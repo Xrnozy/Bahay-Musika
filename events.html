@@ -475,18 +475,6 @@
       </div>
     </div>
     <script>
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-
-      function raf(time) {
-        lenis.raf(time);
-        ScrollTrigger.update();
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
       document.addEventListener("DOMContentLoaded", () => {
         const container = document.querySelector(".carousel-container");
         const carouselCont = document.querySelector(".carousel-items");
