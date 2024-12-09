@@ -278,3 +278,184 @@
   transition: 1.5s ease-in-out 2.4s;
   opacity: 100;
 }
+
+/*sagip*/
+.event-detail-sagip.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+
+.date-label-sagip.active {
+  left: 0;
+  opacity: 100;
+  transition: 1s ease-in-out;
+}
+
+.location-label-sagip.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.1s;
+}
+
+.event-title-sagip.active {
+  left: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.5s;
+}
+
+.event-detail-sagip.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+.event-img-sagip.active {
+  position: relative;
+  right: 0;
+  transition: 1.5s ease-in-out 2.4s;
+  opacity: 100;
+}
+/*school*/
+.event-detail-school.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+
+.date-label-school.active {
+  left: 0;
+  opacity: 100;
+  transition: 1s ease-in-out;
+}
+
+.location-label-school.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.1s;
+}
+
+.event-title-school.active {
+  left: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.5s;
+}
+
+.event-detail-school.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+.event-img-school.active {
+  position: relative;
+  right: 0;
+  transition: 1.5s ease-in-out 2.4s;
+  opacity: 100;
+}
+/*pray*/
+.event-detail-pray.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+
+.date-label-pray.active {
+  left: 0;
+  opacity: 100;
+  transition: 1s ease-in-out;
+}
+
+.location-label-pray.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.1s;
+}
+
+.event-title-pray.active {
+  left: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.5s;
+}
+
+.event-detail-pray.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+.event-img-pray.active {
+  position: relative;
+  right: 0;
+  transition: 1.5s ease-in-out 2.4s;
+  opacity: 100;
+}
+/*values*/
+.event-detail-values.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+
+.date-label-values.active {
+  left: 0;
+  opacity: 100;
+  transition: 1s ease-in-out;
+}
+
+.location-label-values.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.1s;
+}
+
+.event-title-values.active {
+  left: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.5s;
+}
+
+.event-detail-values.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+.event-img-values.active {
+  position: relative;
+  right: 0;
+  transition: 1.5s ease-in-out 2.4s;
+  opacity: 100;
+}
+/*hiv*/
+.event-detail-hiv.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+
+.date-label-hiv.active {
+  left: 0;
+  opacity: 100;
+  transition: 1s ease-in-out;
+}
+
+.location-label-hiv.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.1s;
+}
+
+.event-title-hiv.active {
+  left: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.5s;
+}
+
+.event-detail-hiv.active {
+  right: 0;
+  opacity: 100;
+  transition: 1.5s ease-in-out 1.8s;
+}
+.event-img-hiv.active {
+  position: relative;
+  right: 0;
+  transition: 1.5s ease-in-out 2.4s;
+  opacity: 100;
+}
