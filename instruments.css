@@ -1,0 +1,38 @@
+.organization {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.title-organization {
+  position: relative;
+}
+.team-cont {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.member-img {
+  width: 100px;
+  border-radius: 1000px;
+}
+.members-cont {
+  display: grid;
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 20px;
+  gap: 15px;
+  width: 80vw;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.member {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 2px solid red;
+}
