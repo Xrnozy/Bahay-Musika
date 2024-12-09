@@ -169,7 +169,7 @@ body {
   background-image: linear-gradient(
     to right,
     rgb(255, 255, 255) 40%,
-    #6f6e6e 100%
+    #ffffff 100%
   );
   -webkit-background-clip: text;
   color: transparent;
@@ -307,7 +307,7 @@ body {
   background-image: linear-gradient(
     to right,
     rgb(255, 255, 255) 0%,
-    #1a1919 90%
+    #ffffff 90%
   );
   -webkit-background-clip: text;
   color: transparent;
@@ -791,25 +791,23 @@ body {
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  .layout {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 2rem; /* Use `gap` for consistency */
-  }
-
-  .w-50 {
-    flex: 0 0 50%; /* Flexible sizing for better layout control */
-  }
-
-  .w-25 {
-    flex: 0 0 25%;
-  }
-
   .header a {
     text-align: left; /* Adjust links for mobile view */
   }
 }
+.layout {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2rem; /* Use `gap` for consistency */
+}
 
+.w-50 {
+  flex: 0 0 50%; /* Flexible sizing for better layout control */
+}
+
+.w-25 {
+  flex: 0 0 25%;
+}
 .Bar {
   display: block;
   width: 30px;
