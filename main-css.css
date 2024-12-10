@@ -6,6 +6,9 @@
   -webkit-user-drag: none;
   user-select: none;
 }
+body::-webkit-scrollbar {
+  display: none;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -22,7 +25,9 @@ nav {
   width: 100%;
   z-index: 1000;
 }
-
+.container-footer {
+  z-index: 3;
+}
 html,
 body {
   position: relative;
@@ -733,7 +738,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: fit-content;
 }
 .Hamburger {
   float: right;
