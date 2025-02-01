@@ -1,0 +1,58 @@
+#section-1 {
+  background-color: #2d8df8;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+a#scroll-btn {
+  scale: 0.7;
+  position: absolute;
+  height: 60px;
+  width: 30px;
+  border: 3px solid #ffffff;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  border-radius: 20px;
+}
+
+a#scroll-btn:before {
+  position: absolute;
+  content: "";
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 5px;
+  height: 10px;
+  width: 10px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  animation: move-down 2s infinite;
+}
+
+@keyframes move-down {
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(35px);
+    opacity: 0;
+  }
+}
+
+a#scroll-btn:after {
+  position: absolute;
+  content: "Scroll Down";
+  text-align: center;
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -40px;
+  font-size: 20px;
+  color: #ffffff;
+  letter-spacing: 3px;
+  font-weight: 600;
+}
