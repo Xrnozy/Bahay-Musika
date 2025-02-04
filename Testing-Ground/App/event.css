@@ -13,7 +13,12 @@ h1 {
   font-weight: 800;
   margin: 1rem 0 0;
 }
-
+.event-link {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: translate(-1rem, -1rem);
+}
 ul {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -21,6 +26,7 @@ ul {
   list-style: none;
 
   li {
+    transition: 1s ease;
     display: flex;
     width: 10rem;
     height: 10rem;
@@ -40,8 +46,11 @@ ul {
 
     time {
       font-size: 2rem;
-      margin: 0 0 1rem 0;
+
       font-weight: 500;
+    }
+    .events-title {
+      font-size: 15px;
     }
   }
   .today {
@@ -50,6 +59,10 @@ ul {
     }
     background: #ffffff70;
   }
+}
+li:hover {
+  transition: 0.1s ease;
+  background: #ffffff70;
 }
 .upcominig-title {
   margin-bottom: 20px;
