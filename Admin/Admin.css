@@ -1,23 +1,96 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 body {
   display: flex;
-  overflow: scroll;
+
   flex-direction: row;
 }
 nav {
-  width: 10vw;
+  width: 20vw;
+  background-color: rgb(71, 71, 71);
+}
+.profile-picture {
+  height: 60px;
+  border-radius: 100%;
+  margin-right: 5%;
+}
+
+.profile-cont {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(131, 131, 131);
+  padding: 30px;
+  align-items: center;
+}
+.admin-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+.admin-profile-cont {
+  display: flex;
+  flex-direction: column;
+}
+.admin-status {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(8, 218, 103);
 }
 .dashboard {
-  padding: 20px;
-  background-color: bisque;
+  background-color: rgb(255, 255, 255);
   width: 100vw;
   height: 100vh;
 }
 .dashboard-buttons {
   display: flex;
   flex-direction: row;
+  margin-top: 20px;
+  justify-content: center;
+}
+.buttons-click {
+  padding: 20px;
+  border: 2px solid rgb(211, 211, 211);
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  border-radius: 20px;
+  background-color: rgb(255, 255, 255);
+  width: 200px;
+}
+.dashboard-title {
+  font-size: 15px;
+  margin-top: 0;
+  background-color: rgb(248, 248, 248);
+  padding: 15px;
+  font-weight: 600;
+  margin-bottom: 50px;
+  padding-left: 40px;
+}
+.company-name {
+  font-size: 13px;
+  padding: 20px;
+  background-color: rgb(71, 71, 71);
+  color: white;
+  padding-left: 40px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.general {
+  color: white;
+  padding: 20px;
+  border-bottom: 2px solid rgb(114, 218, 250);
+}
+.general-title {
+  font-weight: 300;
+  font-size: 20px;
 }
