@@ -7,23 +7,15 @@
       href="https://scontent.fmnl17-4.fna.fbcdn.net/v/t39.30808-6/326550258_1211873573075989_6677191777421434541_n.png?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeE6Urt2xxcxoLN8MjGWaK1K_DUXngsHECb8NReeCwcQJvRQ_toAsM5tsfVUWOQGNwfSWmpHmXy7nJB9cZoOvIDo&_nc_ohc=KZTZvuXVbMQQ7kNvgEsQxgG&_nc_zt=23&_nc_ht=scontent.fmnl17-4.fna&_nc_gid=AGbVG-ASeBS2vQfqePKkcRX&oh=00_AYCcaHCKgb-d8RBvxut-kIycO77cVquYY86DHb1wc8TodA&oe=675D887B"
       type="image/x-icon"
     />
-    <link rel="stylesheet" href="main-css.css" />
-    <link rel="stylesheet" href="scroll.css" />
-    <link rel="stylesheet" href="instruments.css" />
-    <link rel="stylesheet" href="carousel.css" />
+    <link rel="stylesheet" href="assets/css/main-css.css" />
+    <link rel="stylesheet" href="assets/css/scroll.css" />
+    <link rel="stylesheet" href="assets/css/instruments.css" />
+    <link rel="stylesheet" href="assets/css/carousel.css" />
     <link rel="prerender" href="/home" />
     <link rel="prerender" href="/contacts" />
     <link rel="prerender" href="/donations" />
     <link rel="prerender" href="/events" />
     <link rel="prerender" href="/news" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/fluidscroll@2.0.0"
-      integrity="sha384-ZvfwaJZFftLPOaPS13spccPYdWRcrfz/GDgUYAf7b6I2OBXY74KiAC6WVg0XF3Qq"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@0.2.28/bundled/lenis.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/ScrollToPlugin.min.js"></script>
     <script src="https://assets.codepen.io/16327/ScrollTrigger.min.js"></script>
@@ -53,31 +45,6 @@
     </style>
   </head>
   <body id="smooth-scroll-wrapper">
-    <script>
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: "vertical",
-        gestureDirection: "vertical",
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        infinite: false,
-      });
-
-      //get scroll value
-      lenis.on("scroll", ({ scroll, limit, velocity, direction, progress }) => {
-        console.log({ scroll, limit, velocity, direction, progress });
-      });
-
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
-    </script>
     <div class="width-full">
       <nav>
         <div class="header">
@@ -124,16 +91,15 @@
             });
           });
       </script>
-      <div class="home-cont">
-        <div id="home" class="home">
-          <div class="cont">
-            <h1 class="fronttext">Minstrels Rhythm of Hope Inc.</h1>
-          </div>
 
-          <section id="section-1">
-            <a id="scroll-btn" href="#section-2"></a>
-          </section>
+      <div id="home" class="home">
+        <div class="cont">
+          <h1 class="fronttext">Minstrels Rhythm of Hope Inc.</h1>
         </div>
+
+        <section id="section-1">
+          <a id="scroll-btn" href="#section-2"></a>
+        </section>
       </div>
 
       <div class="div-front">
