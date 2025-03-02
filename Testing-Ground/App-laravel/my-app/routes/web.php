@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,3 +23,8 @@ Route::get('/events', function () {
 Route::get('/news', function () {
     return view('news');
 });
+Route::get('/testing', function () {
+    return view('testing');
+});
+
+Route::post('/register', [UserController::class, 'register']);
