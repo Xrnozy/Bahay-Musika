@@ -12,15 +12,85 @@
   <style>
     @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Forum&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+  <link rel="stylesheet" href="../Admin.css" />
+
   <script>
-    function loadContent(page) {
+    function imageData(url) {
+      const originalUrl = url || '';
+      return {
+        previewPhoto: originalUrl,
+        fileName: null,
+        emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
+        updatePreview($refs) {
+          var reader,
+            files = $refs.input.files;
+          reader = new FileReader();
+          reader.onload = (e) => {
+            this.previewPhoto = e.target.result;
+            this.fileName = files[0].name;
+          };
+          reader.readAsDataURL(files[0]);
+        },
+        clearPreview($refs) {
+          $refs.input.value = null;
+          this.previewPhoto = originalUrl;
+          this.fileName = false;
+        }
+      };
+    }
+  </script>
+  <script>
+    const cache = {}; // Store preloaded pages
+    let currentPage = ''; // Start with an empty page so Dashboard loads properly on first click
+
+    function preloadContent(page) {
       fetch(page)
         .then(response => response.text())
         .then(data => {
-          document.getElementById("content").innerHTML = data;
+          cache[page] = data; // Store preloaded content
         })
-        .catch(error => console.error('Error loading content:', error));
+        .catch(error => console.error('Error preloading content:', error));
     }
+
+    function loadContent(page) {
+      if (currentPage === page) {
+        console.log(`"${page}" is already loaded, skipping reload.`);
+        return; // Prevent reloading the same page
+      }
+
+      if (cache[page]) {
+        document.getElementById("content").innerHTML = cache[page]; // Load from cache
+      } else {
+        fetch(page)
+          .then(response => response.text())
+          .then(data => {
+            cache[page] = data; // Store in cache
+            document.getElementById("content").innerHTML = data;
+          })
+          .catch(error => console.error('Error loading content:', error));
+      }
+
+      currentPage = page; // Update the currently loaded page
+    }
+
+    // Preload common pages for faster access
+    const pages = [
+      'content-manager/dashboard_management.php',
+      'content-manager/news_management.php',
+      'content-manager/events_management.php',
+      'content-manager/calendar_management.php',
+      'content-manager/members_management.php',
+      'content-manager/homepage_management.php',
+      'content-manager/analytics_management.php'
+    ];
+
+    pages.forEach(preloadContent);
+
+    window.onload = function() {
+      // Load Dashboard on startup
+    };
   </script>
 </head>
 

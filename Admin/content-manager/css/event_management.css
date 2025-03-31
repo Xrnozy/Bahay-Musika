@@ -1,0 +1,239 @@
+/* General Container Styling */
+.container {
+  max-width: 40rem; /* xl size */
+
+  display: flex;
+  flex-direction: row;
+
+}
+
+/* Header Styling */
+.main-cont h1 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+/* Section Styling */
+
+
+.block {
+  display: block;
+}
+
+.text-sm {
+  font-size: 25px;
+}
+#content {
+  padding-bottom: 20px;
+}
+.leading-5 {
+  line-height: 1.25rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-gray-700 {
+  color: #4a5568;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* File Input Container */
+.file-input {
+  display: flex;
+  
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Image Preview Styling */
+.h-12, .w-12 {
+  height: 10rem;
+  width: 10rem;
+}
+.dashboard {
+  padding-bottom:20px ;
+}
+.rounded-full {
+  
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.bg-gray-100 {
+  background-color: #f7fafc;
+}
+
+/* SVG Placeholder */
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+/* File Upload Button */
+label[for="photo"] {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a5568;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+label[for="photo"]:hover {
+  color: #4f46e5;
+  border-color: #a5b4fc;
+}
+
+label[for="photo"]:focus {
+  outline: none;
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5);
+}
+
+label[for="photo"]:active {
+  background-color: #f9fafb;
+  color: #3730a3;
+}
+
+/* Hidden File Input */
+input[type="file"].custom {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* File Info Display */
+.text-gray-500 {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+/* Remove Image Button */
+button[aria-label="Remove image"] {
+  margin-left: -0.5rem;
+  margin-top: -0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+button[aria-label="Remove image"] svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  transition: color 0.15s ease-in-out;
+}
+
+button[aria-label="Remove image"]:hover svg {
+  color: #ef4444;
+}
+
+/* Default File Input */
+input[type="file"] {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: white;
+}
+.input-name {
+  width: 550px;
+  flex: 6;
+  border: 2px solid rgb(0, 0, 0);
+  height: 15px;
+  border-radius: 5px;
+  color: #000000;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.add-member-btn {
+    padding: 20px;
+    width: 50%;
+    margin-right: 10px;
+}
+.cancel-member-btn {
+    padding: 20px;
+    width: 50%;
+}
+.add-member {
+    padding: 20px 20px 0 20px;
+}
+.input-main {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.input-cont {
+  margin-right: 20px;
+}
+.file-input {
+    margin-bottom: 10px;
+}
+.input-cont {
+    display: flex;
+    flex-direction: column;
+    justify-items: start;
+}
+.buttons {
+    width: 550px;
+    display: flex;
+
+    justify-content: space-evenly;
+}
+.members-list {
+    padding: 20px;
+    height: 200px; /* Matches .top-container */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.member-cont {
+    border: 2px solid black;
+    margin-top: 10px;
+    padding: 15px;
+    height: 200px;
+    border-radius: 10px;
+    display: flex;
+    height: fit-content;
+    flex-direction: row;
+}
+
+.member-img {
+    border-radius: 10px;
+    height: 200px;
+}
+
+.member-details {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
