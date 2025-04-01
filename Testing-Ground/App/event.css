@@ -9,7 +9,7 @@ body {
   background-color: #101010;
   color: white;
 }
-h1 {
+.upcoming-events h1 {
   font-weight: 800;
   margin: 1rem 0 0;
 }
@@ -19,7 +19,7 @@ h1 {
   width: 100%;
   transform: translate(-1rem, -1rem);
 }
-ul {
+.upcoming-events ul {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   flex-wrap: wrap;
@@ -60,7 +60,7 @@ ul {
     background: #ffffff70;
   }
 }
-li:hover {
+.upcoming-events li:hover {
   transition: 0.1s ease;
   background: #ffffff70;
 }
