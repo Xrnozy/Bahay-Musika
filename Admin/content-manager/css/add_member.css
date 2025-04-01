@@ -157,11 +157,11 @@ input[type="file"] {
   font-size: 0.875rem;
   background-color: white;
 }
-.input-name-add {
-  width: 100%;
+.input-name {
+  width: 550px;
   flex: 6;
   border: 2px solid rgb(0, 0, 0);
-  height: 50px;
+  height: 15px;
   border-radius: 5px;
   color: #000000;
   padding: 14px;
@@ -186,8 +186,8 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
 }
-.buttons-add {
-  width: 100%;
+.buttons {
+  width: 550px;
   display: flex;
   justify-content: space-evenly;
 }
@@ -223,26 +223,4 @@ input[type="file"] {
 .input-layout {
   display: flex;
   flex-direction: row;
-}
-.name-cont {
-  height: fit-content;
-}
-
-.add-cont {
-  width: 550px;
-}
-.edit-layout {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
-.edit-button {
-  margin-left: auto;
-
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.input-title-update {
-  margin-bottom: 20px;
 }

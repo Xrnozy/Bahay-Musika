@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="content-manager/css/update_member.css">
-<link rel="stylesheet" href="css/update_member.css">
+<link rel="stylesheet" href="content-manager/css/add_member.css">
+<link rel="stylesheet" href="css/add_member.css">
 
 <div id="content" class="dashboard">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -30,14 +30,57 @@
             };
         }
     </script>
+
+    <script>
+        const cache = {}; // Store preloaded pages
+        let currentPage = ""; // Start with an empty page so Dashboard loads properly on first click
+
+        function preloadContent(page) {
+            fetch(page)
+                .then((response) => response.text())
+                .then((data) => {
+                    cache[page] = data; // Store preloaded content
+                })
+                .catch((error) => console.error("Error preloading content:", error));
+        }
+
+        function loadContent(page) {
+            if (currentPage === page) {
+                console.log(`"${page}" is already loaded, skipping reload.`);
+                return; // Prevent reloading the same page
+            }
+
+            if (cache[page]) {
+                document.getElementById("content").innerHTML = cache[page]; // Load from cache
+            } else {
+                fetch(page)
+                    .then((response) => response.text())
+                    .then((data) => {
+                        cache[page] = data; // Store in cache
+                        document.getElementById("content").innerHTML = data;
+                    })
+                    .catch((error) => console.error("Error loading content:", error));
+            }
+
+            currentPage = page;
+        }
+
+        // Preload common pages for faster access
+        const pages = [
+            "content-manager/update_member.php",
+
+        ];
+
+        pages.forEach(preloadContent);
+    </script>
     <div class="company-name">
         <h1 class="company-name-title">Bahay Musika Admin Panel</h1>
     </div>
     <h3 class="dashboard-title">Update Choir Member Profile</h3>
 
-    <div class="main-cont ">
+    <div class="main-cont">
         <div class="add-main-cont">
-            <div class="add-member add-cont">
+            <div class="add-member">
                 <div class="file-input input-layout">
                     <section class="container max-w-xl mx-auto flex flex-col py-8">
 
@@ -45,7 +88,9 @@
 
 
                         <div class="py-8">
-
+                            <h1 class="block text-sm leading-5 font-medium text-gray-700 mb-4">
+                                Choose member's profile photo
+                            </h1>
                             <!-- If you wish to reference an existing file (i.e. from your database), pass the url into imageData() -->
                             <div x-data="imageData()" class="file-input flex items-center">
 
@@ -104,34 +149,12 @@
                     </section>
                 </div>
                 <div class="input-cont">
-                    <h3 class="input-title-update">Edit Member Information:</h3>
-                    <div class="name-cont">
-                        <div class="edit-layout">
-                            <h4>Name: Dominic</h4>
-
-                        </div>
-
-                        <input class="input-name-add" id="input-name" type="text" name="name" placeholder="Name">
-                    </div>
-                    <div class="name-cont">
-                        <div class="edit-layout">
-                            <h4>Link: https://www.facebook.com/xrnozy</h4>
-
-                        </div>
-
-                        <input class="input-name-add" id="input-link" type="text" name="fbLink" placeholder="Facebook Link">
-                    </div>
-                    <div class="name-cont">
-                        <div class="edit-layout">
-                            <h4>Category: Alto</h4>
-
-                        </div>
-
-                        <input class="input-name-add" id="input-category" type="text" name="Category" placeholder="Category">
-                    </div>
-
-                    <div class="buttons-add">
-                        <button class="add-member-btn">Update</button>
+                    <h3 class="input-title">Edit Member Information:</h3>
+                    <input class="input-name" type="text" name="name" placeholder="Name">
+                    <input class="input-name" type="text" name="fbLink" placeholder="Facebook Link">
+                    <input class="input-name" type="text" name="Category" placeholder="Category">
+                    <div class="buttons">
+                        <button class="add-member-btn">Add</button>
                         <button class="cancel-member-btn">Cancel</button>
                     </div>
 
@@ -142,6 +165,39 @@
 
         </div>
 
+        <div class="members-list">
+
+            <h2 class="member-title">Members List</h2>
+            <div class="list">
+                <div class="member-cont">
+                    <img src="https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-6/481259781_1223400092634847_3204620503352458800_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHZACEINnBnOrF1DLBqxRv8QLF8AAMgPLVAsXwAAyA8tdpFvBFsXdrJPvv9o0Y_Tq4HjVv6ppFipVjYxAMs4bdJ&_nc_ohc=OXuAr-zpxjgQ7kNvgFI9qKz&_nc_oc=Adnp_Fqk-kPTU9LnMosy_4WufYtviBTnq-Qe4CC_SNPMbQy7ytgH8GVNzdr05dzmWjk&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_gid=mAVXgbpDA1KMgfV_vv5eUw&oh=00_AYFc5oupRmGWfSYedFKjvoaJzb3MivRxv6mmyY2Ngjy66Q&oe=67ED0041" alt="" class="member-img">
+                    <div class="member-details">
+                        <h3>Dominic G. Casinto</h3>
+                        <div class="category-edit-cont">
+                            <h5>Alto</h5>
+
+                            <h5 class="edit-button" onclick="loadContent('content-manager/update_member.php')">Edit Member Profile</h5>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="member-cont">
+                    <img src="https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-6/481259781_1223400092634847_3204620503352458800_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHZACEINnBnOrF1DLBqxRv8QLF8AAMgPLVAsXwAAyA8tdpFvBFsXdrJPvv9o0Y_Tq4HjVv6ppFipVjYxAMs4bdJ&_nc_ohc=OXuAr-zpxjgQ7kNvgFI9qKz&_nc_oc=Adnp_Fqk-kPTU9LnMosy_4WufYtviBTnq-Qe4CC_SNPMbQy7ytgH8GVNzdr05dzmWjk&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_gid=mAVXgbpDA1KMgfV_vv5eUw&oh=00_AYFc5oupRmGWfSYedFKjvoaJzb3MivRxv6mmyY2Ngjy66Q&oe=67ED0041" alt="" class="member-img">
+                    <div class="member-details">
+                        <h3>Dominic G. Casinto</h3>
+                        <div class="category-edit-cont">
+                            <h5>Alto</h5>
+
+                            <h5 class="edit-button" onclick="loadContent('content-manager/update_member.php')">Edit Member Profile</h5>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 

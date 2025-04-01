@@ -56,7 +56,7 @@
                         </div>
 
                     </div>
-                    <div class="file-input">
+                    <div class="file-input1 layout-input">
                         <section class="container max-w-xl mx-auto flex flex-col py-8">
 
 
@@ -153,8 +153,8 @@
                 <div class="member-cont">
                     <img src="../App/img/4.jpg" alt="" class="member-img">
                     <div class="member-details">
-                        <h3>lorem ipsum</h3>
-
+                        <h3>Lorem ipsum</h3>
+                        <h4>Taguig City</h4>
                         <div class="category-edit-cont">
                             <h5>Feb 14, 2025</h5>
                             <h5>7:30 A.M.</h5>

@@ -20,7 +20,7 @@
 
                     </div>
                     <div class="text-button">
-                        <h5 class="text-button-news">View all news</h5>
+                        <h5 class="text-button-news" onclick="loadContent('content-manager/news_management.php')">View all news</h5>
                     </div>
 
                 </div>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="text-button">
-                        <h5 class="text-button-members">Update Members</h5>
+                        <h5 class="text-button-members" onclick="loadContent('content-manager/add_member.php')">Update Members</h5>
                     </div>
                 </div>
 

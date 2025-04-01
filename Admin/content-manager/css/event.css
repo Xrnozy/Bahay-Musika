@@ -1,0 +1,89 @@
+.upcoming-events {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  color: white;
+}
+.main-cont-calendar {
+  background-color: #101010;
+}
+.upcoming-events h1 {
+  font-weight: 800;
+  margin: 1rem 0 0;
+}
+.event-link {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: translate(-1rem, -1rem);
+}
+.upcoming-events ul {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  list-style: none;
+}
+
+.upcoming-events ul li {
+  transition: 1s ease;
+  display: flex;
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  margin: 0.25rem;
+  flex-flow: column;
+  border-radius: 10px;
+  padding: 1rem;
+  font-weight: 300;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.179);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.upcoming-events ul li time {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.upcoming-events ul li .events-title {
+  font-size: 15px;
+}
+
+.upcoming-events ul li.today {
+  background: #ffffff70;
+}
+
+.upcoming-events ul li.today time {
+  font-weight: 800;
+}
+
+.upcoming-events ul li:hover {
+  transition: 0.1s ease;
+  background: #ffffff70;
+}
+
+.upcoming-events ul li::after {
+  content: "Edit";
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #1f1f1f;
+  color: white;
+  padding: 5px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.upcoming-events ul li:hover::after {
+  display: block;
+}
+
+.upcoming-events ul li::after:hover {
+  background: #ff4500;
+}
