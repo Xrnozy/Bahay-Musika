@@ -1,10 +1,49 @@
-<link rel="stylesheet" href="content-manager/css/event_management.css">
+<!-- Keep this in the main admin.html -->
 <link rel="stylesheet" href="css/event_management.css">
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $eventTitle = trim($_POST['eventTitle'] ?? '');
+    $eventLocation = trim($_POST['eventLocation'] ?? '');
+    $dateOfEvents = trim($_POST['dateOfEvents'] ?? '');
+    $timeOfEvents = trim($_POST['timeOfEvents'] ?? '');
+    $eventsLink = trim($_POST['eventsLink'] ?? '');
+    $profileImage = $_FILES['profileImage'] ?? null;
+
+    if (empty($eventTitle) || empty($eventLocation) || empty($dateOfEvents) || empty($timeOfEvents) || empty($eventsLink) || !$profileImage) {
+        exit("<span style='color: red;'>❌ All fields, including the image, are required.</span>");
+    }
+
+    $imageData = file_get_contents($profileImage['tmp_name']);
+    $imageType = $profileImage['type'];
+
+    $conn = new mysqli("localhost", "root", "", "my_database");
+    if ($conn->connect_error) {
+        exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
+    }
+
+    $stmt = $conn->prepare("INSERT INTO events (title, location, date, time, fb_link, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    if ($stmt) {
+        $stmt->bind_param("sssssss", $eventTitle, $eventLocation, $dateOfEvents, $timeOfEvents, $eventsLink, $imageData, $imageType);
+        if ($stmt->execute()) {
+            exit("<span style='color: green;'>✅ Events added successfully!</span>");
+        } else {
+            exit("<span style='color: red;'>❌ Insert Error: " . $stmt->error . "</span>");
+        }
+        $stmt->close();
+    } else {
+        exit("<span style='color: red;'>❌ Prepare Failed: " . $conn->error . "</span>");
+    }
+
+    $conn->close();
+}
+?>
 
 <div id="content" class="dashboard">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     <link rel="stylesheet" href="../Admin.css" />
+
     <script>
         function imageData(url) {
             const originalUrl = url || '';
@@ -13,9 +52,8 @@
                 fileName: null,
                 emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
                 updatePreview($refs) {
-                    var reader,
-                        files = $refs.input.files;
-                    reader = new FileReader();
+                    const reader = new FileReader();
+                    const files = $refs.input.files;
                     reader.onload = (e) => {
                         this.previewPhoto = e.target.result;
                         this.fileName = files[0].name;
@@ -30,145 +68,208 @@
             };
         }
     </script>
+
     <div class="company-name">
         <h1 class="company-name-title">Bahay Musika Admin Panel</h1>
     </div>
-    <h3 class="dashboard-title">Event Manager</h3>
+    <h3 class="dashboard-title">Events Manager</h3>
 
     <div class="main-cont">
         <div class="add-main-cont">
-            <div class="add-member">
-                <h1 class="block text-sm leading-5 font-medium text-gray-700 mb-4">
-                    Announce an Event
-                </h1>
-                <div class="input-main">
-                    <div class="input-cont">
-                        <input class="input-name" type="text" name="name" placeholder="Event Title">
-                        <input class="input-name" type="date" name="date" placeholder="Event Date">
-                        <input class="input-name" type="time" name="time" placeholder="Event Time">
-                        <input class="input-name" type="text" name="Category" placeholder="Event Location">
-                        <input class="input-name" type="text" name="Category" placeholder="Facebook Event Link">
-                        <textarea class="input-name" name="description" id="" cols="30" rows="5" placeholder="Event Description"></textarea>
-                        <input class="input-name" type="text" name="Category" placeholder="Category">
-                        <div class="buttons">
-                            <button class="add-member-btn">Update</button>
-                            <button class="cancel-member-btn">Cancel</button>
-                        </div>
+            <form id="userForm" enctype="multipart/form-data">
+                <div class="personal-info-container">
+                    <link rel="stylesheet" href="../personalInfo.css" />
+                    <div class="personal-info-form">
+                        <div class="form-header">
 
-                    </div>
-                    <div class="file-input1 layout-input">
-                        <section class="container max-w-xl mx-auto flex flex-col py-8">
-
-
-
-
-                            <div class="py-8">
-
-                                <!-- If you wish to reference an existing file (i.e. from your database), pass the url into imageData() -->
-                                <div x-data="imageData()" class="file-input flex items-center">
-
-                                    <!-- Preview Image -->
-
-
-                                    <div class="flex items-center">
-                                        <!-- File Input -->
-                                        <div class="ml-5 rounded-md shadow-sm">
-                                            <!-- Replace the file input styles with our own via the label -->
-                                            <input @change="updatePreview($refs)" x-ref="input"
-                                                type="file"
-                                                accept="image/*,capture=camera"
-                                                name="photo" id="photo"
-                                                class="custom">
-                                            <label for="photo"
-                                                class="py-2 px-3 border border-gray-300 rounded-md text-sm leading-4 font-medium text-gray-700 hover:text-indigo-500 hover:border-indigo-300 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo active:bg-gray-50 active:text-indigo-800 transition duration-150 ease-in-out">
-                                                Upload Photo
-                                            </label>
-                                        </div>
-                                        <div class="flex items-center text-sm text-gray-500 mx-2">
-                                            <!-- Display the file name when available -->
-                                            <span x-text="fileName || emptyText"></span>
-                                            <!-- Removes the selected file -->
-                                            <button x-show="fileName"
-                                                @click="clearPreview($refs)"
-                                                type="button"
-                                                aria-label="Remove image"
-                                                class="mx-1 mt-1">
-                                                <svg viewBox="0 0 20 20" fill="currentColor" class="x-circle w-4 h-4"
-                                                    aria-hidden="true" focusable="false">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                    </div>
-                                    <div class="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                                        <!-- Placeholder image -->
-                                        <div x-show="!previewPhoto">
-                                            <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                            </svg>
-                                        </div>
-                                        <!-- Show a preview of the photo -->
-                                        <div x-show="previewPhoto" class="h-12 w-12 rounded-full overflow-hidden">
-                                            <img :src="previewPhoto"
-                                                alt=""
-                                                class="h-12 w-12 object-cover">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="title">
+                                <h1 class="form-title wow fadeInUp" data-wow-delay="0s">
+                                    Events Announcement Form
+                                </h1>
+                                <p class="form-subtitle">Please fill out the form below</p>
                             </div>
 
+                            <div class="form-fields-container">
+                                <div class="form-fields">
 
-                        </section>
-                    </div>
-                </div>
+                                    <input
+                                        class="info-input wow fadeInUp name-input"
+                                        type="text"
+                                        name="eventTitle"
+                                        placeholder="Events Title"
+                                        data-wow-delay="0.2s" />
 
+                                    <input
+                                        class="info-input wow fadeInUp"
+                                        type="text"
+                                        name="eventLocation"
+                                        placeholder="Events Location"
+                                        data-wow-delay="0.5s" />
+                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of the Events</label>
+                                    <input
+                                        class="info-input wow fadeInUp"
+                                        type="date"
+                                        name="dateOfEvents"
+                                        placeholder="Date of Events"
+                                        data-wow-delay="0.6s" />
+                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Time of the Events</label>
+                                    <input
+                                        class="info-input wow fadeInUp"
+                                        type="time"
+                                        name="timeOfEvents"
+                                        placeholder="Date of Events"
+                                        data-wow-delay="0.6s" />
+                                    <input
+                                        class="info-input wow fadeInUp"
+                                        type="tel"
+                                        name="eventsLink"
+                                        placeholder="Facebook Events Link"
+                                        data-wow-delay="0.7s" />
+                                    <script></script>
 
-            </div>
+                                    <div class="form-buttons">
+                                        <button class="btn-submit btn-news wow fadeInUp" data-wow-delay="0.9s">
+                                            Submit
+                                        </button>
+                                        <button class="btn-cancel btn-news wow fadeInUp" data-wow-delay="1.0s">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
 
-        </div>
+                                <div class="profile-image-section layout-input">
+                                    <section class="upload-container">
+                                        <div class="upload-wrapper">
+                                            <div x-data="imageData()" class="image-upload flex items-center">
+                                                <div class="upload-controls flex items-center">
+                                                    <div class="upload-input-wrapper ml-5 rounded-md shadow-sm">
+                                                        <input
+                                                            @change="updatePreview($refs)"
+                                                            x-ref="input"
+                                                            type="file"
+                                                            accept="image/*,capture=camera"
+                                                            name="profileImage"
+                                                            id="profileImage"
+                                                            class="file-input" />
+                                                    </div>
 
-        <div class="members-list">
+                                                    <div class="filename-display text-sm text-gray-500 mx-2">
+                                                        <span x-text="fileName || emptyText"></span>
+                                                        <button
+                                                            x-show="fileName"
+                                                            @click="clearPreview($refs)"
+                                                            type="button"
+                                                            class="remove-image-btn"
+                                                            aria-label="Remove image">
+                                                            <svg
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                                class="x-circle w-4 h-4"
+                                                                aria-hidden="true"
+                                                                focusable="false">
+                                                                <path
+                                                                    fill-rule="evenodd"
+                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                                    clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
 
-            <h2 class="member-title">Recent Uploaded Events List</h2>
-            <div class="list">
-                <div class="member-cont">
-                    <img src="../App/img/4.jpg" alt="" class="member-img">
-                    <div class="member-details">
-                        <h3>Lorem ipsum</h3>
-                        <h4>Taguig City</h4>
-                        <div class="category-edit-cont">
-                            <h5>Feb 14, 2025</h5>
-                            <h5>7:30 A.M.</h5>
-
+                                                <div
+                                                    class="image-preview  bg-gray-100">
+                                                    <div x-show="!previewPhoto">
+                                                        <svg
+                                                            class="placeholder-icon h-full w-full text-gray-300"
+                                                            fill="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div
+                                                        x-show="previewPhoto"
+                                                        class=" overflow-hidden">
+                                                        <img
+                                                            :src="previewPhoto"
+                                                            alt=""
+                                                            class="preview-image object-cover" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
                         </div>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-
                     </div>
+            </form>
+            <script>
+                document.getElementById("user-form").addEventListener("submit", function(e) {
+                    e.preventDefault();
 
-                </div>
+                    const form = e.target;
+                    const formData = new FormData(form);
 
+                    fetch("process.php", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            document.querySelector("#for-response p").innerHTML = data;
+                        })
+                        .catch(error => {
+                            document.querySelector("#for-response p").innerHTML = "❌ Something went wrong.";
+                        });
+                });
+            </script>
+
+            <div id="form-response" style="margin-top: 10px;">
+                <p></p>
             </div>
-            <div class="list">
-                <div class="member-cont">
-                    <img src="../App/img/4.jpg" alt="" class="member-img">
-                    <div class="member-details">
-                        <h3>Lorem ipsum</h3>
-                        <h4>Taguig City</h4>
-                        <div class="category-edit-cont">
-                            <h5>Feb 14, 2025</h5>
-                            <h5>7:30 A.M.</h5>
 
-                        </div>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-
-                    </div>
-
-                </div>
-
-            </div>
         </div>
 
     </div>
 
+    <div class="events-list">
+        <h2 class="member-title">Recent Uploaded Events List</h2>
+        <div class="list">
+            <?php
+            $conn = new mysqli("localhost", "root", "", "my_database");
+            if ($conn->connect_error) {
+                echo "<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>";
+            } else {
+                $result = $conn->query("SELECT title, location, date, time, fb_link, image, image_type FROM events ORDER BY id DESC");
+                if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $imageData = base64_encode($row['image']);
+                        $imageType = $row['image_type'];
+            ?>
+                        <div class="news-input">
+                            <div class="img-news-cont">
+                                <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="" class="">
+                            </div>
+
+                            <div class="member-details">
+                                <h3><?php echo htmlspecialchars($row['title']); ?></h3>
+                                <h4><?php echo htmlspecialchars($row['location']); ?></h4>
+                                <div class="category-edit-cont">
+                                    <h5><?php echo htmlspecialchars($row['date']); ?></h5>
+                                    <h5><?php echo htmlspecialchars($row['time']); ?></h5>
+                                </div>
+                                <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a></p>
+                            </div>
+                        </div>
+            <?php
+                    }
+                } else {
+                    echo "<p>No events available.</p>";
+                }
+                $conn->close();
+            }
+            ?>
+        </div>
+    </div>
 </div>

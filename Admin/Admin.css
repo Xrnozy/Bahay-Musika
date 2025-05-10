@@ -6,8 +6,21 @@
   -webkit-user-drag: none;
   user-select: none;
 }
+body :not(nav) h1,
+body :not(nav) h2,
+body :not(nav) h3,
+body :not(nav) h4,
+body :not(nav) h5,
+body :not(nav) h6 {
+  font-family: revert !important;
+  font-size: revert !important;
+  font-weight: revert !important;
+  line-height: revert !important;
+  color: revert !important;
+}
 
 body {
+  font-family: "Poppins", sans-serif;
   display: flex;
   overflow-x: hidden;
   flex-direction: row;
@@ -23,9 +36,10 @@ nav {
   align-items: stretch;
   justify-content: flex-start;
   position: fixed;
+  border-right: 1px solid #ddd;
   top: 0;
   z-index: 1000;
-  background-color: #1a1919;
+  background-color: #ffffff;
   flex-shrink: 0;
 }
 .profile-picture {
@@ -53,7 +67,7 @@ nav {
 .admin-status {
   font-size: 15px;
   font-weight: 500;
-  color: rgb(8, 218, 103);
+  color: rgb(8, 218, 103) !important;
 }
 .dashboard {
   background-color: rgb(255, 255, 255);
@@ -75,9 +89,15 @@ nav {
   margin-top: 20px;
   justify-content: center;
 }
+.form-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  height: 100%;
+}
 .buttons-click {
   padding: 20px;
-  border: 2px solid rgb(211, 211, 211);
+  border: 1px solid rgb(211, 211, 211);
   margin-right: 20px;
   display: flex;
   flex-direction: column;
@@ -87,6 +107,31 @@ nav {
   border-radius: 20px;
   background-color: rgb(255, 255, 255);
   width: 200px;
+}
+.mg-news-cont {
+  width: 30%;
+  height: 100%;
+}
+.mg-news-cont img {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.news-input {
+  display: flex;
+  flex-direction: row;
+  font-weight: 100;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 20px;
+}
+.news-input img {
+  height: 150px;
+  width: 200px;
+}
+.btn-news {
+  height: 40px;
 }
 .dashboard-title {
   font-size: 15px;
@@ -121,6 +166,7 @@ nav .nav_buttons {
   align-items: center;
   padding: 50px;
 }
+
 .upcoming-sched {
   height: 100%;
   width: 100%;
@@ -132,6 +178,25 @@ nav .nav_buttons {
   border: 1px solid rgb(211, 211, 211);
   margin-right: 50px;
   border-radius: 20px;
+}
+.accordion-body .btn {
+  padding: 0 0 10px 20px;
+  text-decoration: none;
+  padding: 10px;
+  padding: 10px;
+  height: auto;
+  display: flex;
+  color: rgb(91, 91, 91);
+  border-radius: 0;
+}
+.accordion-body .btn:not(:last-child) {
+  border-bottom: 1px solid rgb(115, 115, 115);
+}
+.accordion-body .btn:hover {
+  background-color: rgb(211, 211, 211);
+}
+.accordion-body {
+  overflow: visible;
 }
 .donations {
   width: 70%;
@@ -177,4 +242,10 @@ nav button {
 }
 .navigation_buttons {
   padding: 20px;
+}
+.events-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
