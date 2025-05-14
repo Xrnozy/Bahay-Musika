@@ -12,7 +12,7 @@
                 exit;
             }
 
-            $conn = new mysqli("localhost", "root", "", "my_database");
+            $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
             if ($conn->connect_error) {
                 echo "<p style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</p>";
                 exit;

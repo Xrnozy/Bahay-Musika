@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $imageData = file_get_contents($profileImage['tmp_name']);
     $imageType = $profileImage['type'];
 
-    $conn = new mysqli("localhost", "root", "", "my_database");
+    $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
     if ($conn->connect_error) {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }
@@ -45,28 +45,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="../Admin.css" />
 
     <script>
-        function imageData(url) {
-            const originalUrl = url || '';
-            return {
-                previewPhoto: originalUrl,
-                fileName: null,
-                emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
-                updatePreview($refs) {
-                    const reader = new FileReader();
-                    const files = $refs.input.files;
-                    reader.onload = (e) => {
-                        this.previewPhoto = e.target.result;
-                        this.fileName = files[0].name;
-                    };
-                    reader.readAsDataURL(files[0]);
-                },
-                clearPreview($refs) {
-                    $refs.input.value = null;
-                    this.previewPhoto = originalUrl;
-                    this.fileName = false;
-                }
-            };
-        }
+    function imageData(url) {
+        const originalUrl = url || '';
+        return {
+            previewPhoto: originalUrl,
+            fileName: null,
+            emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
+            updatePreview($refs) {
+                const reader = new FileReader();
+                const files = $refs.input.files;
+                reader.onload = (e) => {
+                    this.previewPhoto = e.target.result;
+                    this.fileName = files[0].name;
+                };
+                reader.readAsDataURL(files[0]);
+            },
+            clearPreview($refs) {
+                $refs.input.value = null;
+                this.previewPhoto = originalUrl;
+                this.fileName = false;
+            }
+        };
+    }
     </script>
 
     <div class="company-name">
@@ -92,39 +92,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="form-fields-container">
                                 <div class="form-fields">
 
-                                    <input
-                                        class="info-input wow fadeInUp name-input"
-                                        type="text"
-                                        name="eventTitle"
-                                        placeholder="Events Title"
-                                        data-wow-delay="0.2s" />
+                                    <input class="info-input wow fadeInUp name-input" type="text" name="eventTitle"
+                                        placeholder="Events Title" data-wow-delay="0.2s" />
 
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="text"
-                                        name="eventLocation"
-                                        placeholder="Events Location"
-                                        data-wow-delay="0.5s" />
-                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of the Events</label>
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="date"
-                                        name="dateOfEvents"
-                                        placeholder="Date of Events"
-                                        data-wow-delay="0.6s" />
-                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Time of the Events</label>
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="time"
-                                        name="timeOfEvents"
-                                        placeholder="Date of Events"
-                                        data-wow-delay="0.6s" />
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="tel"
-                                        name="eventsLink"
-                                        placeholder="Facebook Events Link"
-                                        data-wow-delay="0.7s" />
+                                    <input class="info-input wow fadeInUp" type="text" name="eventLocation"
+                                        placeholder="Events Location" data-wow-delay="0.5s" />
+                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of the
+                                        Events</label>
+                                    <input class="info-input wow fadeInUp" type="date" name="dateOfEvents"
+                                        placeholder="Date of Events" data-wow-delay="0.6s" />
+                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Time of the
+                                        Events</label>
+                                    <input class="info-input wow fadeInUp" type="time" name="timeOfEvents"
+                                        placeholder="Date of Events" data-wow-delay="0.6s" />
+                                    <input class="info-input wow fadeInUp" type="tel" name="eventsLink"
+                                        placeholder="Facebook Events Link" data-wow-delay="0.7s" />
                                     <script></script>
 
                                     <div class="form-buttons">
@@ -143,32 +125,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             <div x-data="imageData()" class="image-upload flex items-center">
                                                 <div class="upload-controls flex items-center">
                                                     <div class="upload-input-wrapper ml-5 rounded-md shadow-sm">
-                                                        <input
-                                                            @change="updatePreview($refs)"
-                                                            x-ref="input"
-                                                            type="file"
-                                                            accept="image/*,capture=camera"
-                                                            name="profileImage"
-                                                            id="profileImage"
-                                                            class="file-input" />
+                                                        <input @change="updatePreview($refs)" x-ref="input" type="file"
+                                                            accept="image/*,capture=camera" name="profileImage"
+                                                            id="profileImage" class="file-input" />
                                                     </div>
 
                                                     <div class="filename-display text-sm text-gray-500 mx-2">
                                                         <span x-text="fileName || emptyText"></span>
-                                                        <button
-                                                            x-show="fileName"
-                                                            @click="clearPreview($refs)"
-                                                            type="button"
-                                                            class="remove-image-btn"
+                                                        <button x-show="fileName" @click="clearPreview($refs)"
+                                                            type="button" class="remove-image-btn"
                                                             aria-label="Remove image">
-                                                            <svg
-                                                                viewBox="0 0 20 20"
-                                                                fill="currentColor"
-                                                                class="x-circle w-4 h-4"
-                                                                aria-hidden="true"
+                                                            <svg viewBox="0 0 20 20" fill="currentColor"
+                                                                class="x-circle w-4 h-4" aria-hidden="true"
                                                                 focusable="false">
-                                                                <path
-                                                                    fill-rule="evenodd"
+                                                                <path fill-rule="evenodd"
                                                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                                                                     clip-rule="evenodd"></path>
                                                             </svg>
@@ -176,23 +146,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                     </div>
                                                 </div>
 
-                                                <div
-                                                    class="image-preview  bg-gray-100">
+                                                <div class="image-preview  bg-gray-100">
                                                     <div x-show="!previewPhoto">
-                                                        <svg
-                                                            class="placeholder-icon h-full w-full text-gray-300"
-                                                            fill="currentColor"
-                                                            viewBox="0 0 24 24">
+                                                        <svg class="placeholder-icon h-full w-full text-gray-300"
+                                                            fill="currentColor" viewBox="0 0 24 24">
                                                             <path
                                                                 d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                                         </svg>
                                                     </div>
-                                                    <div
-                                                        x-show="previewPhoto"
-                                                        class=" overflow-hidden">
-                                                        <img
-                                                            :src="previewPhoto"
-                                                            alt=""
+                                                    <div x-show="previewPhoto" class=" overflow-hidden">
+                                                        <img :src="previewPhoto" alt=""
                                                             class="preview-image object-cover" />
                                                     </div>
                                                 </div>
@@ -205,24 +168,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
             </form>
             <script>
-                document.getElementById("user-form").addEventListener("submit", function(e) {
-                    e.preventDefault();
+            document.getElementById("user-form").addEventListener("submit", function(e) {
+                e.preventDefault();
 
-                    const form = e.target;
-                    const formData = new FormData(form);
+                const form = e.target;
+                const formData = new FormData(form);
 
-                    fetch("process.php", {
-                            method: "POST",
-                            body: formData
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            document.querySelector("#for-response p").innerHTML = data;
-                        })
-                        .catch(error => {
-                            document.querySelector("#for-response p").innerHTML = "❌ Something went wrong.";
-                        });
-                });
+                fetch("process.php", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.querySelector("#for-response p").innerHTML = data;
+                    })
+                    .catch(error => {
+                        document.querySelector("#for-response p").innerHTML = "❌ Something went wrong.";
+                    });
+            });
             </script>
 
             <div id="form-response" style="margin-top: 10px;">
@@ -237,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <h2 class="member-title">Recent Uploaded Events List</h2>
         <div class="list">
             <?php
-            $conn = new mysqli("localhost", "root", "", "my_database");
+            $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
             if ($conn->connect_error) {
                 echo "<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>";
             } else {
@@ -247,21 +210,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $imageData = base64_encode($row['image']);
                         $imageType = $row['image_type'];
             ?>
-                        <div class="news-input">
-                            <div class="img-news-cont">
-                                <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="" class="">
-                            </div>
+            <div class="news-input">
+                <div class="img-news-cont">
+                    <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="" class="">
+                </div>
 
-                            <div class="member-details">
-                                <h3><?php echo htmlspecialchars($row['title']); ?></h3>
-                                <h4><?php echo htmlspecialchars($row['location']); ?></h4>
-                                <div class="category-edit-cont">
-                                    <h5><?php echo htmlspecialchars($row['date']); ?></h5>
-                                    <h5><?php echo htmlspecialchars($row['time']); ?></h5>
-                                </div>
-                                <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a></p>
-                            </div>
-                        </div>
+                <div class="member-details">
+                    <h3><?php echo htmlspecialchars($row['title']); ?></h3>
+                    <h4><?php echo htmlspecialchars($row['location']); ?></h4>
+                    <div class="category-edit-cont">
+                        <h5><?php echo htmlspecialchars($row['date']); ?></h5>
+                        <h5><?php echo htmlspecialchars($row['time']); ?></h5>
+                    </div>
+                    <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a>
+                    </p>
+                </div>
+            </div>
             <?php
                     }
                 } else {
