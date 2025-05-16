@@ -2,22 +2,18 @@
     <h3 class="dashboard-title">Homepage Manager</h3>
     <div>
         <?php
+        include 'db-connection.php';
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $name = trim($_POST['name'] ?? '');
             $email = trim($_POST['email'] ?? '');
-
 
             if (empty($name) || empty($email)) {
                 echo "<p style='color: red;'>❌ Name and Email are required.</p>";
                 exit;
             }
 
-            $conn = new mysqli("localhost", "root", "", "my_database");
-            if ($conn->connect_error) {
-                echo "<p style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</p>";
-                exit;
-            }
-
+            // $conn is now available from the included file
             $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
             $check->bind_param("s", $email);
             $check->execute();

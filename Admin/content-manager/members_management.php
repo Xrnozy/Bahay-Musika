@@ -1,3 +1,7 @@
+<?php
+include 'db-connection.php';
+?>
+
 <link rel="stylesheet" href="content-manager/css/add_member.css">
 <link rel="stylesheet" href="css/add_member.css">
 

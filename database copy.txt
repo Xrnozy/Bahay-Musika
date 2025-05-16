@@ -1,8 +1,17 @@
 CREATE TABLE members (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    firstName VARCHAR(255) NOT NULL,
+    middleName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
     fb_link VARCHAR(255),
     category VARCHAR(100),
+    dob DATE,
+    phone INT(11),
+    street VARCHAR(25),
+    city VARCHAR(25),
+    state VARCHAR(25),
+    zip VARCHAR(25),
+    country VARCHAR(25),
     profile_image VARCHAR(255),  -- Path to the uploaded profile image
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

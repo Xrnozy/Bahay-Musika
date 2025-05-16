@@ -1,6 +1,8 @@
 <?php
 // File: content-manager/update_member.php
 
+include 'db-connection.php';
+
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
@@ -8,7 +10,6 @@ if (!$id) {
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "my_database");
 if ($conn->connect_error) {
     die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
 }
@@ -28,7 +29,8 @@ if (!$user) {
 <form id="editMemberForm">
     <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
     <label>Name: <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>"></label><br>
-    <label>Facebook Link: <input type="text" name="fb_link" value="<?= htmlspecialchars($user['fb_link']) ?>"></label><br>
+    <label>Facebook Link: <input type="text" name="fb_link"
+            value="<?= htmlspecialchars($user['fb_link']) ?>"></label><br>
     <label>Category: <input type="text" name="category" value="<?= htmlspecialchars($user['category']) ?>"></label><br>
     <button type="submit">Save Changes</button>
 </form>
@@ -48,7 +50,8 @@ if (!$user) {
                 document.getElementById("edit-response").innerHTML = data;
             })
             .catch(err => {
-                document.getElementById("edit-response").innerHTML = "<p style='color:red;'>Error saving changes.</p>";
+                document.getElementById("edit-response").innerHTML =
+                    "<p style='color:red;'>Error saving changes.</p>";
             });
     });
 </script>

@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="css/event_management.css">
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <?php
+include 'db-connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $newsTitle = trim($_POST['newsTitle'] ?? '');
@@ -18,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $imageData = file_get_contents($profileImage['tmp_name']);
     $imageType = $profileImage['type'];
 
-    $conn = new mysqli("localhost", "root", "", "my_database");
     if ($conn->connect_error) {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }
@@ -35,8 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         exit("<span style='color: red;'>❌ Prepare Failed: " . $conn->error . "</span>");
     }
-
-    $conn->close();
 }
 ?>
 
@@ -92,39 +90,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="form-fields-container">
                                 <div class="form-fields">
 
-                                    <input
-                                        class="info-input wow fadeInUp name-input"
-                                        type="text"
-                                        name="newsTitle"
-                                        placeholder="News Title"
-                                        data-wow-delay="0.2s" />
+                                    <input class="info-input wow fadeInUp name-input" type="text" name="newsTitle"
+                                        placeholder="News Title" data-wow-delay="0.2s" />
 
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="text"
-                                        name="newsLocation"
-                                        placeholder="News Location"
-                                        data-wow-delay="0.5s" />
-                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of the News</label>
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="date"
-                                        name="dateOfNews"
-                                        placeholder="Date of News"
-                                        data-wow-delay="0.6s" />
-                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Time of the News</label>
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="time"
-                                        name="timeOfNews"
-                                        placeholder="Date of News"
-                                        data-wow-delay="0.6s" />
-                                    <input
-                                        class="info-input wow fadeInUp"
-                                        type="tel"
-                                        name="NewsLink"
-                                        placeholder="Facebook News Link"
-                                        data-wow-delay="0.7s" />
+                                    <input class="info-input wow fadeInUp" type="text" name="newsLocation"
+                                        placeholder="News Location" data-wow-delay="0.5s" />
+                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of the
+                                        News</label>
+                                    <input class="info-input wow fadeInUp" type="date" name="dateOfNews"
+                                        placeholder="Date of News" data-wow-delay="0.6s" />
+                                    <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Time of the
+                                        News</label>
+                                    <input class="info-input wow fadeInUp" type="time" name="timeOfNews"
+                                        placeholder="Date of News" data-wow-delay="0.6s" />
+                                    <input class="info-input wow fadeInUp" type="tel" name="NewsLink"
+                                        placeholder="Facebook News Link" data-wow-delay="0.7s" />
                                     <script></script>
 
                                     <div class="form-buttons">
@@ -143,56 +123,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             <div x-data="imageData()" class="image-upload flex items-center">
                                                 <div class="upload-controls flex items-center">
                                                     <div class="upload-input-wrapper ml-5 rounded-md shadow-sm">
-                                                        <input
-                                                            @change="updatePreview($refs)"
-                                                            x-ref="input"
-                                                            type="file"
-                                                            accept="image/*,capture=camera"
-                                                            name="profileImage"
-                                                            id="profileImage"
-                                                            class="file-input" />
+                                                        <input @change="updatePreview($refs)" x-ref="input" type="file"
+                                                            accept="image/*,capture=camera" name="profileImage"
+                                                            id="profileImage" class="file-input" />
                                                     </div>
 
                                                     <div class="filename-display text-sm text-gray-500 mx-2">
                                                         <span x-text="fileName || emptyText"></span>
-                                                        <button
-                                                            x-show="fileName"
-                                                            @click="clearPreview($refs)"
-                                                            type="button"
-                                                            class="remove-image-btn"
+                                                        <button x-show="fileName" @click="clearPreview($refs)"
+                                                            type="button" class="remove-image-btn"
                                                             aria-label="Remove image">
-                                                            <svg
-                                                                viewBox="0 0 20 20"
-                                                                fill="currentColor"
-                                                                class="x-circle w-4 h-4"
-                                                                aria-hidden="true"
+                                                            <svg viewBox="0 0 20 20" fill="currentColor"
+                                                                class="x-circle w-4 h-4" aria-hidden="true"
                                                                 focusable="false">
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                                                                     clip-rule="evenodd"></path>
                                                             </svg>
                                                         </button>
                                                     </div>
                                                 </div>
 
-                                                <div
-                                                    class="image-preview  bg-gray-100">
+                                                <div class="image-preview  bg-gray-100">
                                                     <div x-show="!previewPhoto">
-                                                        <svg
-                                                            class="placeholder-icon h-full w-full text-gray-300"
-                                                            fill="currentColor"
-                                                            viewBox="0 0 24 24">
+                                                        <svg class="placeholder-icon h-full w-full text-gray-300"
+                                                            fill="currentColor" viewBox="0 0 24 24">
                                                             <path
                                                                 d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                                         </svg>
                                                     </div>
-                                                    <div
-                                                        x-show="previewPhoto"
-                                                        class=" overflow-hidden">
-                                                        <img
-                                                            :src="previewPhoto"
-                                                            alt=""
+                                                    <div x-show="previewPhoto" class=" overflow-hidden">
+                                                        <img :src="previewPhoto" alt=""
                                                             class="preview-image object-cover" />
                                                     </div>
                                                 </div>
@@ -237,7 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <h2 class="member-title">Recent Uploaded News List</h2>
         <div class="list">
             <?php
-            $conn = new mysqli("localhost", "root", "", "my_database");
             if ($conn->connect_error) {
                 echo "<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>";
             } else {
@@ -259,7 +219,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <h5><?php echo htmlspecialchars($row['date']); ?></h5>
                                     <h5><?php echo htmlspecialchars($row['time']); ?></h5>
                                 </div>
-                                <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a></p>
+                                <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a>
+                                </p>
                             </div>
                         </div>
             <?php
@@ -267,7 +228,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 } else {
                     echo "<p>No news available.</p>";
                 }
-                $conn->close();
             }
             ?>
         </div>

@@ -1,4 +1,6 @@
 <?php
+include 'db-connection.php';
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -7,7 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit("<span style='color: red;'>❌ Name and Email are required.</span>");
     }
 
-    $conn = new mysqli("localhost", "root", "", "my_database");
     if ($conn->connect_error) {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }
