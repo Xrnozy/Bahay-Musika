@@ -4,7 +4,11 @@
 include 'db-connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+<<<<<<< HEAD
     // Use shared $conn from db-connection.php
+=======
+    $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
     if ($conn->connect_error) {
         echo "<script>alert('Database connection failed: " . $conn->connect_error . "');</script>";
         exit;
@@ -49,7 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     exit;
 }
 
+<<<<<<< HEAD
 // Use shared $conn from db-connection.php
+=======
+$conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
 if ($conn->connect_error) {
     exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
 }
@@ -61,6 +69,7 @@ $result = $conn->query("SELECT id, title, location, date, time, fb_link FROM eve
     <h2 class="events-title">Edit or Delete Events</h2>
     <div class="list">
         <?php if ($result && $result->num_rows > 0): ?>
+<<<<<<< HEAD
             <?php while ($row = $result->fetch_assoc()): ?>
                 <form method="POST" class="event-item">
                     <input type="hidden" name="event_id" value="<?php echo $row['id']; ?>">
@@ -78,8 +87,27 @@ $result = $conn->query("SELECT id, title, location, date, time, fb_link FROM eve
                     </div>
                 </form>
             <?php endwhile; ?>
+=======
+        <?php while ($row = $result->fetch_assoc()): ?>
+        <form method="POST" class="event-item">
+            <input type="hidden" name="event_id" value="<?php echo $row['id']; ?>">
+            <div class="event-details">
+                <input type="text" name="eventTitle" value="<?php echo htmlspecialchars($row['title']); ?>" required>
+                <input type="text" name="eventLocation" value="<?php echo htmlspecialchars($row['location']); ?>"
+                    required>
+                <input type="date" name="dateOfEvents" value="<?php echo htmlspecialchars($row['date']); ?>" required>
+                <input type="time" name="timeOfEvents" value="<?php echo htmlspecialchars($row['time']); ?>" required>
+                <input type="text" name="eventsLink" value="<?php echo htmlspecialchars($row['fb_link']); ?>" required>
+            </div>
+            <div class="event-actions">
+                <button type="submit" name="action" value="edit">Edit</button>
+                <button type="submit" name="action" value="delete">Delete</button>
+            </div>
+        </form>
+        <?php endwhile; ?>
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
         <?php else: ?>
-            <p>No events available.</p>
+        <p>No events available.</p>
         <?php endif; ?>
     </div>
 </div>

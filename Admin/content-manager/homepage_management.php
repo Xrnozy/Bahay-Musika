@@ -13,7 +13,16 @@
                 exit;
             }
 
+<<<<<<< HEAD
             // $conn is now available from the included file
+=======
+            $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+            if ($conn->connect_error) {
+                echo "<p style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</p>";
+                exit;
+            }
+
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
             $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
             $check->bind_param("s", $email);
             $check->execute();

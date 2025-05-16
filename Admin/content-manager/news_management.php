@@ -19,6 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $imageData = file_get_contents($profileImage['tmp_name']);
     $imageType = $profileImage['type'];
 
+<<<<<<< HEAD
+=======
+    $conn = new mysqli("127.0.0.1", "root", "", "my_database",3307);
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
     if ($conn->connect_error) {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }
@@ -43,28 +47,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="../Admin.css" />
 
     <script>
-        function imageData(url) {
-            const originalUrl = url || '';
-            return {
-                previewPhoto: originalUrl,
-                fileName: null,
-                emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
-                updatePreview($refs) {
-                    const reader = new FileReader();
-                    const files = $refs.input.files;
-                    reader.onload = (e) => {
-                        this.previewPhoto = e.target.result;
-                        this.fileName = files[0].name;
-                    };
-                    reader.readAsDataURL(files[0]);
-                },
-                clearPreview($refs) {
-                    $refs.input.value = null;
-                    this.previewPhoto = originalUrl;
-                    this.fileName = false;
-                }
-            };
-        }
+    function imageData(url) {
+        const originalUrl = url || '';
+        return {
+            previewPhoto: originalUrl,
+            fileName: null,
+            emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
+            updatePreview($refs) {
+                const reader = new FileReader();
+                const files = $refs.input.files;
+                reader.onload = (e) => {
+                    this.previewPhoto = e.target.result;
+                    this.fileName = files[0].name;
+                };
+                reader.readAsDataURL(files[0]);
+            },
+            clearPreview($refs) {
+                $refs.input.value = null;
+                this.previewPhoto = originalUrl;
+                this.fileName = false;
+            }
+        };
+    }
     </script>
 
     <div class="company-name">
@@ -137,7 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                                 class="x-circle w-4 h-4" aria-hidden="true"
                                                                 focusable="false">
                                                                 <path fill-rule="evenodd"
+<<<<<<< HEAD
                                                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+=======
+                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                                                                     clip-rule="evenodd"></path>
                                                             </svg>
                                                         </button>
@@ -166,24 +174,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
             </form>
             <script>
-                document.getElementById("user-form").addEventListener("submit", function(e) {
-                    e.preventDefault();
+            document.getElementById("user-form").addEventListener("submit", function(e) {
+                e.preventDefault();
 
-                    const form = e.target;
-                    const formData = new FormData(form);
+                const form = e.target;
+                const formData = new FormData(form);
 
-                    fetch("process.php", {
-                            method: "POST",
-                            body: formData
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            document.querySelector("#for-response p").innerHTML = data;
-                        })
-                        .catch(error => {
-                            document.querySelector("#for-response p").innerHTML = "❌ Something went wrong.";
-                        });
-                });
+                fetch("process.php", {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.querySelector("#for-response p").innerHTML = data;
+                    })
+                    .catch(error => {
+                        document.querySelector("#for-response p").innerHTML = "❌ Something went wrong.";
+                    });
+            });
             </script>
 
             <div id="form-response" style="margin-top: 10px;">
@@ -198,6 +206,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <h2 class="member-title">Recent Uploaded News List</h2>
         <div class="list">
             <?php
+<<<<<<< HEAD
+=======
+            $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
             if ($conn->connect_error) {
                 echo "<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>";
             } else {
@@ -207,11 +219,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $imageData = base64_encode($row['image']);
                         $imageType = $row['image_type'];
             ?>
-                        <div class="news-input">
-                            <div class="img-news-cont">
-                                <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="" class="">
-                            </div>
+            <div class="news-input">
+                <div class="img-news-cont">
+                    <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="" class="">
+                </div>
 
+<<<<<<< HEAD
                             <div class="member-details">
                                 <h3><?php echo htmlspecialchars($row['title']); ?></h3>
                                 <h4><?php echo htmlspecialchars($row['location']); ?></h4>
@@ -223,6 +236,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 </p>
                             </div>
                         </div>
+=======
+                <div class="member-details">
+                    <h3><?php echo htmlspecialchars($row['title']); ?></h3>
+                    <h4><?php echo htmlspecialchars($row['location']); ?></h4>
+                    <div class="category-edit-cont">
+                        <h5><?php echo htmlspecialchars($row['date']); ?></h5>
+                        <h5><?php echo htmlspecialchars($row['time']); ?></h5>
+                    </div>
+                    <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a>
+                    </p>
+                </div>
+            </div>
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
             <?php
                     }
                 } else {

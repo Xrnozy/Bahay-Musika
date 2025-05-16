@@ -1,7 +1,14 @@
 <?php
 // File: list_events.php
 
+<<<<<<< HEAD
 include 'db-connection.php';
+=======
+$conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+if ($conn->connect_error) {
+    exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
+}
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
 
 $result = $conn->query("SELECT id, title, location, date, time, fb_link FROM events ORDER BY id DESC");
 ?>

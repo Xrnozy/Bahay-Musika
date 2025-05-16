@@ -5,70 +5,70 @@
 
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
-    function imageData(url) {
-        const originalUrl = url || '';
-        return {
-            previewPhoto: originalUrl,
-            fileName: null,
-            emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
-            updatePreview($refs) {
-                var reader,
-                    files = $refs.input.files;
-                reader = new FileReader();
-                reader.onload = (e) => {
-                    this.previewPhoto = e.target.result;
-                    this.fileName = files[0].name;
-                };
-                reader.readAsDataURL(files[0]);
-            },
-            clearPreview($refs) {
-                $refs.input.value = null;
-                this.previewPhoto = originalUrl;
-                this.fileName = false;
-            }
-        };
-    }
+function imageData(url) {
+    const originalUrl = url || '';
+    return {
+        previewPhoto: originalUrl,
+        fileName: null,
+        emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
+        updatePreview($refs) {
+            var reader,
+                files = $refs.input.files;
+            reader = new FileReader();
+            reader.onload = (e) => {
+                this.previewPhoto = e.target.result;
+                this.fileName = files[0].name;
+            };
+            reader.readAsDataURL(files[0]);
+        },
+        clearPreview($refs) {
+            $refs.input.value = null;
+            this.previewPhoto = originalUrl;
+            this.fileName = false;
+        }
+    };
+}
 </script>
 <script>
-    const cache = {}; // Store preloaded pages
-    let currentPage = ""; // Start with an empty page so Dashboard loads properly on first click
+const cache = {}; // Store preloaded pages
+let currentPage = ""; // Start with an empty page so Dashboard loads properly on first click
 
-    function preloadContent(page) {
+function preloadContent(page) {
+    fetch(page)
+        .then((response) => response.text())
+        .then((data) => {
+            cache[page] = data; // Store preloaded content
+        })
+        .catch((error) => console.error("Error preloading content:", error));
+}
+
+function loadContent(page) {
+    if (currentPage === page) {
+        console.log(`"${page}" is already loaded, skipping reload.`);
+        return; // Prevent reloading the same page
+    }
+
+    if (cache[page]) {
+        document.getElementById("content").innerHTML = cache[page]; // Load from cache
+    } else {
         fetch(page)
             .then((response) => response.text())
             .then((data) => {
-                cache[page] = data; // Store preloaded content
+                cache[page] = data; // Store in cache
+                document.getElementById("content").innerHTML = data;
             })
-            .catch((error) => console.error("Error preloading content:", error));
+            .catch((error) => console.error("Error loading content:", error));
     }
 
-    function loadContent(page) {
-        if (currentPage === page) {
-            console.log(`"${page}" is already loaded, skipping reload.`);
-            return; // Prevent reloading the same page
-        }
+    currentPage = page;
+}
 
-        if (cache[page]) {
-            document.getElementById("content").innerHTML = cache[page]; // Load from cache
-        } else {
-            fetch(page)
-                .then((response) => response.text())
-                .then((data) => {
-                    cache[page] = data; // Store in cache
-                    document.getElementById("content").innerHTML = data;
-                })
-                .catch((error) => console.error("Error loading content:", error));
-        }
+// Preload common pages for faster access
+const pages = [
+    "content-manager/update_member.php",
+];
 
-        currentPage = page;
-    }
-
-    // Preload common pages for faster access
-    const pages = [
-        "content-manager/update_member.php",
-    ];
-
-    pages.forEach(preloadContent);
+pages.forEach(preloadContent);
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -156,6 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+<<<<<<< HEAD
     // Validate all required fields
     $requiredFields = [
         'First Name' => $firstName,
@@ -178,6 +179,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     if (!empty($missing)) {
         exit("<span style='color: red; margin-left:20px;'>❌ Please fill in all required fields: " . implode(', ', $missing) . ".</span>");
+=======
+    $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+    if ($conn->connect_error) {
+        exit("<span style='color:red;margin-left:20px;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
     }
 
     // Check for duplicate fb_link
@@ -239,24 +245,40 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <div class="form-fields-container">
                                     <div class="form-fields">
                                         <div class="name">
+<<<<<<< HEAD
                                             <input class="info-input wow fadeInUp name-input" type="text" name="lastName"
                                                 placeholder="Last Name" data-wow-delay="0.2s" required />
                                             <input class="info-input wow fadeInUp name-input" type="text" name="firstName"
                                                 placeholder="First Name" data-wow-delay="0.1s" required />
                                             <input class="info-input wow fadeInUp name-input" type="text"
                                                 name="middleName" placeholder="Middle Name" data-wow-delay="0.3s" required />
+=======
+                                            <input class="info-input wow fadeInUp name-input" type="text" name="name"
+                                                placeholder="Last Name" data-wow-delay="0.2s" />
+                                            <input class="info-input wow fadeInUp name-input" type="text" name="fbLink"
+                                                placeholder="First Name" data-wow-delay="0.1s" />
+
+                                            <input class="info-input wow fadeInUp name-input" type="text"
+                                                name="middleName" placeholder="Middle Name" data-wow-delay="0.3s" />
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                                             <input class="info-input wow fadeInUp Ext" type="text" name="extName"
                                                 placeholder="Ext. Name" data-wow-delay="0.4s" />
                                         </div>
 
+<<<<<<< HEAD
                                         <input class="info-input wow fadeInUp" type="text" name="category"
                                             placeholder="Category" data-wow-delay="0.5s" required />
+=======
+                                        <input class="info-input wow fadeInUp" type="text" name="profession"
+                                            placeholder="Profession" data-wow-delay="0.5s" />
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                                         <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of
                                             Birth</label>
                                         <input class="info-input wow fadeInUp" type="date" name="dob"
                                             placeholder="Date of Birth" data-wow-delay="0.6s" />
                                         <input class="info-input wow fadeInUp" type="tel" name="phone" id="phone"
                                             placeholder="Phone Number" data-wow-delay="0.7s"
+<<<<<<< HEAD
                                             maxlength="11" required />
 
                                         <div class="address">
@@ -272,6 +294,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             <input class="info-input wow fadeInUp" type="text" name="zip" id="zip"
                                                 placeholder="Zip Code" data-wow-delay="0.8s" required /> <input class="info-input wow fadeInUp" type="text" name="fb_link"
                                                 id="fb_link" placeholder="Facebook Profile Link" data-wow-delay="0.9s" required />
+=======
+                                            oninput="formatPhoneNumber(this)" pattern="^\+63\d{10}$" maxlength="13" />
+                                        <script></script>
+
+                                        <div class="address">
+                                            <input class="info-input wow fadeInUp" type="text" name="street" id="street"
+                                                placeholder="Street Address" data-wow-delay="0.5s" />
+
+                                            <input class="info-input wow fadeInUp" type="text" name="city" id="city"
+                                                placeholder="City" data-wow-delay="0.6s" />
+
+                                            <input class="info-input wow fadeInUp" type="text" name="state" id="state"
+                                                placeholder="State/Province" data-wow-delay="0.7s" />
+
+                                            <input class="info-input wow fadeInUp" type="text" name="zip" id="zip"
+                                                placeholder="Zip Code" data-wow-delay="0.8s" />
+
+                                            <input class="info-input wow fadeInUp" type="text" name="country"
+                                                id="country" placeholder="Country" data-wow-delay="0.9s" />
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                                         </div>
 
                                         <div class="form-buttons">
@@ -293,7 +335,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                             <input @change="updatePreview($refs)" x-ref="input"
                                                                 type="file" accept="image/*,capture=camera"
                                                                 name="profileImage" id="profileImage"
+<<<<<<< HEAD
                                                                 class="file-input" required />
+=======
+                                                                class="file-input" />
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                                                         </div>
 
                                                         <div class="filename-display text-sm text-gray-500 mx-2">
@@ -346,6 +392,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="list">
                     <?php
+<<<<<<< HEAD
                     $result = $conn->query("SELECT * FROM members");
                     while ($user = $result->fetch_assoc()):
                     ?>
@@ -369,8 +416,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                         onclick="loadContent('content-manager/update_member.php?id=<?= $user['id'] ?>')">
                                         Edit Member Profile</h5>
                                 </div>
+=======
+                    $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $result = $conn->query("SELECT * FROM members");
+                    while ($user = $result->fetch_assoc()):
+                    ?>
+                    <div class="member-cont">
+                        <?php if (!empty($user['profile_image'])): ?>
+                        <img src="<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="member-img">
+                        <?php else: ?>
+                        <div class="member-img placeholder">
+                            <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="member-details">
+                            <h3><?= htmlspecialchars($user['name'] . ', ' . $user['fb_link']) ?></h3>
+                            <div class="category-edit-cont">
+                                <h5><?= ucfirst($user['category']) ?></h5>
+                                <h5 class="edit-button"
+                                    onclick="loadContent('content-manager/update_member.php?id=<?= $user['id'] ?>')">
+                                    Edit Member Profile</h5>
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                             </div>
                         </div>
+                    </div>
                     <?php endwhile; ?>
 
                 </div>

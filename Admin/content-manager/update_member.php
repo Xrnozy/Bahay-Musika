@@ -4,32 +4,94 @@
 <link rel="stylesheet" href="../Admin.css" />
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
-    function imageData(url) {
-        const originalUrl = url || '';
-        return {
-            previewPhoto: originalUrl,
-            fileName: null,
-            emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
-            updatePreview($refs) {
-                var reader,
-                    files = $refs.input.files;
-                reader = new FileReader();
-                reader.onload = (e) => {
-                    this.previewPhoto = e.target.result;
-                    this.fileName = files[0].name;
-                };
-                reader.readAsDataURL(files[0]);
-            },
-            clearPreview($refs) {
-                $refs.input.value = null;
-                this.previewPhoto = originalUrl;
-                this.fileName = false;
-            }
-        };
-    }
+function imageData(url) {
+    const originalUrl = url || '';
+    return {
+        previewPhoto: originalUrl,
+        fileName: null,
+        emptyText: originalUrl ? 'No new file chosen' : 'No file chosen',
+        updatePreview($refs) {
+            var reader,
+                files = $refs.input.files;
+            reader = new FileReader();
+            reader.onload = (e) => {
+                this.previewPhoto = e.target.result;
+                this.fileName = files[0].name;
+            };
+            reader.readAsDataURL(files[0]);
+        },
+        clearPreview($refs) {
+            $refs.input.value = null;
+            this.previewPhoto = originalUrl;
+            this.fileName = false;
+        }
+    };
+}
 </script>
 <?php
+<<<<<<< HEAD
 include 'db-connection.php';
+=======
+$conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
+if ($conn->connect_error) {
+    die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
+}
+
+$user = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        echo "<p style='color:red;'>Invalid member ID.</p>";
+        exit;
+    }
+
+    $stmt = $conn->prepare("SELECT * FROM members WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if (!$user) {
+        echo "<p style='color:red;'>Member not found.</p>";
+        exit;
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+    $name = trim($_POST['name'] ?? '');
+    $fb_link = trim($_POST['fb_link'] ?? '');
+    $category = trim($_POST['category'] ?? '');
+
+    if (!$id || !$name) {
+        echo "<p style='color:red;'>ID and name are required.</p>";
+        exit;
+    }
+
+    $profileImagePath = '';
+    if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['profileImage']['tmp_name'];
+        $fileName = basename($_FILES['profileImage']['name']);
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (in_array($fileExtension, $allowedExtensions)) {
+            $newFileName = uniqid("img_") . "." . $fileExtension;
+            $uploadPath = "../uploads/" . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+                $profileImagePath = $uploadPath;
+            } else {
+                echo "<p style='color:red;'>Error uploading image.</p>";
+                exit;
+            }
+        } else {
+            echo "<p style='color:red;'>Invalid image type.</p>";
+            exit;
+        }
+    }
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
 
 
 ?>
@@ -49,12 +111,18 @@ include 'db-connection.php';
                     <div class="form-fields-container">
                         <div class="form-fields">
                             <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+<<<<<<< HEAD
                             <input class="info-input" type="text" name="firstName"
                                 value="<?= htmlspecialchars($user['firstName']) ?>" placeholder="First Name" />
+=======
+                            <input class="info-input" type="text" name="name"
+                                value="<?= htmlspecialchars($user['name']) ?>" placeholder="Name" />
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                             <input class="info-input" type="text" name="fb_link"
                                 value="<?= htmlspecialchars($user['fb_link']) ?>" placeholder="Facebook Link" />
                             <input class="info-input" type="text" name="category"
                                 value="<?= htmlspecialchars($user['category']) ?>" placeholder="Category" />
+<<<<<<< HEAD
                             <input class="info-input" type="text" name="middleName"
                                 value="<?= htmlspecialchars($user['middleName'] ?? '') ?>" placeholder="Middle Name" />
                             <input class="info-input" type="text" name="extName"
@@ -73,6 +141,8 @@ include 'db-connection.php';
                                 value="<?= htmlspecialchars($user['zip'] ?? '') ?>" placeholder="Zip Code" />
                             <input class="info-input" type="text" name="country"
                                 value="bruh" placeholder="Country" />
+=======
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                             <div class="form-buttons">
                                 <button type="submit" class="btn-submit">Save Changes</button>
                                 <button type="reset" class="btn-cancel">Cancel</button>
@@ -127,10 +197,11 @@ include 'db-connection.php';
     </div>
 
     <script>
-        document.getElementById("editMemberForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
+    document.getElementById("editMemberForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
 
+<<<<<<< HEAD
             fetch("content-manager/update_member_process.php", {
                     method: "POST",
                     body: formData
@@ -144,6 +215,21 @@ include 'db-connection.php';
                         "<p style='color:red;'>Error saving changes.</p>";
                 });
         });
+=======
+        fetch("content-manager/update_member_process.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById("edit-response").innerHTML = data;
+            })
+            .catch(err => {
+                document.getElementById("edit-response").innerHTML =
+                    "<p style='color:red;'>Error saving changes.</p>";
+            });
+    });
+>>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
     </script>
 
 </div>
