@@ -9,10 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit("<span style='color: red;'>❌ Name and Email are required.</span>");
     }
 
-<<<<<<< HEAD
-=======
-    $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
->>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
+
     if ($conn->connect_error) {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }

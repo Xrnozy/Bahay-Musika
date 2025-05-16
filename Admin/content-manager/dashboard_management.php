@@ -1,13 +1,5 @@
 <?php
-<<<<<<< HEAD
 include 'db-connection.php';
-=======
-// Database connection
-$conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
-if ($conn->connect_error) {
-    exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
-}
->>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
 
 // Initialize counts
 $newsCount = 0;
@@ -94,13 +86,13 @@ $conn->close();
                         <h3>Latest News</h3>
                         <ul>
                             <?php while ($news = $latestNews->fetch_assoc()): ?>
-                            <li><?php echo $news['title'] . " (" . $news['created_at'] . ")"; ?></li>
+                                <li><?php echo $news['title'] . " (" . $news['created_at'] . ")"; ?></li>
                             <?php endwhile; ?>
                         </ul>
                         <h3>Latest Events</h3>
                         <ul>
                             <?php while ($event = $latestEvents->fetch_assoc()): ?>
-                            <li><?php echo $event['title'] . " (" . $event['created_at'] . ")"; ?></li>
+                                <li><?php echo $event['title'] . " (" . $event['created_at'] . ")"; ?></li>
                             <?php endwhile; ?>
                         </ul>
                     </div>
@@ -129,7 +121,6 @@ $conn->close();
                     <h2 class="member-title">Members List</h2>
 
                     <div class="list">
-<<<<<<< HEAD
                         <?php foreach ($membersList as $user): ?>
                             <div class="member-cont">
                                 <?php if (!empty($user['profile_image'])): ?>
@@ -154,63 +145,28 @@ $conn->close();
                                 </div>
                             </div>
                         <?php endforeach; ?>
-=======
-                        <?php
-                        $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        }
-
-                        $result = $conn->query("SELECT * FROM members");
-                        while ($user = $result->fetch_assoc()):
-                        ?>
-                        <div class="member-cont">
-                            <?php if (!empty($user['profile_image'])): ?>
-                            <img src="<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="member-img">
-                            <?php else: ?>
-                            <div class="member-img placeholder">
-                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                            </div>
-                            <?php endif; ?>
-
-                            <div class="member-details">
-                                <h3><?= htmlspecialchars($user['name'] . ', ' . $user['fb_link']) ?></h3>
-                                <div class="category-edit-cont">
-                                    <h5><?= ucfirst($user['category']) ?></h5>
-                                    <h5 class="edit-button"
-                                        onclick="loadContent('content-manager/update_member.php?id=<?= $user['id'] ?>')">
-                                        Edit Member Profile</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endwhile; ?>
-
->>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-    const newsCount = <?php echo json_encode($newsCount); ?>;
-    const eventsCount = <?php echo json_encode($eventsCount); ?>;
-    const membersCount = <?php echo json_encode($membersCount); ?>;
+        const newsCount = <?php echo json_encode($newsCount); ?>;
+        const eventsCount = <?php echo json_encode($eventsCount); ?>;
+        const membersCount = <?php echo json_encode($membersCount); ?>;
 
-    console.log({
-        newsCount,
-        eventsCount,
-        membersCount
-    });
+        console.log({
+            newsCount,
+            eventsCount,
+            membersCount
+        });
 
-    // Wait until the whole page is loaded before updating
-    window.addEventListener("DOMContentLoaded", () => {
-        document.querySelector('.total-news').textContent = newsCount;
-        document.querySelector('.total-event').textContent = eventsCount;
-        document.querySelector('.total-members').textContent = membersCount;
-    });
+        // Wait until the whole page is loaded before updating
+        window.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('.total-news').textContent = newsCount;
+            document.querySelector('.total-event').textContent = eventsCount;
+            document.querySelector('.total-members').textContent = membersCount;
+        });
     </script>
 
 </div>

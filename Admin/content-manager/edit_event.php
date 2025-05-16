@@ -4,11 +4,7 @@
 include 'db-connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-<<<<<<< HEAD
-    // Use shared $conn from db-connection.php
-=======
-    $conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
->>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
+
     if ($conn->connect_error) {
         echo "<script>alert('Database connection failed: " . $conn->connect_error . "');</script>";
         exit;

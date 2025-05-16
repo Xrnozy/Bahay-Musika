@@ -10,10 +10,7 @@ if (!$id) {
     exit;
 }
 
-<<<<<<< HEAD
-=======
-$conn = new mysqli("127.0.0.1", "root", "", "my_database", 3307);
->>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
+
 if ($conn->connect_error) {
     die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
 }
@@ -41,11 +38,11 @@ if (!$user) {
 <div id="edit-response"></div>
 
 <script>
-document.getElementById("editMemberForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const formData = new FormData(this);
+    document.getElementById("editMemberForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
 
-<<<<<<< HEAD
+
         fetch("content-manager/update_member_process.php", {
                 method: "POST",
                 body: formData
@@ -59,19 +56,4 @@ document.getElementById("editMemberForm").addEventListener("submit", function(e)
                     "<p style='color:red;'>Error saving changes.</p>";
             });
     });
-=======
-    fetch("content-manager/update_member_process.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById("edit-response").innerHTML = data;
-        })
-        .catch(err => {
-            document.getElementById("edit-response").innerHTML =
-                "<p style='color:red;'>Error saving changes.</p>";
-        });
-});
->>>>>>> 157a0d0e1d4d67b404f471e12cdfd885da14d670
 </script>
