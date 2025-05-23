@@ -35,178 +35,76 @@ while ($row = $result->fetch_assoc()) {
     $eventsByDate[$row['date']][] = $row;
 }
 ?>
+<?php
+include 'db-connection.php';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Collect and sanitize form data
+    $title = trim($_POST['title'] ?? '');
+    $location = trim($_POST['location'] ?? '');
+    $date = trim($_POST['date'] ?? '');
+    $time = trim($_POST['time'] ?? '');
+    $fb_link = trim($_POST['fb_link'] ?? '');
+
+    // Handle image upload
+    $image = null;
+    $image_type = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $imgTmp = $_FILES['image']['tmp_name'];
+        $imgSize = $_FILES['image']['size'];
+        $maxSize = 1024 * 1024 * 4; // 4MB limit
+
+        if ($imgSize > $maxSize) {
+            exit("<span style='color: red;'>❌ Image size exceeds the maximum limit of 4MB.</span>");
+        }
+
+        $imgData = file_get_contents($imgTmp);
+        $image = $imgData;
+        $image_type = $_FILES['image']['type'];
+    }
+
+    // Validate required fields
+    $requiredFields = [
+        'Title' => $title,
+        'Location' => $location,
+        'Date' => $date,
+        'Time' => $time,
+        'Facebook Link' => $fb_link
+    ];
+    $missing = [];
+    foreach ($requiredFields as $label => $value) {
+        if (empty($value)) {
+            $missing[] = $label;
+        }
+    }
+    if (!empty($missing)) {
+        exit("<span style='color: red;'>❌ Please fill in all required fields: " . implode(', ', $missing) . ".</span>");
+    }
+
+    // Update the database
+    $stmt = $conn->prepare("UPDATE events SET title = ?, location = ?, date = ?, time = ?, fb_link = ?, image = ?, image_type = ? WHERE id = ?");
+    if ($stmt) {
+        $stmt->bind_param("sssssssi", $title, $location, $date, $time, $fb_link, $image, $image_type, $id);
+        if ($stmt->execute()) {
+            $stmt->close();
+            $conn->close();
+            exit("<span style='color: green;'>✅ Event updated successfully!</span>");
+        } else {
+            $stmt->close();
+            $conn->close();
+            exit("<span style='color: red;'>❌ Update Error: " . $stmt->error . "</span>");
+        }
+    } else {
+        $conn->close();
+        exit("<span style='color: red;'>❌ Prepare Failed: " . $conn->error . "</span>");
+    }
+}
+?>
+
 <div id="content" class="dashboard">
 
     <style>
         /* Hidden by default */
-        #popup {
-            display: none;
-            position: fixed;
-            height: auto;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: white;
-            border: 2px solid #333;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-content h2 {
-            margin-top: 0;
-        }
-
-        .modal-content label {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .modal-content input,
-        .modal-content button {
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .modal-content button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .modal-content button:hover {
-            background-color: #0056b3;
-        }
-
-        .event-details {
-            font-size: 14px;
-            margin-top: 5px;
-            color: #333;
-        }
-
-        .event-details p {
-            margin: 2px 0;
-        }
-
-        .event-details {
-            color: white
-        }
-
-        /* Popup form styles */
-        .form-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .form-title {
-            margin: 0;
-            font-size: 24px;
-            color: #333;
-        }
-
-        .form-subtitle {
-            margin: 5px 0 0 0;
-            font-size: 14px;
-            color: #777;
-        }
-
-        .form-fields {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-fields label {
-            margin-top: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-fields input {
-            margin-top: 5px;
-            padding: 10px;
-            font-size: 16px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .form-fields input::placeholder {
-            color: #aaa;
-        }
-
-        .form-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .btn-submit {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-submit:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-cancel {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-cancel:hover {
-            background-color: #c82333;
-        }
     </style>
     <div class="company-name">
         <h1 class="company-name-title">Bahay Musika Admin Panel</h1>
@@ -302,6 +200,9 @@ while ($row = $result->fetch_assoc()) {
 
                 <label for="image">Image:</label>
                 <input type="file" id="image" name="image" accept="image/*">
+
+                <label for='image-preview'>Image Preview:</label>
+                <img id='image-preview' src='' alt='Event Image' style='max-width: 100%; height: auto; margin-top: 10px; display: none;'>
             </div>
 
             <div class="form-buttons">
@@ -309,6 +210,9 @@ while ($row = $result->fetch_assoc()) {
                 <button type="button" class="btn-cancel" onclick="hidePopup()">Cancel</button>
             </div>
         </form>
+        <div id="form-response" style="margin-top: 10px;">
+            <p></p>
+        </div>
     </div>
 </div>
 
