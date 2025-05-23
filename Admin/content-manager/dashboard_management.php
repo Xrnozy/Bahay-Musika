@@ -121,10 +121,15 @@ $conn->close();
                     <h2 class="member-title">Members List</h2>
 
                     <div class="list">
-                        <?php foreach ($membersList as $user): ?>
+                        <?php foreach ($membersList as $user):
+                            $imageData = base64_encode($user['profile_image']);
+                            $imageType = $user['profile_image_type'];
+                        ?>
+
                             <div class="member-cont">
                                 <?php if (!empty($user['profile_image'])): ?>
-                                    <img src="<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="member-img">
+
+                                    <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="Profile" class="member-img">
                                 <?php else: ?>
                                     <div class="member-img placeholder">
                                         <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -135,11 +140,11 @@ $conn->close();
                                 <?php endif; ?>
 
                                 <div class="member-details">
-                                    <h3><?= htmlspecialchars($user['name'] . ', ' . $user['fb_link']) ?></h3>
+                                    <h3><?= htmlspecialchars($user['firstName'] . ', ' . $user['lastName']) ?></h3>
                                     <div class="category-edit-cont">
                                         <h5><?= ucfirst($user['category']) ?></h5>
                                         <h5 class="edit-button"
-                                            onclick="loadContent('content-manager/update_member.php')">
+                                            onclick="loadContent('content-manager/update_member.php?id=<?= $user['id'] ?>')">
                                             Edit Member Profile</h5>
                                     </div>
                                 </div>

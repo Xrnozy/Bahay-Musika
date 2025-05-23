@@ -4,7 +4,79 @@ include 'db-connection.php';
 
 <link rel="stylesheet" href="content-manager/css/add_member.css">
 <link rel="stylesheet" href="css/add_member.css">
+<style>
+    .members-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: 100%;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-left: 0px;
+    }
 
+    .member-cont {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .member-cont:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .member-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 10%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+        margin-right: 0px;
+    }
+
+    .member-details {
+        flex: 1;
+    }
+
+    .member-details h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .category-edit-cont {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .category-edit-cont h5 {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .edit-button {
+        cursor: pointer;
+        color: #007bff;
+        text-decoration: underline;
+        font-size: 14px;
+        color: white;
+    }
+
+    .edit-button:hover {
+        color: #0056b3;
+    }
+</style>
 <div id="content" class="dashboard">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
@@ -88,33 +160,32 @@ include 'db-connection.php';
 
             <h2 class="member-title">Members List</h2>
             <div class="list">
-                <div class="member-cont">
-                    <img src="https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-6/481259781_1223400092634847_3204620503352458800_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHZACEINnBnOrF1DLBqxRv8QLF8AAMgPLVAsXwAAyA8tdpFvBFsXdrJPvv9o0Y_Tq4HjVv6ppFipVjYxAMs4bdJ&_nc_ohc=OXuAr-zpxjgQ7kNvgFI9qKz&_nc_oc=Adnp_Fqk-kPTU9LnMosy_4WufYtviBTnq-Qe4CC_SNPMbQy7ytgH8GVNzdr05dzmWjk&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_gid=mAVXgbpDA1KMgfV_vv5eUw&oh=00_AYFc5oupRmGWfSYedFKjvoaJzb3MivRxv6mmyY2Ngjy66Q&oe=67ED0041" alt="" class="member-img">
-                    <div class="member-details">
-                        <h3>Dominic G. Casinto</h3>
-                        <div class="category-edit-cont">
-                            <h5>Alto</h5>
+                <?php
+                $result = $conn->query("SELECT * FROM members");
+                if ($result->num_rows > 0):
+                    while ($user = $result->fetch_assoc()): ?>
+                        <div class="member-cont">
+                            <?php if (!empty($user['profile_image'])): ?>
+                                <img src="data:image/jpeg;base64,<?= base64_encode($user['profile_image']) ?>" alt="Profile" class="member-img">
+                            <?php else: ?>
+                                <div class="member-img placeholder">
+                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </div>
+                            <?php endif; ?>
 
-                            <h5 class="edit-button" onclick="loadContent('content-manager/update_member.php')">Edit Member Profile</h5>
+                            <div class="member-details">
+                                <h3><?= htmlspecialchars($user['firstName'] . ' ' . $user['lastName']) ?></h3>
+                                <h5><?= htmlspecialchars($user['category']) ?></h5>
+
+
+                            </div>
+                            <h5 class="edit-button" onclick="loadContent('content-manager/update_member.php?id=<?= $user['id'] ?>')">Edit Member Profile</h5>
+
                         </div>
-
-                    </div>
-
-                </div>
-
-                <div class="member-cont">
-                    <img src="https://scontent.fmnl17-5.fna.fbcdn.net/v/t39.30808-6/481259781_1223400092634847_3204620503352458800_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHZACEINnBnOrF1DLBqxRv8QLF8AAMgPLVAsXwAAyA8tdpFvBFsXdrJPvv9o0Y_Tq4HjVv6ppFipVjYxAMs4bdJ&_nc_ohc=OXuAr-zpxjgQ7kNvgFI9qKz&_nc_oc=Adnp_Fqk-kPTU9LnMosy_4WufYtviBTnq-Qe4CC_SNPMbQy7ytgH8GVNzdr05dzmWjk&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_gid=mAVXgbpDA1KMgfV_vv5eUw&oh=00_AYFc5oupRmGWfSYedFKjvoaJzb3MivRxv6mmyY2Ngjy66Q&oe=67ED0041" alt="" class="member-img">
-                    <div class="member-details">
-                        <h3>Dominic G. Casinto</h3>
-                        <div class="category-edit-cont">
-                            <h5>Alto</h5>
-
-                            <h5 class="edit-button" onclick="loadContent('content-manager/update_member.php')">Edit Member Profile</h5>
-                        </div>
-
-                    </div>
-
-                </div>
+                <?php endwhile;
+                endif; ?>
             </div>
         </div>
 

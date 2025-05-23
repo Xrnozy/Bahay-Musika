@@ -32,7 +32,63 @@
       rel="stylesheet"
       href="content-manager/css/dashboard_management.css"
     />
+    <script>
+      function showPopup(
+        buttonLabel,
+        id,
+        title,
+        location,
+        date,
+        time,
+        fb_link
+      ) {
+        console.log(buttonLabel, id, title, location, date, time, fb_link);
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("overlay");
 
+        if (popup && overlay) {
+          popup.style.display = "block";
+          overlay.style.display = "block";
+          if (buttonLabel === "Add") {
+            const titleField = document.getElementById("title");
+            const locationField = document.getElementById("location");
+            const dateField = document.getElementById("date");
+            const timeField = document.getElementById("time");
+            const fbLinkField = document.getElementById("fb_link");
+
+            if (titleField) titleField.value = "";
+            if (locationField) locationField.value = "";
+            if (dateField) dateField.value = "";
+            if (timeField) timeField.value = "";
+            if (fbLinkField) fbLinkField.value = "";
+          }
+          if (
+            (id != null,
+            title != null,
+            location != null,
+            date != null,
+            time != null,
+            fb_link != null)
+          ) {
+            const titleField = document.getElementById("title");
+            const locationField = document.getElementById("location");
+            const dateField = document.getElementById("date");
+            const timeField = document.getElementById("time");
+            const fbLinkField = document.getElementById("fb_link");
+            if (titleField) titleField.value = title;
+            if (locationField) locationField.value = location;
+            if (dateField) dateField.value = date;
+            if (timeField) timeField.value = time;
+            if (fbLinkField) fbLinkField.value = fb_link;
+          }
+        }
+      }
+
+      function hidePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+      }
+    </script>
     <script>
       function imageData(url) {
         const originalUrl = url || "";
@@ -248,52 +304,25 @@
                 <button
                   class="btn btn-link"
                   type="button"
-                  onclick="loadContent('content-manager/edit_event.php')"
+                  onclick="loadContent('content-manager/update_event.php')"
                 >
                   Edit Event
                 </button>
               </div>
             </div>
           </div>
-
-          <!-- Calendar Events -->
           <div class="accordion-item">
             <h2 class="accordion-header" id="heading-calendar">
               <button
                 class="accordion-button collapsed no-arrow"
                 type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#calendarOptions"
-                aria-expanded="false"
-                aria-controls="calendarOptions"
+                onclick="loadContent('content-manager/calendar_management.php')"
               >
-                Calendar Events
+                Edit Calendar Events
               </button>
             </h2>
-            <div
-              id="calendarOptions"
-              class="accordion-collapse collapse"
-              aria-labelledby="heading-calendar"
-              data-bs-parent="#adminAccordion"
-            >
-              <div class="accordion-body">
-                <button
-                  class="btn btn-link"
-                  type="button"
-                  onclick="loadContent('content-manager/add_calendar_management.php')"
-                >
-                  Add Calendar Event
-                </button>
-                <button
-                  class="btn btn-link"
-                  type="button"
-                  onclick="loadContent('content-manager/calendar_management.php')"
-                >
-                  Edit Calendar Event
-                </button>
-              </div>
-            </div>
           </div>
+          <!-- Calendar Events -->
 
           <!-- Members Management -->
           <div class="accordion-item">
@@ -326,7 +355,7 @@
                 <button
                   class="btn btn-link"
                   type="button"
-                  onclick="loadContent('content-manager/edit_member.php')"
+                  onclick="loadContent('content-manager/update_member.php')"
                 >
                   Edit Member
                 </button>

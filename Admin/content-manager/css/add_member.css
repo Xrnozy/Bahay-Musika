@@ -195,13 +195,83 @@ input[type="file"] {
 }
 
 .member-cont {
-  border: 2px solid #ddd;
-  margin-top: 10px;
-  padding: 15px;
-  border-radius: 10px;
   display: flex;
-  height: fit-content;
-  flex-direction: row;
+  align-items: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.member-cont:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.member-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  border: 2px solid #ccc;
+}
+
+.member-img.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eaeaea;
+  color: #aaa;
+}
+
+.member-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.member-details h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.member-details p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.member-details a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.member-details a:hover {
+  color: #0056b3;
+}
+
+.edit-button {
+  align-self: flex-start;
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
 }
 .news-input {
   display: flex;

@@ -73,8 +73,19 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('userForm');
+        const maxSize = 1024 * 1024 * 4; // 4MB limit
+
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
+            const fileInput = document.getElementById('profileImage');
+            if (fileInput && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                if (file.size > maxSize) {
+                    e.preventDefault();
+                    document.getElementById('form-response').innerHTML = "<span style='color: red; margin-left:20px;'>❌ Image size exceeds the maximum limit of 4MB.</span>";
+                    return;
+                }
+            }
+
             let valid = true;
             let firstInvalid = null;
             // List of required field names
@@ -144,16 +155,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $state = trim($_POST['state'] ?? '');
     $zip = trim($_POST['zip'] ?? '');
     $fb_link = trim($_POST['fb_link'] ?? '');
+    $extName = trim($_POST['extName'] ?? '');
+    $maxSize = 1024 * 1024 * 4;
+    $imgSize = $_FILES['profileImage']['size'];
+
+    if ($imgSize > $maxSize) {
+        exit("<span style='color: red; margin-left:20px;'>❌ Image size exceeds the maximum limit of 4MB.</span>");
+    }
 
     // Handle profile image upload
-    $profile_image = '';
+    $profile_image = null;
+    $profile_image_type = null;
     if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOAD_ERR_OK) {
         $imgTmp = $_FILES['profileImage']['tmp_name'];
-        $imgName = basename($_FILES['profileImage']['name']);
-        $imgPath = '../../App/img/' . $imgName;
-        if (move_uploaded_file($imgTmp, $imgPath)) {
-            $profile_image = 'App/img/' . $imgName;
+        $imgSize = $_FILES['profileImage']['size'];
+        $maxSize = 1024 * 1024 * 4; // 4MB limit
+
+        if ($imgSize > $maxSize) {
+            exit("<span style='color: red; margin-left:20px;'>❌ Image size exceeds the maximum limit of 4MB.</span>");
         }
+
+        $imgData = file_get_contents($imgTmp); // Read the file content as binary data
+        $profile_image = $imgData;
+        $profile_image_type = $_FILES['profileImage']['type']; // Store the MIME type of the image
     }
 
     // Validate all required fields
@@ -190,9 +214,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $check->close();
         exit("<span style='color: orange;margin-left:20px;'>⚠️ User with this Facebook link already exists.</span>");
     } else {
-        $stmt = $conn->prepare("INSERT INTO members (firstName, middleName, lastName, fb_link, category, dob, phone, street, city, state, zip, country, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO members (firstName, middleName, lastName, extName, fb_link, category, dob, phone, street, city, state, zip, profile_image, profile_image_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)");
+        $imgSize = $_FILES['profileImage']['size'];
+
+        if ($imgSize > $maxSize) {
+            exit("<span style='color: red; margin-left:20px;'>❌ Image size exceeds the maximum limit of 4MB.</span>");
+        }
         if ($stmt) {
-            $stmt->bind_param("ssssssissssss", $firstName, $middleName, $lastName, $fb_link, $category, $dob, $phone, $street, $city, $state, $zip, $country, $profile_image);
+            $stmt->bind_param("sssssssisssssb", $firstName, $middleName, $lastName, $extName, $fb_link, $category, $dob, $phone, $street, $city, $state, $zip, $profile_image, $profile_image_type);
             if ($stmt->execute()) {
                 $stmt->close();
                 $check->close();
@@ -255,7 +284,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             Birth</label>
                                         <input class="info-input wow fadeInUp" type="date" name="dob"
                                             placeholder="Date of Birth" data-wow-delay="0.6s" />
-                                        <input class="info-input wow fadeInUp" type="tel" name="phone" id="phone"
+                                        <input class="info-input wow fadeInUp" type="number" name="phone" id="phone"
                                             placeholder="Phone Number" data-wow-delay="0.7s"
                                             maxlength="11" required />
 
@@ -344,35 +373,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="events-list">
                 <h2 class="member-title">Members List</h2>
 
+
                 <div class="list">
                     <?php
-                    $result = $conn->query("SELECT * FROM members");
-                    while ($user = $result->fetch_assoc()):
+                    if ($conn->connect_error) {
+                        echo "<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>";
+                    } else {
+                        $result = $conn->query("SELECT * FROM members");
+                        if ($result && $result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $imageData = base64_encode($row['profile_image']);
+                                $imageType = $row['profile_image_type'];
                     ?>
-                        <div class="member-cont">
-                            <?php if (!empty($user['profile_image'])): ?>
-                                <img src="<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="member-img">
-                            <?php else: ?>
-                                <div class="member-img placeholder">
-                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                </div>
-                            <?php endif; ?>
+                                <div class="news-input">
+                                    <div class="img-news-cont">
+                                        <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>" alt="" class="">
+                                    </div>
 
-                            <div class="member-details">
-                                <h3><?= htmlspecialchars($user['name'] . ', ' . $user['fb_link']) ?></h3>
-                                <div class="category-edit-cont">
-                                    <h5><?= ucfirst($user['category']) ?></h5>
-                                    <h5 class="edit-button"
-                                        onclick="loadContent('content-manager/update_member.php?id=<?= $user['id'] ?>')">
-                                        Edit Member Profile</h5>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endwhile; ?>
+                                    <div class="member-details">
+                                        <h3><?= htmlspecialchars($row['firstName'] . ' ' . $row['lastName']) ?></h3>
+                                        <p><strong>Middle Name:</strong> <?= htmlspecialchars($row['middleName']) ?></p>
+                                        <p><strong>Facebook:</strong> <a href="<?= htmlspecialchars($row['fb_link']) ?>" target="_blank">View Profile</a></p>
+                                        <p><strong>Category:</strong> <?= ucfirst($row['category']) ?></p>
+                                        <p><strong>Date of Birth:</strong> <?= htmlspecialchars($row['dob']) ?></p>
+                                        <p><strong>Phone:</strong> <?= htmlspecialchars($row['phone']) ?></p>
+                                        <p><strong>Address:</strong> <?= htmlspecialchars($row['street'] . ', ' . $row['city'] . ', ' . $row['state'] . ', ' . $row['zip']) ?></p>
 
+                                    </div>
+                                    <h5 class="edit-button" onclick="loadContent('content-manager/update_member.php?id=<?= $row['id'] ?>')">
+                                        Edit Member Profile
+                                    </h5>
+                                </div>
+                    <?php
+                            }
+                        } else {
+                            echo "<p>No news available.</p>";
+                        }
+                    }
+                    ?>
                 </div>
             </div>
         </div>

@@ -180,26 +180,29 @@
 
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const element = document.querySelector(".news-img-item");
+  document.addEventListener("DOMContentLoaded", function () {
+    gsap.registerPlugin(ScrollTrigger);
 
-    if (element) {
-      element.addEventListener("mouseenter", () => {
-        console.log("try bruh");
-        gsap.to(element, {
-          scale: 1.3,
-          duration: 0.3,
-        });
-      });
+    const newsContainer = document.querySelector("#horizontal .news-content");
+    const newsItems = gsap.utils.toArray(".news-item");
 
-      element.addEventListener("mouseleave", () => {
-        gsap.to(element, {
-          scale: 1,
-          duration: 0.3,
-        });
-      });
-    } else {
-      console.error("Element with class 'news-img-item' not found.");
+    if (!newsContainer || newsItems.length === 0) {
+      console.error("News container or items not found.");
+      return;
     }
+
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: newsContainer,
+        start: "top top",
+        end: "+=" + newsContainer.offsetWidth * newsItems.length,
+        pin: true,
+        scrub: 1,
+      },
+    }).to(newsItems, {
+      xPercent: -100 * (newsItems.length - 1),
+      ease: "sine.out",
+      duration: 4,
+    });
   });
 </script>

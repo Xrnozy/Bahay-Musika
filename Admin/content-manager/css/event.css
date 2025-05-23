@@ -66,20 +66,6 @@
   background: #ffffff70;
 }
 
-.upcoming-events ul li::after {
-  content: "Edit";
-  display: none;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: #1f1f1f;
-  color: white;
-  padding: 5px 10px;
-  font-size: 15px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
 .upcoming-events ul li:hover::after {
   display: block;
 }
