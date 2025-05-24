@@ -64,6 +64,8 @@ $news = $conn->query("SELECT * FROM news");
                     <th>Last Name</th>
                     <th>Category</th>
                     <th>Phone</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,6 +76,8 @@ $news = $conn->query("SELECT * FROM news");
                         <td><?= $row['lastName'] ?></td>
                         <td><?= $row['category'] ?></td>
                         <td><?= $row['phone'] ?></td>
+                        <td><?= $row['created_at'] ?></td>
+                        <td><?= $row['updated_at'] ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -90,6 +94,8 @@ $news = $conn->query("SELECT * FROM news");
                     <th>Location</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                 </tr>
             </thead>
             <tbody>
@@ -100,6 +106,8 @@ $news = $conn->query("SELECT * FROM news");
                         <td><?= $row['location'] ?></td>
                         <td><?= $row['date'] ?></td>
                         <td><?= $row['time'] ?></td>
+                        <td><?= $row['created_at'] ?></td>
+                        <td><?= $row['updated_at'] ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -116,6 +124,8 @@ $news = $conn->query("SELECT * FROM news");
                     <th>Location</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                 </tr>
             </thead>
             <tbody>
@@ -126,6 +136,8 @@ $news = $conn->query("SELECT * FROM news");
                         <td><?= $row['location'] ?></td>
                         <td><?= $row['date'] ?></td>
                         <td><?= $row['time'] ?></td>
+                        <td><?= $row['created_at'] ?></td>
+                        <td><?= $row['updated_at'] ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

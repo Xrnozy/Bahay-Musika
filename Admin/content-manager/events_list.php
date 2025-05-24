@@ -1,5 +1,6 @@
 <?php
 include 'db-connection.php';
+
 ?>
 
 <link rel="stylesheet" href="content-manager/css/add_member.css">
@@ -155,7 +156,11 @@ include 'db-connection.php';
     <h3 class="dashboard-title">Update Event Details</h3>
 
     <div class="main-cont">
-
+        <style>
+            .event-details-child {
+                color: #333;
+            }
+        </style>
         <div class="events-list">
 
             <h2 class="event-title">Events List</h2>
@@ -175,7 +180,7 @@ include 'db-connection.php';
                                 </div>
                             <?php endif; ?>
 
-                            <div class="event-details">
+                            <div class="event-details-child">
                                 <h3><?= htmlspecialchars($event['title']) ?></h3>
                                 <h5><?= htmlspecialchars($event['date']) ?></h5>
                             </div>

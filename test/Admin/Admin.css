@@ -1,0 +1,422 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+body :not(nav) h1,
+body :not(nav) h2,
+body :not(nav) h3,
+body :not(nav) h4,
+body :not(nav) h5,
+body :not(nav) h6 {
+  font-family: revert !important;
+  font-size: revert !important;
+  font-weight: revert !important;
+  line-height: revert !important;
+  color: revert !important;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  overflow-x: hidden;
+  flex-direction: row;
+}
+.text-button {
+  font-weight: 100;
+}
+nav {
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  position: fixed;
+  border-right: 1px solid #ddd;
+  top: 0;
+  z-index: 1000;
+  background-color: #ffffff;
+  flex-shrink: 0;
+}
+.profile-picture {
+  height: 60px;
+  border-radius: 100%;
+  margin-right: 5%;
+}
+
+.profile-cont {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(85, 85, 85);
+  padding: 30px;
+  align-items: center;
+}
+.admin-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+.admin-profile-cont {
+  display: flex;
+  flex-direction: column;
+}
+.admin-status {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(8, 218, 103) !important;
+}
+.dashboard {
+  background-color: rgb(255, 255, 255);
+
+  flex-grow: 1;
+  height: 100vh;
+}
+.dashboard-main {
+  width: 100%;
+  height: 100%;
+}
+.input-name {
+  height: 50px;
+}
+.dashboard-buttons {
+  display: flex;
+  height: fit-content;
+  flex-direction: row;
+  margin-top: 20px;
+  justify-content: center;
+}
+.form-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  height: 100%;
+}
+.buttons-click {
+  padding: 20px;
+  border: 1px solid rgb(211, 211, 211);
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  border-radius: 20px;
+  background-color: rgb(255, 255, 255);
+  width: 200px;
+}
+.mg-news-cont {
+  width: 30%;
+  height: 100%;
+}
+.mg-news-cont img {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.news-input {
+  display: flex;
+  flex-direction: row;
+  font-weight: 100;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 20px;
+}
+.news-input img {
+  height: 150px;
+  width: 200px;
+}
+.btn-news {
+  height: 40px;
+}
+.dashboard-title {
+  font-size: 15px;
+  margin-top: 0;
+  background-color: rgb(248, 248, 248);
+  padding: 15px;
+  font-weight: 600;
+
+  padding-left: 40px;
+}
+.company-name {
+  font-size: 13px;
+  padding: 20px;
+  background-color: rgb(71, 71, 71);
+  color: white;
+  padding-left: 40px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+nav .nav_buttons {
+  color: white;
+
+  font-weight: 300;
+  font-size: 13px;
+  display: flex;
+}
+
+.upcoming-sched {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.upcoming-sched {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.upcoming-main-cont {
+  height: 100%;
+  width: 30%;
+  border: 1px solid rgb(211, 211, 211);
+  margin-right: 50px;
+  border-radius: 20px;
+}
+.accordion-body .btn {
+  padding: 0 0 10px 20px;
+  text-decoration: none;
+  padding: 10px;
+  padding: 10px;
+  height: auto;
+  display: flex;
+  color: rgb(91, 91, 91);
+  border-radius: 0;
+}
+.accordion-body .btn:not(:last-child) {
+  border-bottom: 1px solid rgb(115, 115, 115);
+}
+.accordion-body .btn:hover {
+  background-color: rgb(211, 211, 211);
+}
+.accordion-body {
+  overflow: visible;
+}
+.donations {
+  width: 70%;
+  height: 100%;
+  border: 1px solid rgb(211, 211, 211);
+  background-color: white;
+  border-radius: 20px;
+}
+.navParent {
+  height: 100vh;
+}
+nav button {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  width: 100%;
+}
+.dashboard-parent {
+  margin-left: 250px;
+  width: 100%;
+}
+.intro-cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 29px;
+  color: rgba(255, 255, 255, 0.911);
+  width: 100%;
+  background-image: radial-gradient(
+      circle,
+      rgba(12, 12, 12, 0.87) 0%,
+      rgba(13, 13, 13, 0.945) 60%,
+      #101010 100%
+    ),
+    url("../App/img/homeBackground.jpg");
+}
+.nav_button {
+  padding: 0;
+  height: 45px;
+  cursor: pointer;
+}
+.navigation_buttons {
+  padding: 20px;
+}
+.events-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#popup {
+  display: none;
+  position: fixed;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: white;
+  border: 2px solid #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.modal-content input,
+.modal-content button {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-content button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.event-details {
+  font-size: 14px;
+  margin-top: 5px;
+  color: #333;
+}
+
+.event-details p {
+  margin: 2px 0;
+}
+
+.event-details {
+  color: white;
+}
+
+/* Popup form styles */
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.form-subtitle {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #777;
+}
+
+.form-fields {
+  height: auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-fields label {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-fields input {
+  margin-top: 5px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-fields input::placeholder {
+  color: #aaa;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-submit {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+}

@@ -1,0 +1,186 @@
+-- Fixed and Complete Database Schema for Bahay Musika
+
+-- Members table (fixed syntax)
+CREATE TABLE members (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(255) NOT NULL,
+    middleName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
+    extName VARCHAR(255),
+    fb_link VARCHAR(255),
+    category VARCHAR(100),
+    dob DATE,
+    phone VARCHAR(20),
+    street VARCHAR(255),
+    city VARCHAR(255),
+    state VARCHAR(255),
+    zip VARCHAR(25),
+    country VARCHAR(255),
+    profile_image LONGBLOB,
+    profile_image_type VARCHAR(50),
+    profile_image_path VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Events table (fixed syntax)
+CREATE TABLE events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    fb_link VARCHAR(255) NOT NULL,
+    image LONGBLOB,
+    image_type VARCHAR(50),
+    image_path VARCHAR(255),
+    description TEXT,
+    status ENUM('active', 'inactive', 'cancelled') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- News table (fixed syntax)
+CREATE TABLE news (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    location VARCHAR(255),
+    date DATE NOT NULL,
+    time TIME,
+    fb_link VARCHAR(255),
+    image LONGBLOB,
+    image_type VARCHAR(50),
+    image_path VARCHAR(255),
+    status ENUM('published', 'draft', 'archived') DEFAULT 'published',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Admin Users table (NEW)
+CREATE TABLE admin_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('head_admin', 'content_manager', 'social_manager') NOT NULL,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    status ENUM('active', 'inactive', 'suspended') DEFAULT 'active',
+    last_login TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- User Sessions table (NEW)
+CREATE TABLE user_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_token VARCHAR(255) UNIQUE NOT NULL,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    expires_at TIMESTAMP NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE CASCADE
+);
+
+-- Donations table (NEW)
+CREATE TABLE donations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    donor_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(20),
+    amount DECIMAL(10,2) NOT NULL,
+    reference_number VARCHAR(100),
+    payment_method ENUM('gcash', 'bpi', 'bank_transfer', 'other') NOT NULL,
+    donation_type ENUM('one_time', 'monthly') DEFAULT 'one_time',
+    message TEXT,
+    status ENUM('pending', 'verified', 'rejected') DEFAULT 'pending',
+    verified_by INT NULL,
+    verified_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (verified_by) REFERENCES admin_users(id) ON DELETE SET NULL
+);
+
+-- Contacts table (NEW)
+CREATE TABLE contacts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    message TEXT NOT NULL,
+    status ENUM('new', 'read', 'replied', 'archived') DEFAULT 'new',
+    replied_by INT NULL,
+    replied_at TIMESTAMP NULL,
+    reply_message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (replied_by) REFERENCES admin_users(id) ON DELETE SET NULL
+);
+
+-- Comments table (NEW)
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
+    comment TEXT NOT NULL,
+    page VARCHAR(50) NOT NULL,
+    parent_id INT NULL,
+    status ENUM('pending', 'approved', 'rejected', 'spam') DEFAULT 'pending',
+    ip_address VARCHAR(45),
+    moderated_by INT NULL,
+    moderated_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE,
+    FOREIGN KEY (moderated_by) REFERENCES admin_users(id) ON DELETE SET NULL
+);
+
+-- Analytics table (NEW)
+CREATE TABLE analytics (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    metric_name VARCHAR(100) NOT NULL,
+    metric_value INT NOT NULL,
+    metric_date DATE NOT NULL,
+    category VARCHAR(50),
+    additional_data JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_metric_date (metric_date),
+    INDEX idx_metric_name (metric_name)
+);
+
+-- Activity Logs table (NEW)
+CREATE TABLE activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    action VARCHAR(100) NOT NULL,
+    table_name VARCHAR(50),
+    record_id INT,
+    old_values JSON,
+    new_values JSON,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE CASCADE,
+    INDEX idx_user_action (user_id, action),
+    INDEX idx_created_at (created_at)
+);
+
+-- Insert default admin users
+INSERT INTO admin_users (username, email, password, role, first_name, last_name) VALUES
+('admin', 'admin', 'test', 'head_admin', 'Head', 'Administrator'),
+('content_manager', 'content', 'test', 'content_manager', 'Content', 'Manager'),
+('social_manager', 'social', 'test', 'social_manager', 'Social', 'Manager');
+
+-- Note: Default password for all accounts is 'password' (hashed)
+-- Please change these passwords after first login
+
+-- Create indexes for better performance
+CREATE INDEX idx_events_date ON events(date);
+CREATE INDEX idx_news_date ON news(date);
+CREATE INDEX idx_donations_status ON donations(status);
+CREATE INDEX idx_contacts_status ON contacts(status);
+CREATE INDEX idx_comments_status ON comments(status);
+CREATE INDEX idx_sessions_expires ON user_sessions(expires_at);

@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="main-cont">
         <div class="add-main-cont">
-            <form id="userForm" enctype="multipart/form-data">
+            <form id="userForm" method="POST" enctype="multipart/form-data">
                 <div class="personal-info-container">
                     <link rel="stylesheet" href="../personalInfo.css" />
                     <div class="personal-info-form">
@@ -208,22 +208,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
             </form>
             <script>
-                document.getElementById("user-form").addEventListener("submit", function(e) {
+                document.getElementById("userForm").addEventListener("submit", function(e) {
                     e.preventDefault();
 
                     const form = e.target;
                     const formData = new FormData(form);
 
-                    fetch("process.php", {
+                    fetch("content-manager/events_management.php", {
                             method: "POST",
                             body: formData
                         })
                         .then(response => response.text())
                         .then(data => {
-                            document.querySelector("#for-response p").innerHTML = data;
+                            document.querySelector("#form-response p").innerHTML = data;
+                            // Clear form on success
+                            if (data.includes("✅")) {
+                                form.reset();
+                                // Reset image preview if using Alpine.js
+                                const imageUpload = form.querySelector('[x-data]');
+                                if (imageUpload && imageUpload.__x) {
+                                    imageUpload.__x.$data.previewPhoto = '';
+                                    imageUpload.__x.$data.fileName = null;
+                                }
+                            }
                         })
                         .catch(error => {
-                            document.querySelector("#for-response p").innerHTML = "❌ Something went wrong.";
+                            document.querySelector("#form-response p").innerHTML = "❌ Something went wrong.";
                         });
                 });
             </script>
@@ -243,7 +253,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($conn->connect_error) {
                 echo "<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>";
             } else {
-                $result = $conn->query("SELECT title, location, date, time, fb_link, image, image_type FROM events ORDER BY id DESC");
+                $result = $conn->query("SELECT id, title, location, date, time, fb_link, image, image_type FROM events ORDER BY id DESC");
                 if ($result && $result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         $imageData = base64_encode($row['image']);
@@ -265,7 +275,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 </div>
                                 <p><a href="<?php echo htmlspecialchars($row['fb_link']); ?>" target="_blank">View on Facebook</a>
                                 </p>
-                                <h5 class="edit-button" onclick="loadContent('content-manager/update_event.php?id=<?= $event['id'] ?>')">
+                                <h5 class="edit-button" onclick="loadContent('content-manager/update_event.php?id=<?= $row['id'] ?>')">
                                     Edit Event
                                 </h5>
                             </div>

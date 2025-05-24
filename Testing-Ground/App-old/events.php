@@ -26,7 +26,7 @@
     #popup {
       display: none;
       position: fixed;
-      flex-direction: row;
+      flex-direction: column;
       top: 50%;
       left: 50%;
       height: 60vh;
@@ -43,7 +43,10 @@
 
     #eventForm {
       display: flex;
-      flex-direction: column;
+      width: 100%;
+      flex-direction: row;
+      justify-content: center;
+
     }
 
     #overlay {
@@ -76,7 +79,7 @@
       background: white;
       padding: 20px;
       border-radius: 8px;
-      max-width: 500px;
+
       width: 100%;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
@@ -530,302 +533,56 @@
               </div>
             </div>
           </div>
+          <?php
+          // Fetch events for carousel from database
+          $carouselQuery = "SELECT *, DATE_FORMAT(date, '%M %d %Y') as formatted_date FROM events ORDER BY date DESC LIMIT 10";
+          $carouselResult = $conn->query($carouselQuery);
+          $carouselEvents = [];
+          while ($row = $carouselResult->fetch_assoc()) {
+            $carouselEvents[] = $row;
+          }
+          ?>
+
           <div class="event-description-list-wrap">
             <div class="event-description-list">
               <div class="container-desc">
                 <div class="slick-track" style="opacity: 1">
-                  <div class="container-desc-per icymi">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-icymi">October 19 2024</span>
-                        <p class="event-title event-title-icymi">
-                          ICYMI:
-                          <i>The capabilities building program and values
-                            formation program 'Film Viewing'
-                          </i>
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-icymi">
-                            <p>Bahay Musika Building</p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-icymi">
-                          An annual film viewing for the beneficiaries of the
-                          organization as they watched the film “Lolo and the
-                          kid directed by Benedict Mique” that centers around
-                          an old man to a child and their remarkable
-                          connections to each other.
-                        </p>
-                        <div class="event-img event-img-icymi">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
+                  <?php foreach ($carouselEvents as $index => $event):
+                    $eventKey = 'event_' . $event['id'];
+                    $formattedTime = date('h:i A', strtotime($event['time']));
+                    $imageData = base64_encode($event['image']);
+                    $formattedDate = date('F j, Y', strtotime($event['date']));
+                    $imageSrc = 'data:' . $event['image_type'] . ';base64,' . $imageData;
+                  ?>
+                    <div class="container-desc-per <?php echo $eventKey; ?>">
+                      <div class="event-description-item slick-slide">
+                        <div class="time">
+                          <span class="event-date-label event-date-label-<?php echo $eventKey; ?>"><?php echo $formattedDate; ?></span>
+                          <p class="event-title event-title-<?php echo $eventKey; ?>">
+                            <?php echo htmlspecialchars($event['title']); ?>
+                          </p>
+                          <div class="event-date-cont">
+                            <span class="location-label location-label-<?php echo $eventKey; ?>">
+                              <p><?php echo htmlspecialchars($event['location']); ?></p>
+                              <div class="rectangle"></div>
+                            </span>
+                          </div>
+                          <p class="event-detail event-detail-<?php echo $eventKey; ?>">
+                            Event scheduled for <?php echo $formattedTime; ?> at <?php echo htmlspecialchars($event['location']); ?>.
+                            <?php if (!empty($event['fb_link'])): ?>
+                              <a href="<?php echo htmlspecialchars($event['fb_link']); ?>" class="fb_link" target="_blank">View on Facebook</a>
+                            <?php endif; ?>
+                          </p>
+                          <div class="event-img event-img-<?php echo $eventKey; ?>">
+                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-1" />
+                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-2" />
+                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-3" />
+                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-4" />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="container-desc-per baton">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-baton">August 31 2024
-                        </span>
-                        <p class="event-title event-title-baton">
-                          Under the baton:
-                          <i>The Anthony Villanueva music festival </i>
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-baton">
-                            <p>
-                              Tanghalang yaman lahi, Emilio Aguinaldo College
-                            </p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-baton">
-                          Minstrels of hope headed by their musical director,
-                          Mr Anthony Go Villanueva performed the piece CIkala
-                          Le Pong Pong, arranged by Ken Steven
-                        </p>
-                        <div class="event-img event-img-baton">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container-desc-per sagip">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-sagip">July 27 2024</span>
-                        <p class="event-title event-title-sagip">
-                          Benildean operation sagip:
-
-                          <i>Bagyong Carina </i>
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-sagip">
-                            <p>Benilde Center for Social Action</p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-sagip">
-                          Donations through relief packs for the victims of
-                          bagyong Carina given to the organization with the
-                          help of Benildeans.
-                        </p>
-                        <div class="event-img event-img-sagip">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container-desc-per school">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-school">July 21 2024</span>
-                        <p class="event-title event-title-school">
-                          Back to school program 2024
-
-                          <i>
-                            “Bayanihan sa bahay musika, tungo sa masayang
-                            balik eskwela”</i>
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-school">
-                            <p>Silahis ng Karunungan Ppecial School</p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-school">
-                          Donation of school supplies and other school
-                          essentials for the disabled children to equip the
-                          students for their very exciting return to school
-                        </p>
-                        <div class="event-img event-img-school">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container-desc-per pray">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-pray">March 17 2024
-                        </span>
-                        <p class="event-title event-title-pray">
-                          Prayer and Contemplation
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-pray">
-                            <p>Barangay 825 Zone 89 Saint Teri Chapel</p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-pray">
-                          To help our beneficiaries to acknowledge god's
-                          presence and keep their eyes on him by engaging
-                          their hearts and mind
-                        </p>
-                        <div class="event-img event-img-pray">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container-desc-per values">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-values">November 27 2023</span>
-                        <p class="event-title event-title-values">
-                          Values Formation
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-values">
-                            <p>Barangay 828 Zone 89 Paco Manila</p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-values">
-                          Celebrating children's month by promoting a child's
-                          well being. Highlights the importance of insuring
-                          every child has an access to proper nutrition and a
-                          safe living environment
-                        </p>
-                        <div class="event-img event-img-values">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container-desc-per hiv">
-                    <div class="event-description-item slick-slide">
-                      <div class="time">
-                        <span class="date-label date-label-hiv">June 2 2024</span>
-                        <p class="event-title event-title-hiv">
-                          Reproductive Health and HIV Awareness
-                        </p>
-                        <div class="date-cont">
-                          <span class="location-label location-label-hiv">
-                            <p>Merced St. Paco Manila</p>
-                            <div class="rectangle"></div>
-                          </span>
-                        </div>
-                        <p class="event-detail event-detail-hiv">
-                          The purpose of this seminar was to educate the
-                          people on how to prevent HIV by altering their
-                          sexual behavior , as well as to promote positive
-                          attitudes and increased comfort with one's
-                          sexualities.
-                        </p>
-                        <div class="event-img event-img-hiv">
-                          <img
-                            src="img/11.jpg"
-                            alt=""
-                            class="img img-icymi img-1" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-2" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-3" />
-                          <img
-                            src="img/12.jpg"
-                            alt=""
-                            class="img img-icymi img-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <?php endforeach; ?>
                 </div>
               </div>
             </div>
@@ -835,13 +592,9 @@
         <div class="carousel-container">
           <div class="carousel-items">
             <div id="trial" class="carousel-item"></div>
-            <div class="carousel-item">ICYMI</div>
-            <div class="carousel-item">Under the Baton</div>
-            <div class="carousel-item">Benildean Operation Sagip</div>
-            <div class="carousel-item">Back to School Program 2024</div>
-            <div class="carousel-item">Prayer and Contemplation</div>
-            <div class="carousel-item">Values Formation</div>
-            <div class="carousel-item">HIV Awareness</div>
+            <?php foreach ($carouselEvents as $index => $event): ?>
+              <div class="carousel-item"><?php echo htmlspecialchars($event['title']); ?></div>
+            <?php endforeach; ?>
           </div>
         </div>
       </div>
@@ -855,14 +608,16 @@
       const items = document.querySelector(".carousel-items");
       const itemHeight =
         document.querySelector(".carousel-item").offsetHeight;
+
+      // Dynamic itemsData based on PHP events
       const itemsData = [
-        "icymi",
-        "baton",
-        "sagip",
-        "school",
-        "pray",
-        "values",
-        "hiv",
+        <?php
+        $jsEventKeys = [];
+        foreach ($carouselEvents as $event) {
+          $jsEventKeys[] = '"event_' . $event['id'] . '"';
+        }
+        echo implode(',', $jsEventKeys);
+        ?>
       ];
 
       let currentIndex = 1;
@@ -918,6 +673,7 @@
         }
       }
 
+
       const updateCarousel = () => {
         Array.from(items.children).forEach((child) =>
           child.classList.remove("highlighted")
@@ -925,21 +681,17 @@
 
         items.children[currentIndex].classList.add("highlighted");
 
-        const defaultTranslationValueVh = 70;
         const highlightedItem = items.children[currentIndex];
-        const highlightedItemTop = highlightedItem.offsetTop;
-        const firstVisibleItem = items.children[1];
-        const firstItemTop =
-          firstVisibleItem.offsetTop + firstVisibleItem.clientHeight / 2;
+        const highlightedItemCenter =
+          highlightedItem.offsetTop + highlightedItem.clientHeight / 2;
+
+        const verticalOffset = 100; // pixels higher than center
+        const screenCenter = window.innerHeight / 2 - verticalOffset;
 
         const adjustmentValueVh =
-          ((highlightedItemTop +
-              highlightedItem.clientHeight / 2 -
-              firstItemTop) /
-            window.innerHeight) *
-          100;
-        const finalTranslationValueVh =
-          defaultTranslationValueVh - adjustmentValueVh;
+          ((highlightedItemCenter - screenCenter) / window.innerHeight) * 100;
+
+        const finalTranslationValueVh = -adjustmentValueVh;
 
         items.style.transform = `translateY(${finalTranslationValueVh}vh)`;
 

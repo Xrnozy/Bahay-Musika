@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bahay Musika</title>
+    <link
+      rel="icon"
+      href="https://scontent.fmnl17-4.fna.fbcdn.net/v/t39.30808-6/326550258_1211873573075989_6677191777421434541_n.png?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeE6Urt2xxcxoLN8MjGWaK1K_DUXngsHECb8NReeCwcQJvRQ_toAsM5tsfVUWOQGNwfSWmpHmXy7nJB9cZoOvIDo&_nc_ohc=KZTZvuXVbMQQ7kNvgEsQxgG&_nc_zt=23&_nc_ht=scontent.fmnl17-4.fna&_nc_gid=AGbVG-ASeBS2vQfqePKkcRX&oh=00_AYCcaHCKgb-d8RBvxut-kIycO77cVquYY86DHb1wc8TodA&oe=675D887B"
+      type="image/x-icon"
+    />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("img").forEach((img) => {
+          img.setAttribute("loading", "lazy");
+        });
+      });
+
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: "vertical",
+        gestureDirection: "vertical",
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+      });
+
+      //get scroll value
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+
+      requestAnimationFrame(raf);
+    </script>
+    <script>
+      const cache = {};
+      let currentPage = "";
+
+      const pages = [
+        "home.php",
+        "about-us.php",
+        "contacts.php",
+        "donation.php",
+        "events.php",
+        "news.php",
+      ];
+      window.onload = () => {
+        pages.forEach((page) => preloadContent(page));
+        if (currentPage != "home.php") {
+          loadContent("home.php");
+          initializeGSAP();
+        }
+      };
+
+      function preloadContent(page) {
+        fetch(page)
+          .then((response) => response.text())
+          .then((data) => {
+            cache[page] = data;
+            console.log(cache);
+          })
+          .catch((error) => console.error("Error preloading content:", error));
+      }
+
+      function loadContent(page) {
+        if (currentPage === page) {
+          console.log(`"${page}" is already loaded, skipping reload.`);
+          document.addEventListener("click", function (event) {
+            if (event.target.id === "aboutUsID") {
+              document.getElementById("about-us").scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          });
+          return;
+        }
+
+        if (cache[page]) {
+          document.getElementById("body-main-cont").innerHTML = cache[page];
+          document.addEventListener("click", function (event) {
+            if (event.target.id === "aboutUsID") {
+              document.getElementById("about-us").scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          });
+          initializeGSAP();
+        } else {
+          fetch(page)
+            .then((response) => response.text())
+            .then((data) => {
+              cache[page] = data;
+              document.getElementById("body-main-cont").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading content:", error));
+        }
+
+        currentPage = page;
+      }
+    </script>
+    <script>
+      function initializeGSAP() {
+        setTimeout(() => {
+          gsap.registerPlugin(ScrollTrigger);
+          const aboutUs = document.getElementById("about-us");
+          if (!aboutUs) return; // Ensure element exists before running GSAP
+
+          const imgItems = gsap.utils.toArray(".img-items");
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: aboutUs,
+                start: "top top",
+                pin: true,
+                scrub: 1,
+                end: "+=" + aboutUs.offsetWidth * imgItems.length,
+              },
+            })
+            .to(".guitar", { scale: 5, delay: 1, ease: "linear", duration: 3 })
+            .to(".img-content", { scale: 1.1, ease: "ease", duration: 6 }, "<")
+            .to(".guitar", { opacity: 0, delay: 1.5, duration: 4 }, "<")
+            .to(".img-content", {
+              xPercent: -100 * (imgItems.length - 1),
+              ease: "sine.out",
+              snap: 1 / (imgItems.length - 1),
+              duration: 10,
+            })
+            .to(
+              ".about-us-text",
+              { opacity: 1, ease: "linear", duration: 4, delay: 2 },
+              "<"
+            )
+            .to(
+              ".pCont",
+              { left: "0px", ease: "ease", duration: 3, opacity: 1, delay: 1 },
+              "<"
+            );
+        }, 500); // Slight delay to allow content to be added
+      }
+    </script>
+    <script>
+      function initializeGSAP1() {
+        setTimeout(() => {
+          gsap.registerPlugin(ScrollTrigger);
+          const section_2 = document.getElementById("horizontal");
+          if (!section_2) return; // Ensure element exists before running GSAP
+
+          let box_items = gsap.utils.toArray(".news-item");
+
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: section_2,
+                pin: true,
+                scrub: 1,
+                end: "+=" + section_2.offsetWidth * box_items.length,
+              },
+            })
+            .to(box_items, {
+              xPercent: -100 * (box_items.length - 1),
+              ease: "sine.out",
+              snap: 1 / (box_items.length - 1),
+              duration: 4,
+            });
+        }, 500); // Slight delay to allow content to be added
+      }
+      document.addEventListener("DOMContentLoaded", initializeGSAP1);
+    </script>
+    
+    <script src="preload.js"></script>
+    <link rel="stylesheet" href="main-css.css" />
+    <link rel="stylesheet" href="preload.css" />
+    <link rel="stylesheet" href="scroll.css" />
+    <link rel="stylesheet" href="instruments.css" />
+    <link rel="stylesheet" href="carousel.css" />
+    <link rel="prerender" href="/home" />
+    <link rel="prerender" href="/contacts" />
+    <link rel="prerender" href="/donations" />
+    <link rel="prerender" href="/events" />
+    <link rel="prerender" href="/news" />
+    <script src="js/home-gsap.js"></script>
+    <link rel="stylesheet" href="event.css" />
+    <link rel="stylesheet" href="donation.css" />
+    <link rel="stylesheet" href="main-css.css" />
+    <link rel="stylesheet" href="scroll.css" />
+
+    <link rel="stylesheet" href="instruments.css" />
+    <link rel="stylesheet" href="carousel.css" />
+    <script src="js/lenis.js"></script>
+    <script src="js/gsap.js"></script>
+    <script src="js/scrollToPlugin.js"></script>
+    <script src="js/scrollTrigger.js"></script>
+    <script src="js/lenis.js"></script>
+    <script src="js/gsap.js"></script>
+    <script src="js/scrollToPlugin.js"></script>
+    <script src="js/scrollTrigger.js"></script>
+    <script type="speculationrules">
+      {
+        "prerender": [
+          {
+            "source": "list",
+            "urls": [
+              "/Bahay-Musika/Testing-Ground/App/home",
+              "/Bahay-Musika/Testing-Ground/App/home#about-us",
+              "/Bahay-Musika/Testing-Ground/App/contacts",
+              "/Bahay-Musika/Testing-Ground/App/donation",
+              "/Bahay-Musika/Testing-Ground/App/events",
+              "/Bahay-Musika/Testing-Ground/App/news"
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Forum&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+    </style>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Forum&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+    </style>
+  </head>
+  <body id="smooth-scroll-wrapper">
+    <div class="preloader">
+      <div class="loader-container">
+        <div class="lines-container">
+          <div class="line horizontal-line" style="top: 25%"></div>
+          <div class="line horizontal-line" style="top: 50%"></div>
+          <div class="line horizontal-line" style="top: 75%"></div>
+          <div class="line vertical-line" style="left: 25%"></div>
+          <div class="line vertical-line" style="left: 50%"></div>
+          <div class="line vertical-line" style="left: 75%"></div>
+
+          <div class="dot" style="top: 25%; left: 25%"></div>
+          <div class="dot" style="top: 25%; left: 50%"></div>
+          <div class="dot" style="top: 25%; left: 75%"></div>
+          <div class="dot" style="top: 50%; left: 25%"></div>
+          <div class="dot" style="top: 50%; left: 50%"></div>
+          <div class="dot" style="top: 50%; left: 75%"></div>
+          <div class="dot" style="top: 75%; left: 25%"></div>
+          <div class="dot" style="top: 75%; left: 50%"></div>
+          <div class="dot" style="top: 75%; left: 75%"></div>
+        </div>
+
+        <div class="particles-container" id="particles-container"></div>
+
+        <div class="counter-container">
+          <div class="counter">0</div>
+        </div>
+
+        <div class="message">Initializing</div>
+
+        <div class="progress-bar">
+          <div class="progress-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+    <div class="body-cont">
+      <div class="width-full">
+        <div>
+          <nav>
+            <div class="header">
+              <div class="header-hamburgerLogo">
+                <a href="#default" class="logo">Bahay Musika</a>
+
+                <div class="header-left">
+                  <div class="Hamburger">
+                    <span class="Bar"></span>
+                    <span class="Bar"></span>
+                    <span class="Bar"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="header-right">
+                <a onclick="loadContent('home.php')">Home</a>
+                <a id="aboutUsID" onclick="loadContent('home.php')">About us</a>
+                <a onclick="loadContent('events.php')">Events</a>
+                <a onclick="loadContent('news.php')">News</a>
+                <a onclick="loadContent('donation.php')">Donation</a>
+                <a onclick="loadContent('contacts.php')">Contact Us</a>
+              </div>
+            </div>
+          </nav>
+          <script>
+            document
+              .getElementById("aboutUsClick")
+              .addEventListener("click", function (e) {
+                e.preventDefault();
+                gsap.to(window, {
+                  duration: 1.5,
+                  scrollTo: { y: "#about-us" },
+                });
+              });
+            document
+              .getElementById("homePageClick")
+              .addEventListener("click", function (e) {
+                e.preventDefault();
+                gsap.to(window, {
+                  duration: 2.5,
+                  scrollTo: { y: "#homepage", offsetY: 70 },
+                  ease: "expoScale(0.5,7,none)",
+                });
+              });
+          </script>
+          <div id="body-main-cont"></div>
+        </div>
+      </div>
+
+      <script>
+        const col_left = document.querySelector(".col_left");
+        const timeln = gsap.timeline({ paused: true });
+        gsap.set(".width-full", { width: "100vw" });
+        timeln.fromTo(
+          col_left,
+          { y: 0 },
+          { y: "170vh", duration: 1, ease: "none" },
+          0
+        );
+      </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const container = document.querySelector(".carousel-container");
+          const carouselCont = document.querySelector(".carousel-items");
+
+          const items = document.querySelector(".carousel-items");
+          const itemHeight =
+            document.querySelector(".carousel-item").offsetHeight;
+          const itemsData = [
+            "icymi",
+            "baton",
+            "sagip",
+            "school",
+            "pray",
+            "values",
+            "hiv",
+          ];
+
+          let currentIndex = 1;
+          let isScrolling = false;
+          let autoScrollInterval = null;
+          let delayTimeout;
+          let isClicked = false;
+          let mouseDownTime = 0;
+          let isMouseDown = false;
+          let isAutoScrolling = false;
+
+          const carouselItems = document.querySelectorAll(".carousel-item");
+
+          let isFollowing = false;
+
+          // Scroll lock logic
+          let isScrollLocked = false;
+
+          carouselCont.addEventListener("mouseenter", () => {});
+
+          carouselCont.addEventListener("mouseleave", () => {
+            document.body.classList.remove("scroll-locked");
+          });
+
+          carouselItems.forEach((item, index) => {
+            item.addEventListener("mouseover", (event) => {
+              const hoveredItem = event.currentTarget;
+              const itemText = hoveredItem.textContent || "No Text";
+              const isHighlightedFollow =
+                hoveredItem.classList.contains("highlighted");
+
+              document.addEventListener("mousemove", moveImage);
+            });
+
+            item.addEventListener("mouseleave", () => {
+              isClicked = false;
+              isFollowing = false;
+
+              setTimeout(() => {
+                if (!isFollowing) {
+                  // Additional logic if needed
+                }
+              }, 200);
+            });
+          });
+
+          function moveImage(e) {
+            if (isFollowing) {
+              const targetX = e.pageX;
+              const targetY =
+                e.pageY + document.documentElement.clientHeight * 0.1;
+              requestAnimationFrame(() => {});
+            }
+          }
+
+          const updateCarousel = () => {
+            Array.from(items.children).forEach((child) =>
+              child.classList.remove("highlighted")
+            );
+
+            items.children[currentIndex].classList.add("highlighted");
+
+            const defaultTranslationValueVh = 70;
+            const highlightedItem = items.children[currentIndex];
+            const highlightedItemTop = highlightedItem.offsetTop;
+            const firstVisibleItem = items.children[1];
+            const firstItemTop =
+              firstVisibleItem.offsetTop + firstVisibleItem.clientHeight / 2;
+
+            const adjustmentValueVh =
+              ((highlightedItemTop +
+                highlightedItem.clientHeight / 2 -
+                firstItemTop) /
+                window.innerHeight) *
+              100;
+            const finalTranslationValueVh =
+              defaultTranslationValueVh - adjustmentValueVh;
+
+            items.style.transform = `translateY(${finalTranslationValueVh}vh)`;
+
+            itemsData.forEach((key, index) => {
+              const isHighlighted =
+                items.children[index + 1]?.classList.contains("highlighted");
+              const selectors = [
+                `.date-label-${key}`,
+                `.location-label-${key}`,
+                `.event-detail-${key}`,
+                `.event-title-${key}`,
+                `.event-img-${key}`,
+              ];
+
+              selectors.forEach((selector) => {
+                const element = document.querySelector(selector);
+                if (element) element.classList.toggle("active", isHighlighted);
+              });
+            });
+          };
+
+          items.addEventListener("mousedown", () => {
+            isMouseDown = true;
+
+            mouseDownTimeout = setTimeout(() => {
+              isMouseDown = false;
+            }, 300);
+          });
+
+          items.addEventListener("mouseup", () => {
+            clearTimeout(mouseDownTimeout); // Clear the timeout
+            isMouseDown = false; // Reset mouse down state
+          });
+
+          const nextItem = () => {
+            currentIndex = (currentIndex + 1) % items.children.length;
+
+            if (currentIndex === 0) {
+              currentIndex = 1;
+            }
+            updateCarousel();
+          };
+
+          const prevItem = () => {
+            currentIndex =
+              (currentIndex - 1 + items.children.length) %
+              items.children.length;
+
+            if (currentIndex === 0) {
+              currentIndex = 7;
+            }
+            updateCarousel();
+          };
+
+          const handleScroll = (event) => {
+            if (!isScrolling) {
+              event.deltaY > 0 ? nextItem() : prevItem();
+              isScrolling = true;
+              setTimeout(() => (isScrolling = false), 2000);
+              restartAutoScroll();
+            }
+            event.preventDefault();
+          };
+
+          const handleClick = (index) => {
+            clearTimeout(delayTimeout);
+            delayTimeout = setTimeout(() => {
+              currentIndex = index;
+              updateCarousel();
+            }, 100);
+            restartAutoScroll();
+          };
+
+          const restartAutoScroll = () => {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = setInterval(nextItem, 6000);
+            isAutoScrolling = true;
+          };
+
+          const handleHover = () => clearInterval(autoScrollInterval);
+          const handleMouseOut = () => restartAutoScroll();
+
+          document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+              clearInterval(autoScrollInterval);
+              isAutoScrolling = false;
+            } else {
+              restartAutoScroll();
+            }
+          });
+
+          const handleTransitionEnd = () => {};
+
+          updateCarousel();
+          items.children[0].classList.add("highlighted");
+          items.addEventListener("transitionend", handleTransitionEnd);
+          container.addEventListener("wheel", handleScroll);
+
+          Array.from(items.children).forEach((child, index) => {
+            child.addEventListener("click", () => handleClick(index));
+            child.addEventListener("mouseover", handleHover);
+            child.addEventListener("mouseout", handleMouseOut);
+          });
+
+          const startAutoScroll = () => {
+            if (!isAutoScrolling) {
+              isAutoScrolling = true;
+              autoScrollInterval = setInterval(nextItem, 6000);
+            }
+          };
+
+          const stopAutoScroll = () => {
+            clearInterval(autoScrollInterval);
+            isAutoScrolling = false;
+          };
+
+          const observerOptions = {
+            root: null,
+            threshold: 0.7,
+          };
+
+          const observerCallback = (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                startAutoScroll();
+                if (currentIndex === 0) {
+                  currentIndex = 1;
+                  updateCarousel();
+                }
+              } else {
+                stopAutoScroll();
+              }
+            });
+          };
+
+          const observer = new IntersectionObserver(
+            observerCallback,
+            observerOptions
+          );
+
+          observer.observe(container);
+        });
+        const hamburger = document.querySelector(".Hamburger");
+        const navMenu = document.querySelector(".header-right");
+
+        hamburger.addEventListener("click", () => {
+          hamburger.classList.toggle("active");
+          navMenu.classList.toggle("active");
+        });
+      </script>
+      <script>
+        window.addEventListener(
+          "wheel",
+          function (e) {
+            if (e.ctrlKey) {
+              e.preventDefault();
+              return false;
+            }
+          },
+          { passive: false }
+        );
+
+        window.addEventListener("keydown", function (e) {
+          if (
+            e.ctrlKey &&
+            (e.key === "+" || e.key === "-" || e.key === "=" || e.key === "0")
+          ) {
+            e.preventDefault();
+          }
+        });
+
+        hamburger.addEventListener("click", () => {
+          hamburger.classList.toggle("active");
+          navMenu.classList.toggle("active");
+        });
+      </script>
+
+      <script src="smooth-scrollbar.js"></script>
+      <footer class="footer">
+        <video
+          class="footer_video"
+          muted=""
+          loop=""
+          autoplay
+          src="//cdn.shopify.com/s/files/1/0526/6905/5172/t/5/assets/footer.mp4?v=29581141968431347981633714450"
+          type="video/mp4"
+        ></video>
+
+        <div class="container">
+          <div class="footer_inner">
+            <div class="c-footer">
+              <div class="layout">
+                <div class="layout_item w-50">
+                  <div class="newsletter">
+                    <h3 class="newsletter_title">
+                      Get updates on fun stuff you probably want to know about
+                      in your inbox.
+                    </h3>
+                    <form action="">
+                      <input type="text" placeholder="Email Address" />
+                      <button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          height="24"
+                        >
+                          <path fill="none" d="M0 0h24v24H0z" />
+                          <path
+                            d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                          />
+                        </svg>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="layout_item w-25">
+                  <nav class="c-nav-tool">
+                    <h4 class="c-nav-tool_title">Menu</h4>
+                    <ul class="c-nav-tool_list">
+                      <li>
+                        <a href="#about-us" class="c-link">About Us</a>
+                      </li>
+
+                      <li>
+                        <a href="events" class="c-link">Events</a>
+                      </li>
+
+                      <li>
+                        <a href="news" class="c-link">News</a>
+                      </li>
+                      <a href="donation" class="c-link">Donation</a>
+                      <li>
+                        <a href="#" class="c-link"></a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <div class="layout_item w-25">
+                  <nav class="c-nav-tool">
+                    <h4 class="c-nav-tool_title">Contact Us</h4>
+                    <ul class="c-nav-tool_list">
+                      <li class="c-nav-tool_item">
+                        <a href="email" class="c-link">Email</a>
+                      </li>
+
+                      <li class="c-nav-tool_item">
+                        <a
+                          href="https://www.instagram.com/minstrelsrhythmofhope?igsh=MXA3cGF4Mm81ZWZwbg=="
+                          class="c-link"
+                          >Instagram</a
+                        >
+                      </li>
+
+                      <li class="c-nav-tool_item">
+                        <a
+                          href="https://www.youtube.com/@minstrelsofhope"
+                          class="c-link"
+                          >Youtube</a
+                        >
+                      </li>
+
+                      <li class="c-nav-tool_item">
+                        <a
+                          href="https://www.instagram.com/minstrelsrhythmofhope?igsh=MXA3cGF4Mm81ZWZwbg=="
+                          class="c-link"
+                          >Tiktok</a
+                        >
+                      </li>
+
+                      <li class="c-nav-tool_item">
+                        <a
+                          href="https://web.facebook.com/minstrelsrhythmofhopeinc/?__n=K&_rdc=1&_rdr"
+                          class="c-link"
+                          >Facebook</a
+                        >
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              <div class="layout c-2">
+                <div class="layout_item w-50">
+                  <ul class="flex">
+                    <li>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        height="32"
+                      >
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="M12 6.654a6.786 6.786 0 0 1 2.596 5.344A6.786 6.786 0 0 1 12 17.34a6.786 6.786 0 0 1-2.596-5.343A6.786 6.786 0 0 1 12 6.654zm-.87-.582A7.783 7.783 0 0 0 8.4 12a7.783 7.783 0 0 0 2.728 5.926 6.798 6.798 0 1 1 .003-11.854zm1.742 11.854A7.783 7.783 0 0 0 15.6 12a7.783 7.783 0 0 0-2.73-5.928 6.798 6.798 0 1 1 .003 11.854z"
+                        />
+                      </svg>
+                    </li>
+                    <li>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="32"
+                        height="32"
+                      >
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path
+                          d="M22 12l-4-4V6l6 6-6 6v-2zm-7.5 1H16v2h-6v-2h1.5V9.9c0-.695-.308-1.349-.835-1.768-.527-.418-1.231-.632-1.935-.632-1.615 0-2.941 1.326-2.941 2.948v5.562h1.5v-4.478c0-.719.665-1.243 1.436-1.243 1.194 0 1.594.775 1.594 1.528v4.218h1.5v-5.343c0-1.145-.867-2.048-1.902-2.048-1.392 0-2.243.96-2.243 2.36v5.306z"
+                        />
+                      </svg>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="layout_item w-50">
+                  <p class="copy">&copy;2024 Bahay Musika</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

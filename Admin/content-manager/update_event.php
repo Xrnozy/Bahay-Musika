@@ -31,6 +31,8 @@
 
 <?php
 include 'db-connection.php';
+
+
 $id = $_GET['id'] ?? null;
 $event = null;
 if ($id) {

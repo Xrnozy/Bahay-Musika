@@ -1,6 +1,7 @@
 <?php
 include 'db-connection.php';
 
+
 // Initialize counts
 $newsCount = 0;
 $eventsCount = 0;

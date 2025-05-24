@@ -1,0 +1,230 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+}
+body {
+  display: flex;
+  overflow-x: hidden;
+}
+
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 250px;
+  background-color: #f8f9fa;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-right: 1px solid #ddd;
+}
+
+.navigation-bar {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.logout-layout {
+  margin-top: auto;
+  padding: 15px;
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.img-branding {
+  height: 40px;
+  margin-right: 12px;
+}
+
+.brand-name {
+  display: flex;
+  align-items: center;
+}
+
+.brand-name h1 {
+  font-size: 24px;
+}
+nav {
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  position: fixed;
+  border-right: 1px solid #ddd;
+  top: 0;
+  z-index: 1000;
+  background-color: #ffffff;
+  flex-shrink: 0;
+}
+.nav-list {
+  padding: 0;
+  list-style: none;
+}
+
+.nav-list a {
+  display: block;
+  margin-bottom: 15px;
+  text-decoration: none;
+  color: black;
+}
+
+.accordion-body {
+  background-color: rgb(234, 234, 234);
+}
+
+.accordion-body .list {
+  padding: 0 0 10px 20px;
+}
+
+.p-i-ul {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.p-i-ul.open {
+  max-height: 500px;
+}
+
+/* Remove arrow from specific accordion button */
+
+/* Ensure your styles override Bootstrap */
+.progress-container {
+  padding: 40px;
+  background-color: #f8f9fa;
+  border: 1px solid #e7e7e7ad;
+  display: flex;
+  border-radius: 6px;
+  flex-direction: row;
+  font-family: Arial, sans-serif;
+}
+#main {
+  overflow-y: auto;
+}
+.main {
+  width: 100vw;
+  overflow: hidden;
+}
+.top {
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #5f5f5f34;
+}
+.progress-title {
+  font-size: 40px;
+  font-weight: bold;
+
+  margin-right: 20px;
+}
+
+/* Ensure the height of the progress bar is large enough */
+.progress-container .progress {
+  height: 20px !important; /* Use !important if Bootstrap is overriding it */
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.progress-bar-cont {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+.progress-container .progress-bar {
+  height: 100% !important;
+  background-color: #28a745;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  transition: width 0.4s ease;
+}
+
+.progress-message {
+  font-size: 14px;
+  color: #dc3545;
+}
+.progress-bar-layout {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.notification {
+  height: 30px;
+}
+.acc-name {
+  font-size: 20px;
+}
+.acc-profile-img {
+  height: 40px;
+  border-radius: 100px;
+}
+.profile-acc-layout {
+  display: flex;
+  justify-content: center;
+}
+.acc {
+  gap: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.left {
+  display: flex;
+  padding: 20px 0 0 20px;
+  margin-left: 20px;
+  flex-direction: column;
+}
+.right {
+  padding: 20px;
+
+  overflow-y: scroll;
+}
+.submission-status {
+  border: 1px solid rgb(223, 223, 223);
+  border-radius: 6px;
+
+  padding: 20px;
+}
+.content-main-cont {
+  display: flex;
+  width: auto;
+  height: 100vh;
+  overflow-y: scroll;
+}
+.submission-col {
+  background-color: #898989;
+}
+body {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-out;
+}
+
+body.loaded {
+  opacity: 1;
+  visibility: visible;
+}
+.expiring {
+  padding: 20px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border: 1px solid rgb(223, 223, 223);
+}

@@ -324,7 +324,10 @@ input[type="file"] {
 
 .form-fields {
   display: flex;
+  align-items: start;
   flex-direction: column;
+  width: auto;
+  overflow: hidden;
   gap: 10px;
   flex: 1;
 }
@@ -427,6 +430,7 @@ input[type="file"] {
 .name {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 .Ext {
   width: 100px;
@@ -439,7 +443,8 @@ input[type="file"] {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 20px; /* spacing between fields */
+  gap: 20px;
+  width: 100%; /* spacing between fields */
 }
 .address input {
   flex: 1 1 calc(50% - 20px); /* 2 per row with 20px gap */
