@@ -1,7 +1,7 @@
 <?php
 include '../content-manager/db-connection.php';
 
-$query = "SELECT id, name, email, comment, page, ip_address, status, created_at FROM comments ORDER BY created_at DESC";
+$query = "SELECT id, name, email, comment, page,  created_at FROM comments ORDER BY created_at DESC";
 $result = $conn->query($query);
 ?>
 <!DOCTYPE html>

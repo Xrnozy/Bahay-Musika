@@ -37,27 +37,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             flex-direction: column;
             align-items: center;
-            max-width: 700px;
-            margin: 40px auto;
+            max-width: 480px;
+            margin: 40px auto 0 auto;
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px #0001;
-            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #0002;
+            padding: 40px 36px 32px 36px;
         }
 
-        .filter-row {
-            margin-bottom: 18px;
+        h2.mb-4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3a4b;
+            margin-bottom: 28px !important;
         }
 
-        .filter-label {
+        .mb-3 {
+            width: 100%;
+            margin-bottom: 22px !important;
+        }
+
+        .form-label {
             font-weight: 500;
-            margin-bottom: 6px;
+            color: #3b4252;
+            margin-bottom: 8px;
+        }
+
+        .form-select {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 1rem;
+        }
+
+        #filtersContainer {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #4f8cff 0%, #2356c7 100%);
+            border: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2356c7 0%, #4f8cff 100%);
         }
     </style>
 </head>
 
 <body>
+    <div class="company-name">
+        <h1 class="company-name-title">Bahay Musika Admin Panel</h1>
+    </div>
+    <h3 class="dashboard-title">Report & Analytics</h3>
     <div class="container">
+
         <h2 class="mb-4">Generate Report</h2>
         <form id="reportForm" onsubmit="return false;">
             <div class="mb-3">

@@ -14,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $stmt = $conn->prepare("INSERT INTO comments (name, email, comment, page, ip_address, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
-    $stmt->bind_param("sssss", $name, $email, $comment, $page, $ip);
+    $stmt = $conn->prepare("INSERT INTO comments (name, email, comment, page,  created_at) VALUES (?, ?, ?, ?, NOW())");
+    $stmt->bind_param("ssss", $name, $email, $comment, $page);
 
     if ($stmt->execute()) {
         header('Location: thankyou.php?status=success');

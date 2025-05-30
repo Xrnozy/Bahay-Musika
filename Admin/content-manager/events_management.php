@@ -4,6 +4,10 @@
 <?php
 include 'db-connection.php';
 
+// Get admin user id from session (assumes session is started and user id is stored as admin_id)
+$created_by = $_SESSION['admin_id'] ?? null;
+$updated_by = $created_by;
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $eventTitle = trim($_POST['eventTitle'] ?? '');
     $eventLocation = trim($_POST['eventLocation'] ?? '');
@@ -24,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }
 
-    $stmt = $conn->prepare("INSERT INTO events (title, location, date, time, fb_link, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO events (title, location, date, time, fb_link, image, image_type, created_by, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if ($stmt) {
-        $stmt->bind_param("sssssss", $eventTitle, $eventLocation, $dateOfEvents, $timeOfEvents, $eventsLink, $imageData, $imageType);
+        $stmt->bind_param("ssssssiii", $eventTitle, $eventLocation, $dateOfEvents, $timeOfEvents, $eventsLink, $imageData, $imageType, $created_by, $updated_by);
         if ($stmt->execute()) {
             exit("<span style='color: green;'>✅ Events added successfully!</span>");
         } else {

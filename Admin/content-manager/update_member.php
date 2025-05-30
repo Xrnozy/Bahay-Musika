@@ -108,10 +108,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $check->execute();
     $check->store_result();
 
+    // Get admin user id from session (assumes session is started and user id is stored as admin_id)
+    $updated_by = $_SESSION['admin_id'] ?? null;
+
     // Update the database query to update the table instead of inserting a new record
-    $stmt = $conn->prepare("UPDATE members SET firstName = ?, middleName = ?, lastName = ?, extName = ?,fb_link = ?, category = ?, dob = ?, phone = ?, street = ?, city = ?, state = ?, zip = ?, profile_image = ?, profile_image_type = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE members SET firstName = ?, middleName = ?, lastName = ?, extName = ?,fb_link = ?, category = ?, dob = ?, phone = ?, street = ?, city = ?, state = ?, zip = ?, profile_image = ?, profile_image_type = ?, updated_by = ? WHERE id = ?");
     if ($stmt) {
-        $stmt->bind_param("sssssssissssssi", $firstName, $middleName, $lastName, $extName, $fb_link, $category, $dob, $phone, $street, $city, $state, $zip, $profile_image, $profile_image_type, $id);
+        $stmt->bind_param("sssssssisssssbii", $firstName, $middleName, $lastName, $extName, $fb_link, $category, $dob, $phone, $street, $city, $state, $zip, $profile_image, $profile_image_type, $updated_by, $id);
         if ($stmt->execute()) {
             $stmt->close();
             $check->close();

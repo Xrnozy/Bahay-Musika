@@ -94,6 +94,7 @@ function decrypt_sensitive($data)
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Donation Type</th>
+                    <th>Status</th> <!-- New Status column -->
                 </tr>
             </thead>
             <tbody>
@@ -119,13 +120,24 @@ function decrypt_sensitive($data)
                                 No Image
                             <?php endif; ?>
                         </td>
-                        <td class="masked-data" data-type="email" data-id="<?= $row['id'] ?>" data-full="<?= htmlspecialchars(decrypt_sensitive($row['donor_email'])) ?>">
-                            <?= substr(htmlspecialchars($row['donor_email']), 0, 10) . (strlen($row['donor_email']) > 10 ? '...' : '') ?>
+                        <td class="masked-data" data-type="email" data-id="<?= $row['id'] ?>" data-full="<?= htmlspecialchars(decrypt_sensitive($row['email'])) ?>">
+                            <?= substr(htmlspecialchars($row['email']), 0, 10) . (strlen($row['email']) > 10 ? '...' : '') ?>
                         </td>
                         <td class="masked-data" data-type="phone" data-id="<?= $row['id'] ?>" data-full="<?= htmlspecialchars(decrypt_sensitive($row['phone'])) ?>">
                             <?= substr(htmlspecialchars($row['phone']), 0, 10) . (strlen($row['phone']) > 10 ? '...' : '') ?>
                         </td>
                         <td><?= htmlspecialchars($row['donation_type'] ?? '') ?></td>
+                        <td>
+                            <?php if ($row['status'] === 'verified'): ?>
+                                <span class="badge bg-success">Verified</span>
+                            <?php else: ?>
+                                <form method="post" action="verify_donation.php" target="verifyWindow" style="display:inline;">
+                                    <input type="hidden" name="verify_id" value="<?= $row['id'] ?>">
+                                    <button type="submit" onclick="verify()" class="btn btn-success btn-sm">Verify</button>
+                                </form>
+
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -164,3 +176,19 @@ function decrypt_sensitive($data)
 </body>
 
 </html>
+
+<?php
+// Handle donation verification
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['verify_id'])) {
+    $verify_id = intval($_POST['verify_id']);
+    $admin_id = $_SESSION['admin_id'] ?? null;
+    if ($admin_id && $verify_id) {
+        $stmt = $conn->prepare("UPDATE donations SET status = 'verified', verified_by = ?, verified_at = NOW() WHERE id = ?");
+        $stmt->bind_param("ii", $admin_id, $verify_id);
+        $stmt->execute();
+        $stmt->close();
+        echo "<script>location.reload();</script>";
+        exit;
+    }
+}
+?>

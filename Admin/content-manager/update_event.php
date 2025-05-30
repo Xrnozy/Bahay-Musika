@@ -91,10 +91,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit("<span style='color: red;'>❌ Please fill in all required fields: " . implode(', ', $missing) . ".</span>");
     }
 
+    // Get admin user id from session (assumes session is started and user id is stored as admin_id)
+    $updated_by = $_SESSION['admin_id'] ?? null;
+
     // Update the database
-    $stmt = $conn->prepare("UPDATE events SET title = ?, location = ?, date = ?, time = ?, fb_link = ?, image = ?, image_type = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE events SET title = ?, location = ?, date = ?, time = ?, fb_link = ?, image = ?, image_type = ?, updated_by = ? WHERE id = ?");
     if ($stmt) {
-        $stmt->bind_param("sssssssi", $title, $location, $date, $time, $fb_link, $image, $image_type, $id);
+        $stmt->bind_param("sssssssii", $title, $location, $date, $time, $fb_link, $image, $image_type, $updated_by, $id);
         if ($stmt->execute()) {
             $stmt->close();
             $conn->close();

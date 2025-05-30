@@ -214,14 +214,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $check->close();
         exit("<span style='color: orange;margin-left:20px;'>⚠️ User with this Facebook link already exists.</span>");
     } else {
-        $stmt = $conn->prepare("INSERT INTO members (firstName, middleName, lastName, extName, fb_link, category, dob, phone, street, city, state, zip, profile_image, profile_image_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)");
+        // Get admin user id from session (assumes session is started and user id is stored as admin_id)
+        $created_by = $_SESSION['admin_id'] ?? null;
+        $updated_by = $created_by;
+
+        $stmt = $conn->prepare("INSERT INTO members (firstName, middleName, lastName, extName, fb_link, category, dob, phone, street, city, state, zip, profile_image, profile_image_type, created_by, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $imgSize = $_FILES['profileImage']['size'];
 
         if ($imgSize > $maxSize) {
             exit("<span style='color: red; margin-left:20px;'>❌ Image size exceeds the maximum limit of 4MB.</span>");
         }
         if ($stmt) {
-            $stmt->bind_param("sssssssisssssb", $firstName, $middleName, $lastName, $extName, $fb_link, $category, $dob, $phone, $street, $city, $state, $zip, $profile_image, $profile_image_type);
+            $stmt->bind_param("sssssssisssssbii", $firstName, $middleName, $lastName, $extName, $fb_link, $category, $dob, $phone, $street, $city, $state, $zip, $profile_image, $profile_image_type, $created_by, $updated_by);
             if ($stmt->execute()) {
                 $stmt->close();
                 $check->close();

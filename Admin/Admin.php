@@ -403,6 +403,16 @@ if ($userRole !== 'head_admin') {
     }
   </script>
   <script>
+    function verify() {
+      document.querySelectorAll('form[action$="content-manager/verify_donation.php"]').forEach(function(form) {
+        form.onsubmit = function(e) {
+          e.preventDefault();
+          window.open('content-manager/verify_donation.php', 'verifyWindow', 'width=400,height=200');
+        };
+      });
+    }
+  </script>
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
       const updateForm = document.getElementById("update-member-form");
 

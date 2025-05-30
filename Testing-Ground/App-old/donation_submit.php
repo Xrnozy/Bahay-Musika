@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $enc_email = encrypt_sensitive($donor_email);
     $enc_phone = encrypt_sensitive($phone);
     // Insert into database (image as BLOB)
-    $stmt = $conn->prepare("INSERT INTO donations (donor_name, donor_email, phone, amount, reference_number, payment_method, donation_type, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO donations (donor_name, email, phone, amount, reference_number, payment_method, donation_type, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if (!$stmt) {
         die('Prepare failed: ' . $conn->error);
     }
