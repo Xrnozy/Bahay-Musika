@@ -1,12 +1,29 @@
 <?php
-include 'db-connection.php'; // Include database connection
+include 'db-connection.php';
 
-// Fetch data from the database
-$members = $conn->query("SELECT * FROM members");
-$events = $conn->query("SELECT * FROM events");
-$news = $conn->query("SELECT * FROM news");
+// List of tables to allow report generation for
+$tables = [
+    'members' => 'Members',
+    'events' => 'Events',
+    'news' => 'News',
+    'donations' => 'Donations',
+    'contacts' => 'Contacts',
+    'comments' => 'Comments',
+];
+
+// Table columns and filterable fields (manually mapped for best UX)
+
+
+// Handle form submission and redirect
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $table = $_POST['table'] ?? '';
+    $filters = $_POST['filters'] ?? [];
+    $query = http_build_query(['table' => $table] + $filters);
+    header("Location: generate_report.php?$query");
+    exit;
+}
+
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,135 +33,47 @@ $news = $conn->query("SELECT * FROM news");
     <title>Generate Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
         .container {
-            margin-top: 20px;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0001;
+            padding: 32px;
         }
 
-        .table {
-            margin-top: 20px;
+        .filter-row {
+            margin-bottom: 18px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            margin-bottom: 6px;
         }
     </style>
 </head>
 
-
-<div class="container">
-    <h1 class="text-center">Generate Report</h1>
-
-    <form method="GET" class="mb-4">
-        <div class="row">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Search...">
-            </div>
-            <div class="col-md-4">
-                <select name="filter" class="form-control">
-                    <option value="members">Members</option>
-                    <option value="events">Events</option>
-                    <option value="news">News</option>
+<body>
+    <div class="container">
+        <h2 class="mb-4">Generate Report</h2>
+        <form id="reportForm" onsubmit="return false;">
+            <div class="mb-3">
+                <label class="form-label">Select Table</label>
+                <select class="form-select" name="table" id="tableSelect" required>
+                    <option value="" disabled selected>Select table...</option>
+                    <?php foreach ($tables as $key => $label): ?>
+                        <option value="<?= $key ?>"><?= $label ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
-            </div>
-        </div>
-    </form>
+            <div id="filtersContainer"></div>
+            <button type="button" class="btn btn-primary mt-3" onclick="openReportTab()">Generate</button>
+        </form>
 
-    <div>
-        <h2>Members</h2>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Category</th>
-                    <th>Phone</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $members->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $row['id'] ?></td>
-                        <td><?= $row['firstName'] ?></td>
-                        <td><?= $row['lastName'] ?></td>
-                        <td><?= $row['category'] ?></td>
-                        <td><?= $row['phone'] ?></td>
-                        <td><?= $row['created_at'] ?></td>
-                        <td><?= $row['updated_at'] ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
     </div>
-
-    <div>
-        <h2>Events</h2>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $events->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $row['id'] ?></td>
-                        <td><?= $row['title'] ?></td>
-                        <td><?= $row['location'] ?></td>
-                        <td><?= $row['date'] ?></td>
-                        <td><?= $row['time'] ?></td>
-                        <td><?= $row['created_at'] ?></td>
-                        <td><?= $row['updated_at'] ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <div>
-        <h2>News</h2>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $news->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $row['id'] ?></td>
-                        <td><?= $row['title'] ?></td>
-                        <td><?= $row['location'] ?></td>
-                        <td><?= $row['date'] ?></td>
-                        <td><?= $row['time'] ?></td>
-                        <td><?= $row['created_at'] ?></td>
-                        <td><?= $row['updated_at'] ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-
+</body>
 
 </html>

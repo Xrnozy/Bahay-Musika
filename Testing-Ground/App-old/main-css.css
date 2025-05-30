@@ -179,9 +179,18 @@ body {
 }
 
 .news-img-item:hover {
-  filter: grayscale(10);
+  filter: grayscale(0);
 }
-
+.top-news-paragraph {
+  height: 100%;
+}
+.news-items {
+  height: 600px;
+}
+.desc {
+  height: 70%;
+  overflow: hidden;
+}
 .news {
   height: 100vh;
 }
@@ -382,7 +391,9 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-
+.c-nav-tool_list .c-link {
+  color: black;
+}
 p {
   font-weight: 200;
 }
@@ -645,7 +656,9 @@ body {
 }
 
 .news-img img {
-  height: 200%;
+  width: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
 }
 
 .read-more::before {

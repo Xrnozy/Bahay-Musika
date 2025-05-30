@@ -67,6 +67,7 @@ CREATE TABLE admin_users (
     first_name VARCHAR(100),
     last_name VARCHAR(100),
     status ENUM('active', 'inactive', 'suspended') DEFAULT 'active',
+    is_blocked BOOLEAN DEFAULT 0,
     last_login TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

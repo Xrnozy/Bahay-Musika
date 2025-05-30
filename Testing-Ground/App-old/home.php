@@ -135,23 +135,13 @@
               <h1 class="h1First">We are bahay musika</h1>
               <div class="pCont">
                 <p class="pFirst">
-                  We are the poor helping the poor, youth serving youth. As
-                  volunteers, we dedicate ourselves to offering
-                  underprivileged children opportunities to develop their
-                  talents in dance, theater, singing, and visual arts, all
-                  within a supportive environment. We also provide remedial
-                  classes for those in need.
+
+                  We are the poor helping the poor. They are youth serving youth. Those involved freely give of themselves in offering to less fortunate youth opportunities that call forth their talents in the arts. In a congenial and affirming atmosphere, children are gathered to explore interests in dance, theater, creative movement/dance, singing, and visual arts. Also, the Minstrels provide remedial classes for those in need.
                 </p>
                 <p class="pSecond">
-                  Through these programs, we not only nurture skills in
-                  alternative education and the arts but also foster a sense
-                  of love, concern, and solidarity within our community. What
-                  began with nine young women and Mr. Alain Pronovost has
-                  grown into a mission to provide creative outlets and
-                  education for less fortunate Filipino youth. By doing so, we
-                  help them gain knowledge, express themselves artistically,
-                  and bring beauty to their surroundings.
+                  While the varying programs of The MRHI provide opportunities for the youth to develop their skills in the areas of alternative education and arts, they also become a venue for The Minstrels to return to their civic community some of the advantages from which they have benefited over the years. In their persons they become witnesses to love, concern and solidarity with those less fortunate in their society.
                 </p>
+
               </div>
             </div>
 
@@ -351,20 +341,7 @@
                   Get updates on fun stuff you probably want to know about in
                   your inbox.
                 </h3>
-                <form action="">
-                  <input type="text" placeholder="Email Address" />
-                  <button>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      height="24">
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path
-                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" />
-                    </svg>
-                  </button>
-                </form>
+
               </div>
             </div>
 
@@ -428,30 +405,7 @@
           </div>
           <div class="layout c-2">
             <div class="layout_item w-50">
-              <ul class="flex">
-                <li>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="32"
-                    height="32">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M12 6.654a6.786 6.786 0 0 1 2.596 5.344A6.786 6.786 0 0 1 12 17.34a6.786 6.786 0 0 1-2.596-5.343A6.786 6.786 0 0 1 12 6.654zm-.87-.582A7.783 7.783 0 0 0 8.4 12a7.783 7.783 0 0 0 2.728 5.926 6.798 6.798 0 1 1 .003-11.854zm1.742 11.854A7.783 7.783 0 0 0 15.6 12a7.783 7.783 0 0 0-2.73-5.928 6.798 6.798 0 1 1 .003 11.854z" />
-                  </svg>
-                </li>
-                <li>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="32"
-                    height="32">
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path
-                      d="M22 12l-4-4V6l6 6-6 6v-2zm-7.5 1H16v2h-6v-2h1.5V9.9c0-.695-.308-1.349-.835-1.768-.527-.418-1.231-.632-1.935-.632-1.615 0-2.941 1.326-2.941 2.948v5.562h1.5v-4.478c0-.719.665-1.243 1.436-1.243 1.194 0 1.594.775 1.594 1.528v4.218h1.5v-5.343c0-1.145-.867-2.048-1.902-2.048-1.392 0-2.243.96-2.243 2.36v5.306z" />
-                  </svg>
-                </li>
-              </ul>
+
             </div>
 
             <div class="layout_item w-50">

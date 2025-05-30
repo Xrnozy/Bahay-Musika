@@ -10,10 +10,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $dateOfNews = trim($_POST['dateOfNews'] ?? '');
     $timeOfNews = trim($_POST['timeOfNews'] ?? '');
     $newsLink = trim($_POST['NewsLink'] ?? '');
+    $newsDescription = trim($_POST['newsDescription'] ?? '');
     $profileImage = $_FILES['profileImage'] ?? null;
 
-    if (empty($newsTitle) || empty($newsLocation) || empty($dateOfNews) || empty($timeOfNews) || empty($newsLink) || !$profileImage) {
-        exit("<span style='color: red;'>❌ All fields, including the image, are required.</span>");
+    if (empty($newsTitle) || empty($newsLocation) || empty($dateOfNews) || empty($timeOfNews) || empty($newsLink) || empty($newsDescription) || !$profileImage) {
+        exit("<span style='color: red;'>❌ All fields, including the image and description, are required.</span>");
     }
 
     $imageData = file_get_contents($profileImage['tmp_name']);
@@ -23,15 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit("<span style='color:red;'>❌ Database Connection Failed: " . $conn->connect_error . "</span>");
     }
 
-    $stmt = $conn->prepare("INSERT INTO news (title, location, date, time, fb_link, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO news (title, content, location, date, time, fb_link, image, image_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     if ($stmt) {
-        $stmt->bind_param("sssssss", $newsTitle, $newsLocation, $dateOfNews, $timeOfNews, $newsLink, $imageData, $imageType);
+        $stmt->bind_param("ssssssss", $newsTitle, $newsDescription, $newsLocation, $dateOfNews, $timeOfNews, $newsLink, $imageData, $imageType);
         if ($stmt->execute()) {
             exit("<span style='color: green;'>✅ News added successfully!</span>");
         } else {
             exit("<span style='color: red;'>❌ Insert Error: " . $stmt->error . "</span>");
         }
-        $stmt->close();
     } else {
         exit("<span style='color: red;'>❌ Prepare Failed: " . $conn->error . "</span>");
     }
@@ -105,6 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                         placeholder="Date of News" data-wow-delay="0.6s" />
                                     <input class="info-input wow fadeInUp" type="tel" name="NewsLink"
                                         placeholder="Facebook News Link" data-wow-delay="0.7s" />
+                                    <input class="info-input wow fadeInUp" type="text" name="newsDescription"
+                                        placeholder="News Description" data-wow-delay="0.4s" />
                                     <script></script>
 
                                     <div class="form-buttons">

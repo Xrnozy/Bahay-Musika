@@ -74,7 +74,7 @@
   <div id="homepage" class="main-container"></div>
   <div class="contact_us_6">
     <div class="responsive-container-block container">
-      <form class="form-box">
+      <form class="form-box" method="POST" action="insert_comment.php" onsubmit="return validateContactForm();">
         <div class="container-block form-wrapper">
           <div class="mob-text">
             <p class="text-blk contactus-head">Get in Touch</p>
@@ -92,7 +92,7 @@
                 class="input"
                 id="ijowk-3"
                 name="FirstName"
-                placeholder="Please enter first name..." />
+                placeholder="Please enter first name..." required />
             </div>
             <div
               class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12"
@@ -102,7 +102,7 @@
                 class="input"
                 id="ipmgh-3"
                 name="Email"
-                placeholder="Please enter email..." />
+                placeholder="Please enter email..." type="email" required />
             </div>
             <div
               class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12"
@@ -112,7 +112,7 @@
                 class="input"
                 id="imgis-3"
                 name="PhoneNumber"
-                placeholder="Please enter phone number..." />
+                placeholder="Please enter phone number..." required />
             </div>
             <div
               class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12"
@@ -121,10 +121,11 @@
               <textarea
                 class="textinput"
                 id="i5vyy-3"
-                placeholder="Please enter query..."></textarea>
+                name="Comment"
+                placeholder="Please enter query..." required></textarea>
             </div>
           </div>
-          <button class="submit-btn" id="w-c-s-bgc_p-1-dm-id-2">
+          <button class="submit-btn" id="w-c-s-bgc_p-1-dm-id-2" type="submit">
             Submit
           </button>
         </div>
@@ -311,6 +312,19 @@ https://www.tiktok.com/@minstrelsrhythmofhope?_t=8s4noQynngW&_r=1"
       </div>
     </div>
   </footer>
+  <script>
+    function validateContactForm() {
+      var firstName = document.getElementById('ijowk-3').value.trim();
+      var email = document.getElementById('ipmgh-3').value.trim();
+      var phone = document.getElementById('imgis-3').value.trim();
+      var comment = document.getElementById('i5vyy-3').value.trim();
+      if (!firstName || !email || !phone || !comment) {
+        alert('All fields are required.');
+        return false;
+      }
+      return true;
+    }
+  </script>
 </body>
 
 </html>

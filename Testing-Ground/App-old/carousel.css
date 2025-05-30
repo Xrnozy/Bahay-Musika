@@ -185,11 +185,10 @@
 }
 .event-img .img {
   position: relative;
-  height: auto;
+  height: 300px;
   border-radius: 5px;
 }
 .img-1 {
-  flex: 1;
 }
 .img-2 {
   flex: 1;
@@ -278,8 +277,6 @@
 .img {
   position: absolute;
   z-index: 3;
-  width: 20px;
-  height: 20px;
 }
 
 .event-title {

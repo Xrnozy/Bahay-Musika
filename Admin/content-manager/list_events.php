@@ -2,6 +2,9 @@
 // File: list_events.php
 
 include 'db-connection.php';
+if ($conn->connect_error) {
+    die("Database connection failed: " . htmlspecialchars($conn->connect_error));
+}
 
 $result = $conn->query("SELECT id, title, location, date, time, fb_link FROM events ORDER BY id DESC");
 ?>

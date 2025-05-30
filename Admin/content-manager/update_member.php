@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="main-cont">
             <div class="add-main-cont">
-                <form id="userForm">
+                <form id="userForm" onsubmit="return handleSubmit(event)">
                     <div class="personal-info-container">
                         <div class="personal-info-header">
                             <h1 class="header-title wow fadeInUp" data-wow-delay="0s">
@@ -266,3 +266,80 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 </div>
+
+<!-- Custom Popup -->
+<div id="confirmPopup" class="popup-overlay">
+    <div class="popup-content">
+        <h3>Confirm Update</h3>
+        <p>Are you sure you want to update this member's information?</p>
+        <div class="popup-buttons">
+            <button onclick="confirmUpdate()" class="confirm-btn">Yes, Update</button>
+            <button onclick="closePopup()" class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+    }
+
+    .popup-content h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .popup-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .confirm-btn,
+    .cancel-btn {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+    .confirm-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .confirm-btn:hover {
+        background-color: #45a049;
+    }
+
+    .cancel-btn {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .cancel-btn:hover {
+        background-color: #da190b;
+    }
+</style>

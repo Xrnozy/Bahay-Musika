@@ -223,10 +223,6 @@ input[type="file"] {
   flex-direction: row;
 }
 
-.member-img {
-  width: auto;
-}
-
 .member-details {
   margin-left: 20px;
   display: flex;

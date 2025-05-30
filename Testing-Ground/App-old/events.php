@@ -30,14 +30,14 @@
       top: 50%;
       left: 50%;
       height: 60vh;
-      width: 80vw;
+
       justify-content: center;
       align-items: center;
       transform: translate(-50%, -50%);
-      padding: 20px;
-      background-color: white;
-      border: 2px solid #333;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.71);
+
+
+
+
       z-index: 10000;
     }
 
@@ -76,11 +76,11 @@
     }
 
     .modal-content {
-      background: white;
+
       padding: 20px;
       border-radius: 8px;
 
-      width: 100%;
+
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
@@ -216,48 +216,34 @@
       location,
       date,
       time,
-      fb_link
+      fb_link,
+      description = '',
+      image = ''
     ) {
-
       const popup = document.getElementById("popup");
       const overlay = document.getElementById("overlay");
-
-      console.log(buttonLabel, id, title, location, date, time, fb_link);
       popup.style.display = "flex";
       overlay.style.display = "block";
-      if (buttonLabel === "Add") {
-        const titleField = document.getElementById("title");
-        const locationField = document.getElementById("location");
-        const dateField = document.getElementById("date");
-        const timeField = document.getElementById("time");
-        const fbLinkField = document.getElementById("fb_link");
 
-        if (titleField) titleField.value = "";
-        if (locationField) locationField.value = "";
-        if (dateField) dateField.value = "";
-        if (timeField) timeField.value = "";
-        if (fbLinkField) fbLinkField.value = "";
-      }
-      if (
-        (id != null,
-          title != null,
-          location != null,
-          date != null,
-          time != null,
-          fb_link != null)
-      ) {
-        const titleField = document.getElementById("title");
-        const locationField = document.getElementById("location");
-        const dateField = document.getElementById("date");
-        const timeField = document.getElementById("time");
-        const fbLinkField = document.getElementById("fb_link");
-        if (titleField) titleField.value = title;
-        if (locationField) locationField.value = location;
-        if (dateField) dateField.value = date;
-        if (timeField) timeField.value = time;
-        if (fbLinkField) fbLinkField.value = fb_link;
-      }
-
+      // Professional event card layout
+      let html = `
+        <div style="display: flex; flex-direction: column; align-items: center; max-width: 500px; width: 100%;">
+          <button onclick=\"hidePopup()\" style='align-self: flex-end; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #333;' title='Close'>&times;</button>
+          <div style='width: 100%; background: #f7f7f7; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 24px 20px 20px 20px; display: flex; flex-direction: column; align-items: center;'>
+            ${image ? `<img src='${image}' alt='${title}' style='width: 100%; max-width: 320px; border-radius: 8px; margin-bottom: 18px; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.10);' />` : ''}
+            <h2 style='margin: 0 0 10px 0; color: #1a237e; font-family: Montserrat, sans-serif; font-size: 2rem; text-align: center;'>${title}</h2>
+            <div style='color: #333; font-size: 1.1rem; margin-bottom: 10px; text-align: center;'>
+              <span style='font-weight: 500;'>${date}</span> &bull; <span style='font-weight: 500;'>${time}</span>
+            </div>
+            <div style='color: #555; font-size: 1rem; margin-bottom: 10px; text-align: center;'>
+              <span style='font-weight: 500;'>Location:</span> ${location}
+            </div>
+            ${description ? `<div style='color: #444; font-size: 1rem; margin-bottom: 12px; text-align: center;'>${description}</div>` : ''}
+            ${fb_link && fb_link !== 'null' ? `<a href='${fb_link}' target='_blank' style='display: inline-block; margin-top: 10px; background: #1877f2; color: #fff; padding: 10px 22px; border-radius: 5px; text-decoration: none; font-weight: 500; transition: background 0.2s;'>View on Facebook</a>` : ''}
+          </div>
+        </div>
+      `;
+      popup.innerHTML = html;
     }
 
     function hidePopup() {
@@ -481,14 +467,20 @@
                 if ($hasEvent) {
                   echo "<div class='event-details'>";
                   foreach ($events as $event) {
-                    echo "<p style = \"font-size: 17px;\"><strong>{$event['title']}</strong> </ps>";
-                    $formattedTime = date('h:i A', strtotime($event['time']));
-                    echo "<p><strong></strong> $formattedTime</p>";
+                    $eventTitle = htmlspecialchars($event['title']);
+                    $eventLocation = htmlspecialchars($event['location']);
+                    $eventDate = htmlspecialchars($event['date']);
+                    $eventTime = date('h:i A', strtotime($event['time']));
+                    $eventFbLink = htmlspecialchars($event['fb_link']);
+                    $eventDesc = isset($event['description']) ? htmlspecialchars($event['description']) : '';
+                    $eventImage = !empty($event['image']) ? 'data:' . $event['image_type'] . ';base64,' . base64_encode($event['image']) : '';
+                    echo "<p style = \"font-size: 17px;\"><strong>{$eventTitle}</strong> </p>";
+                    echo "<p><strong></strong> $eventTime</p>";
+                    // Pass all details to showPopup
+                    echo "<button class='edit-btn' onclick=\"showPopup('View', '{$eventId}', '{$eventTitle}', '{$eventLocation}', '{$eventDate}', '{$eventTime}', '{$eventFbLink}', '{$eventDesc}', '{$eventImage}')\" >View</button>";
                   }
                   echo "</div>";
-                  echo "<button class='edit-btn' onclick=\"showPopup();\" >View</button>";
                 } else {
-
                   echo "</li>";
                 }
               }
@@ -498,40 +490,7 @@
           </div>
           <div id="overlay" onclick="hidePopup()"></div>
           <div id="popup" class="modal-content">
-            <div id="eventForm" enctype="multipart/form-data">
-              <div class="form-header">
-                <h2 class="form-title">Add/Edit Event</h2>
-                <p class="form-subtitle">Fill out the details below</p>
-              </div>
 
-              <div class="form-fields">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" placeholder="Event Title" required>
-
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location" placeholder="Event Location" required>
-
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-
-                <label for="time">Time:</label>
-                <input type="time" id="time" name="time" required>
-
-                <label for="fb_link">Facebook Link:</label>
-                <input type="text" id="fb_link" name="fb_link" placeholder="Facebook Event Link">
-
-                <label for="image">Image:</label>
-                <input type="file" id="image" name="image" accept="image/*">
-
-                <label for='image-preview'>Image Preview:</label>
-                <img id='image-preview' src='' alt='Event Image' style='max-width: 100%; height: auto; margin-top: 10px; display: none;'>
-              </div>
-
-              <div class="form-buttons">
-                <button type="submit" class="btn-submit">Save</button>
-                <button type="button" class="btn-cancel" onclick="hidePopup()">Cancel</button>
-              </div>
-            </div>
           </div>
           <?php
           // Fetch events for carousel from database
@@ -575,9 +534,7 @@
                           </p>
                           <div class="event-img event-img-<?php echo $eventKey; ?>">
                             <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-1" />
-                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-2" />
-                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-3" />
-                            <img src="<?php echo $imageSrc; ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="img img-<?php echo $eventKey; ?> img-4" />
+
                           </div>
                         </div>
                       </div>
@@ -685,7 +642,7 @@
         const highlightedItemCenter =
           highlightedItem.offsetTop + highlightedItem.clientHeight / 2;
 
-        const verticalOffset = 100; // pixels higher than center
+        const verticalOffset = 300; // pixels higher than center
         const screenCenter = window.innerHeight / 2 - verticalOffset;
 
         const adjustmentValueVh =
@@ -841,6 +798,100 @@
       navMenu.classList.toggle("active");
     });
   </script>
+  <footer class="footer">
+    <video
+      class="footer_video"
+      muted=""
+      loop=""
+      autoplay
+      src="//cdn.shopify.com/s/files/1/0526/6905/5172/t/5/assets/footer.mp4?v=29581141968431347981633714450"
+      type="video/mp4"></video>
+
+    <div class="container">
+      <div class="footer_inner">
+        <div class="c-footer">
+          <div class="layout">
+            <div class="layout_item w-50">
+              <div class="newsletter">
+                <h3 class="newsletter_title">
+                  Get updates on fun stuff you probably want to know about in
+                  your inbox.
+                </h3>
+
+              </div>
+            </div>
+
+            <div class="layout_item w-25">
+              <nav class="c-nav-tool">
+                <h4 class="c-nav-tool_title">Menu</h4>
+                <ul class="c-nav-tool_list">
+                  <li>
+                    <a href="#about-us" class="c-link">About Us</a>
+                  </li>
+
+                  <li>
+                    <a href="events" class="c-link">Events</a>
+                  </li>
+
+                  <li>
+                    <a href="news" class="c-link">News</a>
+                  </li>
+                  <a href="donation" class="c-link">Donation</a>
+                  <li>
+                    <a href="#" class="c-link"></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <div class="layout_item w-25">
+              <nav class="c-nav-tool">
+                <h4 class="c-nav-tool_title">Contact Us</h4>
+                <ul class="c-nav-tool_list">
+                  <li class="c-nav-tool_item">
+                    <a href="email" class="c-link">Email</a>
+                  </li>
+
+                  <li class="c-nav-tool_item">
+                    <a
+                      href="https://www.instagram.com/minstrelsrhythmofhope?igsh=MXA3cGF4Mm81ZWZwbg=="
+                      class="c-link">Instagram</a>
+                  </li>
+
+                  <li class="c-nav-tool_item">
+                    <a
+                      href="https://www.youtube.com/@minstrelsofhope"
+                      class="c-link">Youtube</a>
+                  </li>
+
+                  <li class="c-nav-tool_item">
+                    <a
+                      href="https://www.instagram.com/minstrelsrhythmofhope?igsh=MXA3cGF4Mm81ZWZwbg=="
+                      class="c-link">Tiktok</a>
+                  </li>
+
+                  <li class="c-nav-tool_item">
+                    <a
+                      href="https://web.facebook.com/minstrelsrhythmofhopeinc/?__n=K&_rdc=1&_rdr"
+                      class="c-link">Facebook</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="layout c-2">
+            <div class="layout_item w-50">
+
+            </div>
+
+            <div class="layout_item w-50">
+              <p class="copy">&copy;2024 Bahay Musika</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 
 </html>

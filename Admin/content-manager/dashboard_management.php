@@ -36,7 +36,6 @@ if ($membersResult) {
     }
 }
 
-$conn->close();
 ?>
 
 
@@ -57,8 +56,7 @@ $conn->close();
                     <h3>Total News Articles</h3>
                     <h1 class="total-news"><?php echo $newsCount; ?></h1>
                     <div class="total-recent">
-                        <h5>Recent update/upload:</h5>
-                        <h5 class="recent-news">None</h5>
+                        <h5>>All News that is currently shown to users</h5>
                     </div>
                     <div class="text-button">
                         <h5 class="text-button-news" onclick="loadContent('content-manager/news_management.php')">View
@@ -70,8 +68,7 @@ $conn->close();
                         <h3>Total Events</h3>
                         <h1 class="total-event"><?php echo $eventsCount; ?></h1>
                         <div class="total-event-recent">
-                            <h5 class="recent-event">None</h5>
-                            <h5>more recent uploaded news</h5>
+                            <h5>All Events that is currently shown to users</h5>
                         </div>
                         <div class="text-button">
                             <h5 class="text-button-events"
@@ -84,18 +81,59 @@ $conn->close();
                 <div class="latest-upload">
                     <h2>Latest Event and News</h2>
                     <div class="latest-upload-cont">
-                        <h3>Latest News</h3>
-                        <ul>
-                            <?php while ($news = $latestNews->fetch_assoc()): ?>
-                                <li><?php echo $news['title'] . " (" . $news['created_at'] . ")"; ?></li>
-                            <?php endwhile; ?>
-                        </ul>
-                        <h3>Latest Events</h3>
-                        <ul>
-                            <?php while ($event = $latestEvents->fetch_assoc()): ?>
-                                <li><?php echo $event['title'] . " (" . $event['created_at'] . ")"; ?></li>
-                            <?php endwhile; ?>
-                        </ul>
+                        <div style="width:100%;margin:auto; height: 100%; ">
+                            <table class="table table-striped table-bordered"
+                                style="background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-radius:10px;overflow:hidden;">
+                                <thead style="background:#4e73df;color:#fff;">
+                                    <tr>
+                                        <th style="width:50%">Latest News</th>
+                                        <th style="width:50%">Latest Events</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // Reset result pointers in case they were already fetched
+                                    if (isset($conn) && $conn instanceof mysqli) {
+                                        $latestNews = $conn->query("SELECT title, created_at FROM news ORDER BY created_at DESC LIMIT 5");
+                                        $latestEvents = $conn->query("SELECT title, created_at FROM events ORDER BY created_at DESC LIMIT 5");
+                                    }
+                                    $newsRows = [];
+                                    $eventRows = [];
+                                    if ($latestNews) while ($news = $latestNews->fetch_assoc()) $newsRows[] = $news;
+                                    if ($latestEvents) while ($event = $latestEvents->fetch_assoc()) $eventRows[] = $event;
+                                    $maxRows = max(count($newsRows), count($eventRows));
+                                    for ($i = 0; $i < $maxRows; $i++):
+                                    ?>
+                                        <tr>
+                                            <td>
+                                                <?php if (isset($newsRows[$i])): ?>
+                                                    <div style="display:flex;flex-direction:column;">
+                                                        <span style="font-weight:600; color:#2e2e2e;">
+                                                            <?= htmlspecialchars($newsRows[$i]['title']) ?>
+                                                        </span>
+                                                        <span style="font-size:12px;color:#888;">
+                                                            <?= date('M d, Y H:i', strtotime($newsRows[$i]['created_at'])) ?>
+                                                        </span>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php if (isset($eventRows[$i])): ?>
+                                                    <div style="display:flex;flex-direction:column;">
+                                                        <span style="font-weight:600; color:#2e2e2e;">
+                                                            <?= htmlspecialchars($eventRows[$i]['title']) ?>
+                                                        </span>
+                                                        <span style="font-size:12px;color:#888;">
+                                                            <?= date('M d, Y H:i', strtotime($eventRows[$i]['created_at'])) ?>
+                                                        </span>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,10 +144,7 @@ $conn->close();
                     <div class="latest-members">
                         <h3>Total Members</h3>
                         <h1 class="total-members"> <?php echo $membersCount; ?></h1>
-                        <div class="total-recent">
-                            <h5 class="recent-member">None</h5>
-                            <h5>more recent uploaded news</h5>
-                        </div>
+
                     </div>
                     <div class="text-button">
                         <h5 class="text-button-members" onclick="loadContent('content-manager/add_member.php')">Update
@@ -176,3 +211,5 @@ $conn->close();
     </script>
 
 </div>
+
+<?php $conn->close(); ?>

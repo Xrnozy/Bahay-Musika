@@ -149,12 +149,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         echo "</div>";
                         $eventCount = count($events);
                         if ($event['date'] < date('Y-m-d')) {
-                            echo "<button class='edit-btn done' onclick=\"showPopup('$eventCount','$buttonLabel', '{$event['id']}', '{$event['title']}', '{$event['location']}', '{$event['date']}', '{$event['time']}', '{$event['fb_link']}');\">Done</button>";
+                            $imageData = !empty($event['image']) ? 'data:' . $event['image_type'] . ';base64,' . base64_encode($event['image']) : '';
+                            echo "<button class='edit-btn done' onclick=\"showPopup('$eventCount','$buttonLabel', '{$event['id']}', '{$event['title']}', '{$event['location']}', '{$event['date']}', '{$event['time']}', '{$event['fb_link']}', '" . htmlspecialchars($imageData, ENT_QUOTES) . "');\">Done</button>";
                         } else {
-                            echo "<button class='edit-btn' onclick=\"showPopup('$eventCount','$buttonLabel', '{$event['id']}', '{$event['title']}', '{$event['location']}', '{$event['date']}', '{$event['time']}', '{$event['fb_link']}');\">Edit</button>";
+                            // Create a data URL for the image if it exists
+                            $imageData = !empty($event['image']) ? 'data:' . $event['image_type'] . ';base64,' . base64_encode($event['image']) : '';
+                            echo "<button class='edit-btn' onclick=\"showPopup('$eventCount','$buttonLabel', '{$event['id']}', '" . htmlspecialchars($event['title'], ENT_QUOTES) . "', '" . htmlspecialchars($event['location'], ENT_QUOTES) . "', '{$event['date']}', '{$event['time']}', '" . htmlspecialchars($event['fb_link'], ENT_QUOTES) . "', '" . htmlspecialchars($imageData, ENT_QUOTES) . "');\">Edit</button>";
                         }
                     } else {
-                        echo "<button class='edit-btn' onclick=\"showPopup('$buttonLabel','none')\">Add</button>";
+                        echo "<button class='edit-btn' onclick=\"showPopup('1','$buttonLabel','none', '1', '12',  '$date')\">Add</button>";
                         echo "</li>";
                     }
                 }
@@ -169,7 +172,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div id="popup" class="modal-content">
         <form id="userForm" method="POST" enctype="multipart/form-data">
             <div class="personal-info-cont">
-                <link rel="stylesheet" href="../personalInfo.css" />
                 <div class="personal-info-form">
                     <div class="form-header">
 
@@ -204,9 +206,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <button class="btn-submit btn-news wow fadeInUp" data-wow-delay="0.9s">
                                         Submit
                                     </button>
-                                    <button class="btn-cancel btn-news wow fadeInUp" data-wow-delay="1.0s">
+                                    <div class="btn-cancel btn-news wow fadeInUp" data-wow-delay="1.0s" onclick="cancel()">
                                         Cancel
-                                    </button>
+                                    </div>
+                                    <div class="btn-delete btn-news wow fadeInUp" id="btn-delete" data-wow-delay="1.0s" onclick="deleteEvent(eventId)">
+                                        Delete
+                                    </div>
                                 </div>
                             </div>
 
@@ -246,8 +251,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                             d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                                     </svg>
                                                 </div>
-                                                <div x-show="previewPhoto" class=" overflow-hidden">
-                                                    <img :src="previewPhoto" alt=""
+                                                <div x-show="previewPhoto" class=" overflow-hidden" id="imgCont">
+                                                    <img id="event-img" :src="previewPhoto" alt=""
                                                         class="preview-image object-cover" />
                                                 </div>
                                             </div>
@@ -265,6 +270,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
         <style>
 
+        </style>
+        <style>
+            #event_list-calendar {
+                display: none;
+            }
         </style>
         <div id="event_list-calendar">
             <h2 class="event-title">Events List</h2>
@@ -304,8 +314,51 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 <script>
-    function showPopup(eventId) {
+    function showPopup(eventCount, buttonLabel, eventId, title, location, date, time, fbLink, imageData) {
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("popup").style.display = "block";
 
+        // Set form values
+        document.getElementById("title").value = title || '';
+        document.getElementById("location").value = location || '';
+        document.getElementById("date").value = date || '';
+        document.getElementById("time").value = time || '';
+        document.getElementById("fb_link").value = fbLink || '';
+
+        // Handle image preview if imageData exists
+        if (imageData) {
+            const previewDiv = document.querySelector('[x-data="imageData()"]');
+            if (previewDiv) {
+                // Initialize Alpine.js data if not already initialized
+                if (!previewDiv.__x) {
+                    Alpine.data('imageData', () => ({
+                        previewPhoto: '',
+                        fileName: '',
+                        emptyText: 'No file selected',
+                        updatePreview(refs) {
+                            const file = refs.input.files[0];
+                            if (file) {
+                                this.fileName = file.name;
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    this.previewPhoto = e.target.result;
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        },
+                        clearPreview(refs) {
+                            refs.input.value = null;
+                            this.previewPhoto = '';
+                            this.fileName = '';
+                        }
+                    }));
+                }
+
+                // Set the preview image
+                previewDiv.__x.$data.previewPhoto = imageData;
+                previewDiv.__x.$data.fileName = 'Current Image';
+            }
+        }
     }
 
     function hidePopup() {

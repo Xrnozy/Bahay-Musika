@@ -27,6 +27,7 @@
     </script>
   <link rel="stylesheet" href="main-css.css" />
   <link rel="stylesheet" href="donation.css" />
+  <script src="lib/tesseract.min.js"></script>
   <script src="antiZoomIn.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -47,7 +48,7 @@
   <style>
     body {
       background-color: #121212;
-      color: #ffffff;
+
       font-family: 'Poppins', sans-serif;
     }
 
@@ -71,6 +72,137 @@
     .cancel-button {
       background-color: #f44336;
       color: #ffffff;
+    }
+
+    .form-step {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .form-step.active-step {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .next-step {
+      background-color: #4caf50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .next-step:hover {
+      background-color: #45a049;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #555;
+      border-radius: 4px;
+      background-color: #1f1f1f;
+      color: white;
+    }
+
+    .method-card {
+      display: flex;
+      align-items: center;
+      width: auto;
+      gap: 10px;
+      margin-bottom: 15px;
+      background-color: #2a2a2a;
+      padding: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .method-card:hover {
+      background-color: #333;
+    }
+
+    .amount-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .amount-option {
+      background-color: #2a2a2a;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-align: center;
+    }
+
+    .amount-option:hover {
+      background-color: #333;
+    }
+
+    .custom-amount {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .step-actions {
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: flex-end;
+    }
+
+    .back-step {
+      background-color: #888;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-step:hover {
+      background-color: #555;
+    }
+
+    .step-actions-donations {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
     }
   </style>
 </head>
@@ -265,101 +397,289 @@
           </div>
 
           <div class="donation-box">
-            <div class="donation-mode">
-              <div class="donation-bpi">
-                <div class="donation-bpi-title">
-                  <h1>BPI Instruction</h1>
-                </div>
-                <div class="donation-bpi-instruction">
-                  <div class="instruction">
-                    <h3>Login in to GCash and tap Pay QR</h3>
-                    <h3>Scan our QR code</h3>
-                    <h3>Input the total amount and tap Next</h3>
-                    <h3>Review all details then tap on Pay</h3>
-                  </div>
-                  <img
-                    class="bpi-qr"
-                    src="https://scontent.fmnl17-6.fna.fbcdn.net/v/t1.15752-9/462652569_566505656131089_5671771928665512710_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeFQDyt_zKObKstooFhVYtbqFIUmPFZDa28UhSY8VkNrb9NC0CvK-nzAOIH3mO_l-C4vmjySiPu3DL-VMBzy2Kcu&_nc_ohc=QLamqZ9CDGcQ7kNvgE7zN-5&_nc_zt=23&_nc_ht=scontent.fmnl17-6.fna&oh=03_Q7cD1QFzHFdnGRvjdQKIUgM7U3Ws1f1hsVOmBdVWGU4P0GjREw&oe=677EB756"
-                    alt="" />
-                </div>
-              </div>
-              <div class="donation-gcash">
-                <div class="donation-gcash-title">
-                  <h1>GCash Instruction</h1>
-                </div>
-                <div class="donation-gcash-instruction">
-                  <div class="instruction">
-                    <h3>Login in to GCash and tap Pay QR</h3>
-                    <h3>Scan our QR code</h3>
-                    <h3>Input the total amount and tap Next</h3>
-                    <h3>Review all details then tap on Pay</h3>
-                  </div>
-                  <img
-                    class="bpi-qr"
-                    src="https://scontent.fmnl17-2.fna.fbcdn.net/v/t1.15752-9/462648968_975804401042881_4021586219592493605_n.png?_nc_cat=107&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeFZKqpC_ai4Kw9rt4NRnM0okrf8JPXZYtqSt_wk9dli2k3bQK4DD_hxVyqSeWJmWVXb_nMY3_Q_q_izz37_N9pl&_nc_ohc=lyF33_JtVAgQ7kNvgEKE0vs&_nc_zt=23&_nc_ht=scontent.fmnl17-2.fna&oh=03_Q7cD1QGnnEPMTdkrrgcaot_AO6aRLoG_iFOOYaNK7ikNfwS_hQ&oe=677EB902"
-                    alt="" />
-                </div>
-              </div>
-            </div>
-            <div class="personal-main-cont">
-              <div class="personal-details">
-                <div class="left">
-                  <h3>Enter your name</h3>
-                  <input class="input-name" placeholder="Name" type="text" />
-                </div>
-                <div class="right">
-                  <h3>Enter your number</h3>
-                  <input
-                    class="input-name"
-                    placeholder="Number"
-                    type="text" />
-                </div>
-              </div>
-              <h3>Enter your email</h3>
-              <input class="input-name" placeholder="Email" type="email" />
-              <h3>Enter the Transaction number/Reference number</h3>
-              <input
-                class="input-name"
-                placeholder="Reference number"
-                type="text" />
-            </div>
-
-            <div class="donation-payment-cont">
-              <div class="donation-time">
-                <div class="one-time active">
-                  <h1>One Time</h1>
-                </div>
-                <div class="monthly">
-                  <h1>Monthly</h1>
+            <form class="payment-container" action="donation_submit.php" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="donation_type" id="donation_type" value="one_time">
+              <div class="payment-header">
+                <h2 class="payment-title">Support Bahay Musika</h2>
+                <div class="donation-type">
+                  <button type="button" class="type-option active" data-type="one_time">One-Time Donation</button>
+                  <button type="button" class="type-option" data-type="monthly">Monthly Support</button>
                 </div>
               </div>
 
-              <div class="donation-price">
-                <h3>Enter how much you donated</h3>
-                <div class="prices-row">
-                  <a class="price">₱100</a>
-                  <a class="price">₱250</a>
-                  <a class="price">₱500</a>
-                  <a class="price">₱1000</a>
-                  <input class="input-price" placeholder="₱" type="number" />
+              <div class="payment-body">
+                <div class="form-step active-step">
+                  <h3 class="section-title">Billing Information</h3>
+                  <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-input" name="donor_name" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-input" name="donor_email" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" class="form-input" name="phone" required>
+                  </div>
+                  <div class="step-actions">
+                    <button type="button" class="next-step">Next</button>
+                  </div>
                 </div>
-                <h3>
-                  ₱20 is the minimum online donation. All donations are tax
-                  deductibles
-                </h3>
-                <h3></h3>
+
+                <div class="form-step">
+                  <h3 class="section-title">Payment Method</h3>
+                  <div class="payment-methods">
+                    <div class="method-option">
+                      <input type="radio" name="payment_method" id="gcash" value="gcash" required>
+                      <label for="gcash" class="method-card">
+                        <img src="icons/gcash.png" alt="GCash">
+                        <span>GCash</span>
+                      </label>
+                    </div>
+                    <div class="method-option">
+                      <input type="radio" name="payment_method" id="paypal" value="paypal">
+                      <label for="paypal" class="method-card">
+                        <img src="icons/paypal.png" alt="PayPal">
+                        <span>PayPal</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="step-actions">
+                    <button type="button" class="back-step">Back</button>
+                    <button type="button" class="next-step">Next</button>
+                  </div>
+                </div>
+
+                <div class="form-step">
+                  <h3 class="section-title">Donation Amount</h3>
+                  <div class="amount-options">
+                    <div class="amount-grid">
+                      <button type="button" class="amount-option">₱100</button>
+                      <button type="button" class="amount-option">₱500</button>
+                      <button type="button" class="amount-option">₱1000</button>
+                      <button type="button" class="amount-option">₱5000</button>
+                    </div>
+                    <div class="custom-amount">
+                      <input type="number" class="form-input" name="amount" placeholder="Enter Custom Amount" min="1" required>
+                    </div>
+                  </div>
+                  <div class="step-actions">
+                    <button type="button" class="back-step">Back</button>
+                    <button type="button" class="next-step">Next</button>
+                  </div>
+                </div>
+
+                <div class="form-step">
+                  <h3 class="section-title">Transaction ID</h3>
+                  <div class="form-group">
+                    <label>Enter GCash/PayPal Transaction ID</label>
+                    <input type="text" class="form-input" name="transaction_id" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Upload Screenshot/Proof of Transaction</label>
+                    <input type="file" class="form-input" name="transaction_proof" id="transaction_proof" accept="image/*" required>
+                    <button type="button" id="validate-ocr" class="next-step" style="margin-top:10px;background:#ffd600;color:#181818;">Validate Transaction ID</button>
+                    <div id="ocr-validation-message" style="margin-top:10px;color:#ffd600;"></div>
+                  </div>
+                  <div class="step-actions">
+                    <div class="step-actions-donations">
+                      <button type="button" class="back-step back-step-donation">Back</button>
+                      <button type="submit" class="submit-button">Complete Donation</button>
+                    </div>
+
+                  </div>
+                </div>
               </div>
-              <div class="continue">
-                <a class="continue-button">Continue</a>
-                <a class="cancel-button">Cancel</a>
+              <script>
+                const typeOption = document.querySelectorAll('.type-option');
+                const donationTypeInput = document.getElementById('donation_type');
+                typeOption.forEach(option => {
+                  option.addEventListener('click', () => {
+                    typeOption.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    // Set hidden input value
+                    donationTypeInput.value = option.getAttribute('data-type');
+                  });
+                });
+
+
+                const formSteps = document.querySelectorAll('.form-step');
+                const nextSteps = document.querySelectorAll('.next-step');
+                const backSteps = document.querySelectorAll('.back-step');
+                let currentStep = 0;
+                nextSteps.forEach(btn => {
+                  btn.addEventListener('click', () => {
+                    // Don't show warning for the Validate Transaction ID button
+                    if (btn.id === 'validate-ocr') return;
+                    // Find the current step
+                    const currentFormStep = formSteps[currentStep];
+                    // Get all required inputs in the current step
+                    const requiredInputs = currentFormStep.querySelectorAll('input[required], select[required], textarea[required]');
+                    let allFilled = true;
+                    requiredInputs.forEach(input => {
+                      if (!input.value || (input.type === 'radio' && !currentFormStep.querySelector('input[type="radio"]:checked'))) {
+                        allFilled = false;
+                      }
+                    });
+                    // Show a warning if not all required fields are filled
+                    let warning = currentFormStep.querySelector('.step-warning');
+                    if (!allFilled) {
+                      if (!warning) {
+                        warning = document.createElement('div');
+                        warning.className = 'step-warning';
+                        warning.style.color = '#ffd600';
+                        warning.style.marginTop = '0px';
+                        warning.style.marginBottom = '10px';
+                        warning.textContent = 'Please complete all required fields before proceeding.';
+                        // Insert warning above the first .step-actions button
+                        const stepActions = currentFormStep.querySelector('.step-actions');
+                        if (stepActions) {
+                          currentFormStep.insertBefore(warning, stepActions);
+                        } else {
+                          currentFormStep.appendChild(warning);
+                        }
+                      }
+                      warning.style.display = 'block';
+                      return;
+                    } else if (warning) {
+                      warning.style.display = 'none';
+                    }
+                    if (currentStep < formSteps.length - 1) {
+                      formSteps[currentStep].classList.remove('active-step');
+                      currentStep++;
+                      formSteps[currentStep].classList.add('active-step');
+                    }
+                  });
+                });
+                backSteps.forEach(btn => {
+                  btn.addEventListener('click', () => {
+                    if (currentStep > 0) {
+                      formSteps[currentStep].classList.remove('active-step');
+                      currentStep--;
+                      formSteps[currentStep].classList.add('active-step');
+                    }
+                  });
+                });
+
+                // OCR Transaction ID Validation
+                let ocrValidated = false;
+                const validateOcrBtn = document.getElementById('validate-ocr');
+                const transactionProofInput = document.getElementById('transaction_proof');
+                const transactionIdInput = document.querySelector('input[name="transaction_id"]');
+                const ocrValidationMessage = document.getElementById('ocr-validation-message');
+
+                validateOcrBtn.addEventListener('click', async () => {
+                  ocrValidationMessage.textContent = 'Processing image, please wait...';
+                  ocrValidationMessage.style.color = '#ffd600';
+                  const file = transactionProofInput.files[0];
+                  if (!file) {
+                    ocrValidationMessage.textContent = 'Please upload a transaction proof image.';
+                    ocrValidationMessage.style.color = '#ffd600';
+                    ocrValidated = false;
+                    return;
+                  }
+                  const reader = new FileReader();
+                  reader.onload = async function(e) {
+                    try {
+                      const {
+                        data: {
+                          text
+                        }
+                      } = await Tesseract.recognize(e.target.result, 'eng', {
+                        logger: m => console.log(m)
+                      });
+                      const enteredId = transactionIdInput.value.trim();
+                      if (!enteredId) {
+                        ocrValidationMessage.textContent = 'Please enter your Transaction ID first.';
+                        ocrValidationMessage.style.color = '#f44336';
+                        ocrValidated = false;
+                        return;
+                      }
+                      const cleanText = text.replace(/\s/g, ' ').toLowerCase();
+                      const cleanEnteredId = enteredId.replace(/\s/g, '').toLowerCase();
+                      let found = false;
+                      const words = cleanText.split(' ');
+                      for (let word of words) {
+                        if (word.length === cleanEnteredId.length && word === cleanEnteredId) {
+                          found = true;
+                          break;
+                        }
+                      }
+                      if (found) {
+                        ocrValidationMessage.textContent = '✅ Transaction ID validated successfully!';
+                        ocrValidationMessage.style.color = '#4caf50';
+                        ocrValidated = true;
+                      } else {
+                        ocrValidationMessage.textContent = '❌ Transaction ID not found in the uploaded image. Please check and try again.';
+                        ocrValidationMessage.style.color = '#f44336';
+                        ocrValidated = false;
+                      }
+                    } catch (err) {
+                      ocrValidationMessage.textContent = 'Error processing image. Please try again or use a clearer image.';
+                      ocrValidationMessage.style.color = '#f44336';
+                      ocrValidated = false;
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                });
+
+                // Prevent form submission if OCR is not validated
+                const donationForm = document.querySelector('.payment-container');
+                donationForm.addEventListener('submit', function(e) {
+                  // Only require OCR validation on the last step (transaction proof)
+                  const lastStep = formSteps[formSteps.length - 1];
+                  if (lastStep.classList.contains('active-step')) {
+                    if (!ocrValidated) {
+                      e.preventDefault();
+                      ocrValidationMessage.textContent = 'Please validate your Transaction ID before submitting.';
+                      ocrValidationMessage.style.color = '#f44336';
+                    }
+                  }
+                });
+
+                // Payment Amount Selection Logic
+                const amountOptions = document.querySelectorAll('.amount-option');
+                const customAmountInput = document.querySelector('input[name="amount"]');
+
+                amountOptions.forEach(option => {
+                  option.addEventListener('click', () => {
+                    // Remove active from all
+                    amountOptions.forEach(opt => opt.classList.remove('active'));
+                    // Set active on clicked
+                    option.classList.add('active');
+                    // Set custom input value but do NOT disable it
+                    customAmountInput.value = option.textContent.replace(/[^\d]/g, '');
+                    customAmountInput.classList.remove('disabled');
+                  });
+                });
+                customAmountInput.addEventListener('input', () => {
+                  // Remove active from all preset buttons if custom is being typed
+                  if (customAmountInput.value) {
+                    amountOptions.forEach(opt => opt.classList.remove('active'));
+                    customAmountInput.classList.remove('disabled');
+                  }
+                });
+                customAmountInput.addEventListener('focus', () => {
+                  amountOptions.forEach(opt => opt.classList.remove('active'));
+                  customAmountInput.classList.remove('disabled');
+                });
+              </script>
+              <div class="payment-footer">
+
+                <p class="security-note">
+                  <i class="fas fa-lock"></i>
+                  Your donation is secure and encrypted
+                </p>
               </div>
-            </div>
           </div>
+          </form>
         </div>
-
-        <div class="campaigns"></div>
       </div>
+
+      <div class="campaigns"></div>
     </div>
+  </div>
   </div>
 
   <script>

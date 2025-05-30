@@ -2,7 +2,7 @@
 class Auth
 {
     private $conn;
-    private $session_duration = 3600; // 1 hour in seconds
+    private $session_duration = 3600;
 
     public function __construct($database_connection)
     {
@@ -23,13 +23,20 @@ class Auth
     public function login($username, $password)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT id, username, email, password, role, status, first_name, last_name FROM admin_users WHERE (username = ? OR email = ?) AND status = 'active'");
+            $stmt = $this->conn->prepare("SELECT id, username, email, password, role, status, first_name, last_name, is_blocked FROM admin_users WHERE (username = ? OR email = ?) AND status = 'active'");
             $stmt->bind_param("ss", $username, $username);
             $stmt->execute();
             $result = $stmt->get_result();
 
             if ($result->num_rows === 1) {
                 $user = $result->fetch_assoc();
+
+                if ($user['is_blocked']) {
+                    return [
+                        'success' => false,
+                        'message' => 'Your account is blocked. Please contact the head admin.'
+                    ];
+                }
 
                 if (password_verify($password, $user['password'])) {
                     // Update last login

@@ -283,7 +283,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <?php
                     }
                 } else {
-                    echo "<p>No news available.</p>";
+                    echo "<p>No events available.</p>";
                 }
             }
             ?>
