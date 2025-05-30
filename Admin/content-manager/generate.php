@@ -7,7 +7,6 @@ $tables = [
     'events' => 'Events',
     'news' => 'News',
     'donations' => 'Donations',
-    'contacts' => 'Contacts',
     'comments' => 'Comments',
 ];
 

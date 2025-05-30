@@ -16,6 +16,10 @@ function decrypt_sensitive($data)
     $c = base64_decode($data);
     $ivlen = openssl_cipher_iv_length($cipher = "AES-256-CBC");
     $iv = substr($c, 0, $ivlen);
+    // Ensure IV is exactly $ivlen bytes (pad with null bytes if too short)
+    if (strlen($iv) < $ivlen) {
+        $iv = str_pad($iv, $ivlen, "\0");
+    }
     $ciphertext = substr($c, $ivlen);
     return openssl_decrypt($ciphertext, $cipher, ENCRYPT_KEY, 0, $iv);
 }

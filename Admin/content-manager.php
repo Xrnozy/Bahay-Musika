@@ -14,7 +14,15 @@ if (!$auth->isAuthenticated()) {
 
 $currentUser = $auth->getCurrentUser();
 $userRole = $currentUser['role'];
+if ($userRole !== 'content_manager' && $userRole !== 'head_admin') {
+    // Unauthenticate and redirect non-head_admins to login with error
+    session_unset();
+    session_destroy();
+    header('Location: login.php?error=unauthorized');
+    exit;
+}
 ?>
+
 
 <!DOCTYPE html>
 
@@ -23,13 +31,16 @@ $userRole = $currentUser['role'];
 <head>
     <title>Admin Access</title>
     <link rel="stylesheet" href="Admin.css" />
-    <script
-        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        defer></script>
-    <!-- Bootstrap JS (requires Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script
+        src="lib/cdn.min.js"
+        defer></script>
+    <script src="lib/chart.min.js"></script>
+    <!-- Bootstrap JS (requires Popper.js) -->
+    <script src="lib/cryptojs.min.js"></script>
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+        href="lib/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
         crossorigin="anonymous" />
@@ -57,9 +68,10 @@ $userRole = $currentUser['role'];
             location,
             date,
             time,
-            fb_link
+            fb_link,
+            img
         ) {
-            console.log(count, buttonLabel, id, title, location, date, time, fb_link);
+            console.log(count, buttonLabel, id, title, location, date, time, fb_link, img);
 
             const popup = document.getElementById("popup");
             const overlay = document.getElementById("overlay");
@@ -73,12 +85,23 @@ $userRole = $currentUser['role'];
                     const dateField = document.getElementById("date");
                     const timeField = document.getElementById("time");
                     const fbLinkField = document.getElementById("fb_link");
-
+                    const imgPic = document.getElementById("event-img");
+                    const deleteButton = document.getElementById("btn-delete");
                     if (titleField) titleField.value = "";
                     if (locationField) locationField.value = "";
-                    if (dateField) dateField.value = "";
+                    if (dateField) dateField.value = date;
                     if (timeField) timeField.value = "";
                     if (fbLinkField) fbLinkField.value = "";
+                    if (deleteButton) deleteButton.style.display = "none"; // Hide delete button for Add
+                    const imagePreview = document.querySelector('.image-preview');
+                    if (imagePreview) {
+                        const placeholderDiv = imagePreview.querySelector('div[x-show="!previewPhoto"]');
+                        const previewDiv = imagePreview.querySelector('div[x-show="previewPhoto"]');
+                        if (placeholderDiv && previewDiv) {
+                            placeholderDiv.style.display = 'block';
+                            previewDiv.style.display = 'none';
+                        }
+                    } // Reset to default image
                 }
                 if (
                     (id != null,
@@ -88,22 +111,38 @@ $userRole = $currentUser['role'];
                         time != null,
                         fb_link != null)
                 ) {
-                    if (count > 1) {
 
-                    } else {
-                        const titleField = document.getElementById("title");
-                        const locationField = document.getElementById("location");
-                        const dateField = document.getElementById("date");
-                        const timeField = document.getElementById("time");
-                        const fbLinkField = document.getElementById("fb_link");
-                        if (titleField) titleField.value = title;
-                        if (locationField) locationField.value = location;
-                        if (dateField) dateField.value = date;
-                        if (timeField) timeField.value = time;
-                        if (fbLinkField) fbLinkField.value = fb_link;
+
+
+                    const titleField = document.getElementById("title");
+                    const locationField = document.getElementById("location");
+                    const dateField = document.getElementById("date");
+                    const timeField = document.getElementById("time");
+                    const fbLinkField = document.getElementById("fb_link");
+                    const imgPic = document.getElementById("event-img");
+
+                    if (titleField) titleField.value = title;
+                    if (locationField) locationField.value = location;
+                    if (dateField) dateField.value = date;
+                    if (timeField) timeField.value = time;
+                    if (fbLinkField) fbLinkField.value = fb_link;
+                    if (imgPic) imgPic.src = img;
+                    const imagePreview = document.querySelector('.image-preview');
+                    if (imagePreview) {
+                        const placeholderDiv = imagePreview.querySelector('div[x-show="!previewPhoto"]');
+                        const previewDiv = imagePreview.querySelector('div[x-show="previewPhoto"]');
+                        if (placeholderDiv && previewDiv) {
+                            placeholderDiv.style.display = 'none';
+                            previewDiv.style.display = 'block';
+                        }
                     }
                 }
             }
+        }
+
+        function cancel() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
         }
 
         function hidePopup() {
@@ -111,6 +150,163 @@ $userRole = $currentUser['role'];
             document.getElementById("overlay").style.display = "none";
         }
     </script>
+
+    <script>
+        function toggleBlock(adminId, block) {
+            const action = block ? 'block' : 'unblock';
+            if (!confirm(`Are you sure you want to ${action} this admin?`)) return;
+            fetch('content-manager/block_admin.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id=${adminId}&block=${block}`
+                })
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg);
+                    location.reload();
+                });
+        }
+    </script>
+    <script>
+        function openReportTab() {
+            const form = document.getElementById('reportForm');
+            const table = document.getElementById('tableSelect').value;
+            if (!table) {
+                alert('Please select a table.');
+                return;
+            }
+            const filters = Array.from(form.querySelectorAll('[name^=filters]')).map(input => {
+                if (!input.value) return '';
+                return encodeURIComponent(input.name.replace('filters[', '').replace(']', '')) + '=' + encodeURIComponent(input.value);
+            }).filter(Boolean).join('&');
+            let url = `content-manager/generated_report.php?table=${encodeURIComponent(table)}`;
+            if (filters) url += `&${filters}`;
+            window.open(url, '_blank');
+        }
+    </script>
+    <script>
+        function decrypt() {
+            const password = prompt('Enter admin password to decrypt all donor details:');
+            if (!password) return;
+            const correctPassword = '123'; // Hardcoded password
+            if (password !== correctPassword) {
+                alert('Incorrect password.');
+                return;
+            }
+            document.querySelectorAll('.masked-data, .donor-name-masked').forEach(function(cell) {
+                cell.textContent = cell.getAttribute('data-full');
+            });
+        }
+
+        function showImagePopup(src) {
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.classList.add('image-popup');
+            overlay.onclick = function() {
+                document.body.removeChild(overlay);
+            };
+            // Create image
+            const img = document.createElement('img');
+            img.src = src;
+            overlay.appendChild(img);
+            document.body.appendChild(overlay);
+        }
+    </script>
+    <script>
+        function updates() {
+            const form = document.getElementById('userForm');
+            const maxSize = 1024 * 1024 * 4; // 4MB limit
+
+            function refreshMembersList() {
+                console.log('Refreshing members list...');
+                fetch('content-manager/add_member.php?refresh_list=true')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.querySelector('.list').innerHTML = html;
+                    })
+                    .catch(error => console.error('Error refreshing members list:', error));
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const fileInput = document.getElementById('profileImage');
+                if (fileInput && fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    if (file.size > maxSize) {
+                        document.getElementById('form-response').innerHTML = "<span style='color: red; margin-left:20px;'>❌ Image size exceeds the maximum limit of 4MB.</span>";
+                        return;
+                    }
+                }
+
+                let valid = true;
+                let firstInvalid = null;
+                // List of required field names
+                const requiredFields = [
+                    'lastName',
+                    'firstName',
+                    'middleName',
+                    'category',
+                    'dob',
+                    'phone',
+                    'street',
+                    'city',
+                    'state',
+                    'zip',
+                    'fb_link'
+                ];
+                requiredFields.forEach(function(field) {
+                    const input = form.elements[field];
+                    if (input && !input.value.trim()) {
+                        input.classList.add('input-error');
+                        if (!firstInvalid) firstInvalid = input;
+                        valid = false;
+                    } else if (input) {
+                        input.classList.remove('input-error');
+                    }
+                });
+                if (!valid) {
+                    document.getElementById('form-response').innerHTML = "<span style='color: red; margin-left:20px;'>❌ Please fill in all required fields.</span>";
+                    if (firstInvalid) firstInvalid.focus();
+                    return; // Prevent AJAX submit if not valid
+                }
+
+                const formData = new FormData(form);
+
+                fetch('content-manager/add_member.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('form-response').innerHTML = data;
+                        if (data.includes('✅')) {
+                            form.reset();
+                            // Reset image preview if using Alpine.js
+                            const imageUpload = form.querySelector('[x-data]');
+                            if (imageUpload && imageUpload.__x) {
+                                imageUpload.__x.$data.previewPhoto = '';
+                                imageUpload.__x.$data.fileName = null;
+                            }
+                            // Refresh the members list
+                            refreshMembersList();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('form-response').innerHTML = "<span style='color: red;margin-left:20px;'>❌ An error occurred.</span>";
+                    });
+            });
+
+
+            /* Add some simple error styling */
+            const style = document.createElement('style');
+            style.innerHTML = `.input-error { border: 2px solid red !important; }`;
+            document.head.appendChild(style);
+        }
+    </script>
+
     <script>
         function imageData(url) {
             const originalUrl = url || "";
@@ -153,6 +349,9 @@ $userRole = $currentUser['role'];
             if (currentPage === page) {
                 console.log(`"${page}" is already loaded, skipping reload.`);
                 return; // Prevent reloading the same page
+            }
+            if (page === "content-manager/dashboard_management.php") {
+                // Clear content for Dashboard
             }
 
             if (cache[page]) {
@@ -205,6 +404,16 @@ $userRole = $currentUser['role'];
         }
     </script>
     <script>
+        function verify() {
+            document.querySelectorAll('form[action$="content-manager/verify_donation.php"]').forEach(function(form) {
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+                    window.open('content-manager/verify_donation.php', 'verifyWindow', 'width=400,height=200');
+                };
+            });
+        }
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             const updateForm = document.getElementById("update-member-form");
 
@@ -235,6 +444,34 @@ $userRole = $currentUser['role'];
             }
         });
     </script>
+    <script>
+        function chart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green'],
+                    datasets: [{
+                        label: 'Sample Data',
+                        data: [12, 19, 3, 5],
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false, // turn off auto-resize to keep it simple
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
 </head>
 
 <body>
@@ -246,11 +483,12 @@ $userRole = $currentUser['role'];
                 <!-- Dashboard -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading-dashboard">
+
                         <button
                             class="accordion-button collapsed no-arrow"
                             type="button"
                             onclick="loadContent('content-manager/dashboard_management.php')">
-                            Dashboard
+                            <img src="imgs/dashboard.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;"> Dashboard
                         </button>
                     </h2>
                 </div>
@@ -265,7 +503,7 @@ $userRole = $currentUser['role'];
                             data-bs-target="#newsOptions"
                             aria-expanded="false"
                             aria-controls="newsOptions">
-                            News Management
+                            <img src="imgs/news.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">News Management
                         </button>
                     </h2>
                     <div
@@ -280,11 +518,12 @@ $userRole = $currentUser['role'];
                                 onclick="loadContent('content-manager/news_management.php')">
                                 Add News
                             </button>
+
                             <button
                                 class="btn btn-link"
                                 type="button"
-                                onclick="loadContent('content-manager/edit_news.php')">
-                                Edit News
+                                onclick="loadContent('content-manager/news_list.php')">
+                                <img src="imgs/news.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">News List
                             </button>
                         </div>
                     </div>
@@ -300,7 +539,7 @@ $userRole = $currentUser['role'];
                             data-bs-target="#eventsOptions"
                             aria-expanded="false"
                             aria-controls="eventsOptions">
-                            Events Management
+                            <img src="imgs/events.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Events Management
                         </button>
                     </h2>
                     <div
@@ -315,11 +554,12 @@ $userRole = $currentUser['role'];
                                 onclick="loadContent('content-manager/events_management.php')">
                                 Add Event
                             </button>
+
                             <button
                                 class="btn btn-link"
                                 type="button"
-                                onclick="loadContent('content-manager/update_event.php')">
-                                Edit Event
+                                onclick="loadContent('content-manager/event_list.php')">
+                                <img src="imgs/events.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Event List
                             </button>
                         </div>
                     </div>
@@ -330,7 +570,7 @@ $userRole = $currentUser['role'];
                             class="accordion-button collapsed no-arrow"
                             type="button"
                             onclick="loadContent('content-manager/calendar_management.php')">
-                            Edit Calendar Events
+                            <img src="imgs/calendar.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Edit Calendar Events
                         </button>
                     </h2>
                 </div>
@@ -346,7 +586,7 @@ $userRole = $currentUser['role'];
                             data-bs-target="#membersOptions"
                             aria-expanded="false"
                             aria-controls="membersOptions">
-                            Members Management
+                            <img src="imgs/user.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Members Management
                         </button>
                     </h2>
                     <div
@@ -359,29 +599,31 @@ $userRole = $currentUser['role'];
                                 class="btn btn-link"
                                 type="button"
                                 onclick="loadContent('content-manager/add_member.php')">
-                                Add Member
+                                <img src="imgs/add-user.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Add Member
                             </button>
+
                             <button
                                 class="btn btn-link"
                                 type="button"
-                                onclick="loadContent('content-manager/update_member.php')">
-                                Edit Member
+                                onclick="loadContent('content-manager/member_list.php')">
+                                <img src="imgs/user.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Member List
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Generate Report -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading-calendar">
                         <button
                             class="accordion-button collapsed no-arrow"
                             type="button"
                             onclick="loadContent('content-manager/generate.php')">
-                            Generate Report
+                            <img src="imgs/report.png" alt="Dashboard Icon" style="width:22px;height:22px;margin-right:10px;vertical-align:middle;">Generate Report
                         </button>
                     </h2>
                 </div>
+                <!-- Active Admins Management -->
+
                 <button class="accordion-button collapsed no-arrow" type="button" style="color: Red;" onclick="window.location.href='login.php?logout=1'">
                     Logout
                 </button>
@@ -401,6 +643,7 @@ $userRole = $currentUser['role'];
                 console.log(`"${page}" is already loaded, skipping reload.`);
                 return;
             }
+
 
             fetch(page + "?_=" + new Date().getTime()) // bust cache
                 .then((response) => response.text())
@@ -431,6 +674,11 @@ $userRole = $currentUser['role'];
                                 });
                         });
                     }
+                    if (page === "generate.php") {
+                        showFilters(); // Call showFilters if on generate page
+
+
+                    }
                 })
                 .catch((error) => console.error("Error loading content:", error));
 
@@ -439,7 +687,7 @@ $userRole = $currentUser['role'];
     </script>
 
     <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        src="lib/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
 </body>
