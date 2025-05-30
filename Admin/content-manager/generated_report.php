@@ -247,6 +247,17 @@ $conn->close();
             text-overflow: ellipsis;
         }
 
+        .table th.news-content-col,
+        .table td.news-content-col {
+            max-width: 600px;
+            min-width: 300px;
+            width: 40vw;
+            white-space: pre-line;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            font-size: 1.05rem;
+        }
+
         @media (max-width: 900px) {
             .report-container {
                 width: 98vw;
@@ -331,6 +342,7 @@ $conn->close();
                                 if (in_array(strtolower($col), ['donor_name', 'name'])) $colClass = 'donor-name-col';
                                 if (in_array(strtolower($col), ['email', 'donor_email'])) $colClass = 'email-col';
                                 if (in_array(strtolower($col), ['phone', 'donor_phone', 'contact'])) $colClass = 'phone-col';
+                                if ($table === 'news' && strtolower($col) === 'content') $colClass = 'news-content-col';
                                 ?>
                                 <th class="<?php echo $colClass; ?>"><?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $col))); ?></th>
                             <?php endforeach; ?>
@@ -355,6 +367,7 @@ $conn->close();
                                 if (in_array(strtolower($col), ['donor_name', 'name'])) $colClass = 'donor-name-col';
                                 if (in_array(strtolower($col), ['email', 'donor_email'])) $colClass = 'email-col';
                                 if (in_array(strtolower($col), ['phone', 'donor_phone', 'contact'])) $colClass = 'phone-col';
+                                if ($table === 'news' && strtolower($col) === 'content') $colClass = 'news-content-col';
                                 ?>
                                 <?php if (in_array($col, ['profile_image', 'image']) && !empty($val)): ?>
                                     <td class="<?php echo $colClass; ?>"><img src="data:image/jpeg;base64,<?php echo base64_encode($val); ?>" style="max-width:80px;max-height:80px;object-fit:contain;" alt="Image"></td>
