@@ -78,7 +78,7 @@ include 'db-connection.php';
     }
 </style>
 <div id="content" class="dashboard">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="../lib/alpinejs.min.js" defer></script>
 
     <link rel="stylesheet" href="../Admin.css" />
     <script>

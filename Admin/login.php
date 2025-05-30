@@ -19,8 +19,14 @@ if ($auth->isAuthenticated()) {
 
     if ($userRole === 'head_admin') {
         header('Location: admin.php');
+    } else if ($userRole === 'content_manager') {
+        header('Location: content-manager.php');
+    } else if ($userRole === 'social_manager') {
+        header('Location: social-manager.php');
     } else {
-        header('Location: index.php');
+        session_unset();
+        session_destroy();
+        header('Location: login.php');
     }
     exit();
 }

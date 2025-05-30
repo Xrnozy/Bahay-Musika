@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="content-manager/css/add_member.css">
 <link rel="stylesheet" href="css/add_member.css">
 <link rel="stylesheet" href="../Admin.css" />
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="../lib/alpinejs.min.js" defer></script>
 <script>
     function imageData(url) {
         const originalUrl = url || '';
@@ -169,8 +169,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                 value="<?= htmlspecialchars($user['extName'] ?? '') ?>" placeholder="Ext. Name" data-wow-delay="0.4s" />
                                         </div>
 
-                                        <input class="info-input wow fadeInUp" type="text" name="category"
-                                            value="<?= htmlspecialchars($user['category'] ?? '') ?>" placeholder="Category" data-wow-delay="0.5s" required />
+                                        <select class="info-input wow fadeInUp" name="category" data-wow-delay="0.5s" required style="width:100%;">
+                                            <option value="">Select Category</option>
+                                            <option value="soprano" <?= (isset($user['category']) && $user['category'] === 'soprano') ? 'selected' : '' ?>>Soprano</option>
+                                            <option value="alto" <?= (isset($user['category']) && $user['category'] === 'alto') ? 'selected' : '' ?>>Alto</option>
+                                            <option value="tenor" <?= (isset($user['category']) && $user['category'] === 'tenor') ? 'selected' : '' ?>>Tenor</option>
+                                            <option value="bass" <?= (isset($user['category']) && $user['category'] === 'bass') ? 'selected' : '' ?>>Bass</option>
+                                        </select>
                                         <label for="dob" class="info-label wow fadeInUp" data-wow-delay="0.6s">Date of
                                             Birth</label>
                                         <input class="info-input wow fadeInUp" type="date" name="dob"

@@ -1,6 +1,6 @@
 <!-- Keep this in the main admin.html -->
 <link rel="stylesheet" href="css/event_management.css">
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="../lib/alpinejs.min.js" defer></script>
 <?php
 include 'db-connection.php';
 

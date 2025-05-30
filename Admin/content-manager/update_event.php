@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="content-manager/css/add_member.css">
 <link rel="stylesheet" href="css/add_member.css">
 <link rel="stylesheet" href="../Admin.css" />
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="../lib/alpinejs.min.js" defer></script>
 <script>
     function imageData(url) {
         const originalUrl = url || '';
